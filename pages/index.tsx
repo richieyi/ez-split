@@ -6,11 +6,36 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import styles from '../styles/Home.module.css';
 
+const item1 = {
+  name: 'hot dog',
+  price: 1.5,
+};
+const item2 = {
+  name: 'waffle',
+  price: 2.33,
+};
+
 const Home: NextPage = () => {
-  const [items, setItems] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newPrice, setNewPrice] = useState('');
+  const [items, setItems] = useState([item1, item2]);
 
   function renderItems() {
-    return items.map((item) => <Input />);
+    return items.map((item, idx) => (
+      <div key={idx}>{`${item.name} - $${item.price}`}</div>
+    ));
+  }
+
+  function saveItem() {
+    setItems([...items, { name: newName, price: Number(newPrice) }]);
+  }
+
+  function handleNameChange(e) {
+    setNewName(e.target.value);
+  }
+
+  function handlePriceChange(e) {
+    setNewPrice(e.target.value);
   }
 
   return (
@@ -25,9 +50,30 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <div className="flex">
+          <Button title="Add item" />
+          <Button title="Save" />
+        </div>
+        {/* <Input /> */}
+        {/* <input onChange={handleNameChange} />
+        <input onChange={handlePriceChange} /> */}
+        <form>
+          <label htmlFor="first">Item</label>
+          <input
+            type="text"
+            name="first"
+            className="border-2 border-black rounded-full p-2"
+            onChange={handleNameChange}
+          />
+          <label htmlFor="second">Price</label>
+          <input
+            type="text"
+            name="second"
+            className="border-2 border-black rounded-full p-2"
+            onChange={handlePriceChange}
+          />
+        </form>
         {renderItems()}
-        <Button title="Add item" />
-        <Input />
       </main>
 
       <footer className={styles.footer}>
