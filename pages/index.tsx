@@ -15,10 +15,16 @@ const item2 = {
   price: 2.33,
 };
 
+interface Item {
+  name: string;
+  price: number;
+}
+
 const Home: NextPage = () => {
-  const [newName, setNewName] = useState('');
-  const [newPrice, setNewPrice] = useState('');
-  const [items, setItems] = useState([item1, item2]);
+  const [newName, setNewName] = useState<string>('');
+  const [newPrice, setNewPrice] = useState<string>('');
+  const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
+  const [items, setItems] = useState<Item[]>([item1, item2]);
 
   function renderItems() {
     return items.map((item, idx) => (
@@ -26,8 +32,13 @@ const Home: NextPage = () => {
     ));
   }
 
-  function saveItem() {
+  function handleAddNewItem() {
+    setIsAddingNew(!isAddingNew);
+  }
+
+  function handleSave() {
     setItems([...items, { name: newName, price: Number(newPrice) }]);
+    setIsAddingNew(!isAddingNew);
   }
 
   function handleNameChange(e) {
@@ -51,28 +62,43 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <div className="flex">
-          <Button title="Add item" />
-          <Button title="Save" />
+          {!isAddingNew ? (
+            <button
+              type="button"
+              className="border-2 border-black rounded-full p-2"
+              onClick={handleAddNewItem}
+            >
+              Add Item
+            </button>
+          ) : null}
+          {isAddingNew ? (
+            <button
+              type="button"
+              className="border-2 border-black rounded-full p-2"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          ) : null}
         </div>
-        {/* <Input /> */}
-        {/* <input onChange={handleNameChange} />
-        <input onChange={handlePriceChange} /> */}
-        <form>
-          <label htmlFor="first">Item</label>
-          <input
-            type="text"
-            name="first"
-            className="border-2 border-black rounded-full p-2"
-            onChange={handleNameChange}
-          />
-          <label htmlFor="second">Price</label>
-          <input
-            type="text"
-            name="second"
-            className="border-2 border-black rounded-full p-2"
-            onChange={handlePriceChange}
-          />
-        </form>
+        {isAddingNew ? (
+          <form>
+            <label htmlFor="first">Item</label>
+            <input
+              type="text"
+              name="first"
+              className="border-2 border-black rounded-full p-2"
+              onChange={handleNameChange}
+            />
+            <label htmlFor="second">Price</label>
+            <input
+              type="text"
+              name="second"
+              className="border-2 border-black rounded-full p-2"
+              onChange={handlePriceChange}
+            />
+          </form>
+        ) : null}
         {renderItems()}
       </main>
 
