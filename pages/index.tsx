@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -20,19 +20,30 @@ interface Item {
   price: number;
 }
 
+interface People {
+  name: string;
+  // percentage: number;
+}
+
 /*
 TODO:
 - Names of people
 - Split type (evenly/percentage)
-- Display total
+- Display sub total
 */
 
 const Home: NextPage = () => {
-  const [newName, setNewName] = useState<string>('');
+  const [newItemName, setNewItemName] = useState<string>('');
   const [newPrice, setNewPrice] = useState<string>('');
   const [hasError, setHasError] = useState<boolean>(false);
-  const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
+  const [isAddingNewItem, setIsAddingNewItem] =
+    useState<boolean>(false);
   const [items, setItems] = useState<Item[]>([item1, item2]);
+
+  const [newPerson, setNewPerson] = useState<string>('');
+  const [isAddingNewPerson, setIsAddingNewPerson] =
+    useState<boolean>(false);
+  const [people, setPeople] = useState<People[]>([]);
 
   function renderItems() {
     return items.map((item, idx) => (
@@ -41,16 +52,16 @@ const Home: NextPage = () => {
   }
 
   function handleAddNewItem() {
-    setIsAddingNew(!isAddingNew);
+    setIsAddingNewItem(true);
   }
 
   function handleSave() {
-    if (newName.length > 0 && newPrice.length > 0) {
+    if (newItemName.length > 0 && newPrice.length > 0) {
       setItems([
         ...items,
-        { name: newName, price: Number(newPrice) },
+        { name: newItemName, price: Number(newPrice) },
       ]);
-      setIsAddingNew(!isAddingNew);
+      setIsAddingNewItem(false);
       setHasError(false);
     } else {
       setHasError(true);
@@ -58,11 +69,11 @@ const Home: NextPage = () => {
   }
 
   function handleCancel() {
-    setIsAddingNew(false);
+    setIsAddingNewItem(false);
   }
 
   function handleNameChange(e) {
-    setNewName(e.target.value);
+    setNewItemName(e.target.value);
   }
 
   function handlePriceChange(e) {
@@ -76,6 +87,32 @@ const Home: NextPage = () => {
     );
   }
 
+  function handlePersonNameChange(e) {
+    setNewPerson(e.target.value);
+  }
+
+  function handleAddNewPerson() {
+    setIsAddingNewPerson(true);
+  }
+
+  function handleSavePerson() {
+    setPeople([...people, { name: newPerson }]);
+    setIsAddingNewPerson(false);
+  }
+
+  function handleCancelPerson() {
+    setNewPerson('');
+    setIsAddingNewPerson(false);
+  }
+
+  function displayPeople() {
+    return people.map((person, idx) => (
+      <div key={idx}>{person.name}</div>
+    ));
+  }
+
+  console.log('here', people);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -88,58 +125,103 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {isAddingNew ? (
-          <form>
-            <label htmlFor="first">Item</label>
-            <input
-              type="text"
-              name="first"
-              className="border-2 border-black rounded-full p-2"
-              onChange={handleNameChange}
-            />
-            <label htmlFor="second">Price</label>
-            <input
-              type="text"
-              name="second"
-              className="border-2 border-black rounded-full p-2"
-              onChange={handlePriceChange}
-            />
-          </form>
-        ) : null}
-        <div className="flex">
-          {!isAddingNew ? (
-            <button
-              type="button"
-              className="border-2 border-black rounded-full p-2"
-              onClick={handleAddNewItem}
-            >
-              Add Item
-            </button>
+        <div>
+          {isAddingNewItem ? (
+            <form>
+              <label htmlFor="first">Item</label>
+              <input
+                type="text"
+                name="first"
+                className="border-2 border-black rounded-full p-2"
+                onChange={handleNameChange}
+              />
+              <label htmlFor="second">Price</label>
+              <input
+                type="text"
+                name="second"
+                className="border-2 border-black rounded-full p-2"
+                onChange={handlePriceChange}
+              />
+            </form>
           ) : null}
-          {isAddingNew ? (
-            <button
-              type="button"
-              className="border-2 border-black rounded-full p-2"
-              onClick={handleSave}
-            >
-              Save
-            </button>
-          ) : null}
-          {isAddingNew ? (
-            <button
-              type="button"
-              className="border-2 border-black rounded-full p-2"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          ) : null}
-          {isAddingNew && hasError ? (
-            <span>Error! Enter item and price.</span>
-          ) : null}
+          <div className="flex">
+            {!isAddingNewItem ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleAddNewItem}
+              >
+                Add Item
+              </button>
+            ) : null}
+            {isAddingNewItem ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            ) : null}
+            {isAddingNewItem ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+            ) : null}
+            {isAddingNewItem && hasError ? (
+              <span>Error! Enter item and price.</span>
+            ) : null}
+          </div>
+          {renderItems()}
+          {`Total: $${displayTotal()}`}
         </div>
-        {renderItems()}
-        {`Total: $${displayTotal()}`}
+        <div>
+          {isAddingNewPerson ? (
+            <form>
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                name="name"
+                className="border-2 border-black rounded-full p-2"
+                onChange={handlePersonNameChange}
+              />
+            </form>
+          ) : null}
+          <div className="flex">
+            {!isAddingNewPerson ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleAddNewPerson}
+              >
+                Add Person
+              </button>
+            ) : null}
+            {isAddingNewPerson ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleSavePerson}
+              >
+                Save
+              </button>
+            ) : null}
+            {isAddingNewPerson ? (
+              <button
+                type="button"
+                className="border-2 border-black rounded-full p-2"
+                onClick={handleCancelPerson}
+              >
+                Cancel
+              </button>
+            ) : null}
+          </div>
+          <div>{displayPeople()}</div>
+        </div>
       </main>
 
       <footer className={styles.footer}>
@@ -163,4 +245,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home
+export default Home;
