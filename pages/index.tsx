@@ -20,9 +20,17 @@ interface Item {
   price: number;
 }
 
+/*
+TODO:
+- Names of people
+- Split type (evenly/percentage)
+- Display total
+*/
+
 const Home: NextPage = () => {
   const [newName, setNewName] = useState<string>('');
   const [newPrice, setNewPrice] = useState<string>('');
+  const [hasError, setHasError] = useState<boolean>(false);
   const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
   const [items, setItems] = useState<Item[]>([item1, item2]);
 
@@ -37,8 +45,20 @@ const Home: NextPage = () => {
   }
 
   function handleSave() {
-    setItems([...items, { name: newName, price: Number(newPrice) }]);
-    setIsAddingNew(!isAddingNew);
+    if (newName.length > 0 && newPrice.length > 0) {
+      setItems([
+        ...items,
+        { name: newName, price: Number(newPrice) },
+      ]);
+      setIsAddingNew(!isAddingNew);
+      setHasError(false);
+    } else {
+      setHasError(true);
+    }
+  }
+
+  function handleCancel() {
+    setIsAddingNew(false);
   }
 
   function handleNameChange(e) {
@@ -47,6 +67,13 @@ const Home: NextPage = () => {
 
   function handlePriceChange(e) {
     setNewPrice(e.target.value);
+  }
+
+  function displayTotal() {
+    return items.reduce(
+      (prevVal, currVal) => prevVal + currVal.price,
+      0
+    );
   }
 
   return (
@@ -61,6 +88,24 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        {isAddingNew ? (
+          <form>
+            <label htmlFor="first">Item</label>
+            <input
+              type="text"
+              name="first"
+              className="border-2 border-black rounded-full p-2"
+              onChange={handleNameChange}
+            />
+            <label htmlFor="second">Price</label>
+            <input
+              type="text"
+              name="second"
+              className="border-2 border-black rounded-full p-2"
+              onChange={handlePriceChange}
+            />
+          </form>
+        ) : null}
         <div className="flex">
           {!isAddingNew ? (
             <button
@@ -80,26 +125,21 @@ const Home: NextPage = () => {
               Save
             </button>
           ) : null}
+          {isAddingNew ? (
+            <button
+              type="button"
+              className="border-2 border-black rounded-full p-2"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          ) : null}
+          {isAddingNew && hasError ? (
+            <span>Error! Enter item and price.</span>
+          ) : null}
         </div>
-        {isAddingNew ? (
-          <form>
-            <label htmlFor="first">Item</label>
-            <input
-              type="text"
-              name="first"
-              className="border-2 border-black rounded-full p-2"
-              onChange={handleNameChange}
-            />
-            <label htmlFor="second">Price</label>
-            <input
-              type="text"
-              name="second"
-              className="border-2 border-black rounded-full p-2"
-              onChange={handlePriceChange}
-            />
-          </form>
-        ) : null}
         {renderItems()}
+        {`Total: $${displayTotal()}`}
       </main>
 
       <footer className={styles.footer}>
