@@ -38,11 +38,14 @@ interface People {
 
 /*
 TODO:
-- Allow editing and deleting of items
-- Display sub total
 - Names of people
   - Allow assigning of people to items
   - Display percentage per person
+- CSS
+  - Style line items
+  - Clean up styling for editing
+  - Icons
+  - UX for adding items
 */
 
 const Home: NextPage = () => {
@@ -63,7 +66,10 @@ const Home: NextPage = () => {
     return items.map((item, idx) => (
       <div key={idx} className="flex w-full">
         <div className="flex justify-between border rounded border-slate-500 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
-          <form onSubmit={handleUpdate}>
+          <form
+            onSubmit={handleUpdate}
+            className="flex justify-between w-full"
+          >
             {isEditingItem === idx ? (
               <input
                 type="text"
@@ -91,14 +97,21 @@ const Home: NextPage = () => {
             <button type="submit" className="hidden" />
           </form>
         </div>
-        <div className="flex align-middle w-1/6">
+        <div className="flex justify-around w-1/6 p2">
           <button
             type="button"
             onClick={() => handleEdit(idx, item.name, item.price)}
           >
             <PencilIcon className="h-5 w-5" />
           </button>
-          <button type="button" onClick={() => handleDelete(idx)}>
+          <button
+            type="button"
+            onClick={() =>
+              isEditingItem > -1
+                ? handleCancelUpdate()
+                : handleDelete(idx)
+            }
+          >
             <TrashIcon className="h-5 w-5" />
           </button>
         </div>
@@ -157,6 +170,10 @@ const Home: NextPage = () => {
     setNewPrice(e.target.value);
   }
 
+  function handleCancelUpdate() {
+    setIsEditingItem(-1);
+  }
+
   function displayTotal() {
     return items.reduce(
       (prevVal, currVal) => prevVal + currVal.price,
@@ -201,8 +218,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="justify-center w-1/2">
-        <h1 className="font-bold text-4xl">EZ Split</h1>
+      <main className="justify-center w-1/2 ml-auto mr-auto">
+        <div>
+          <h1 className="font-bold text-4xl">EZ Split</h1>
+        </div>
         <div className="flex-col justify-start">
           <div>
             <div className="flex justify-between">
@@ -316,7 +335,7 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      <footer>
+      <footer className="justify-center w-1/2 ml-auto mr-auto">
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
