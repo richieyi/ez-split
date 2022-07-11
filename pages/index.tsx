@@ -1,4 +1,10 @@
 import type { NextPage } from 'next';
+import {
+  TrashIcon,
+  PencilIcon,
+  PlusCircleIcon,
+  CheckIcon,
+} from '@heroicons/react/solid';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -47,7 +53,11 @@ const Home: NextPage = () => {
 
   function renderItems() {
     return items.map((item, idx) => (
-      <div key={idx}>{`${item.name} - $${item.price}`}</div>
+      <div key={idx} className="flex">
+        <div>{`${item.name} - $${item.price}`}</div>
+        <PencilIcon className="h-5 w-5" />
+        <TrashIcon className="h-5 w-5" />
+      </div>
     ));
   }
 
@@ -114,7 +124,7 @@ const Home: NextPage = () => {
   console.log('here', people);
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>EZ Split</title>
         <meta
@@ -124,114 +134,125 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <div>
-          {isAddingNewItem ? (
-            <form>
-              <label htmlFor="first">Item</label>
-              <input
-                type="text"
-                name="first"
-                className="border-2 border-black rounded-full p-2"
-                onChange={handleNameChange}
-              />
-              <label htmlFor="second">Price</label>
-              <input
-                type="text"
-                name="second"
-                className="border-2 border-black rounded-full p-2"
-                onChange={handlePriceChange}
-              />
-            </form>
-          ) : null}
-          <div className="flex">
-            {!isAddingNewItem ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleAddNewItem}
-              >
-                Add Item
-              </button>
-            ) : null}
+      <main className="justify-center w-1/2">
+        <div className="flex-col justify-start">
+          <div>
             {isAddingNewItem ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleSave}
-              >
-                Save
-              </button>
+              <form>
+                {/* <label htmlFor="first">Item</label> */}
+                <input
+                  type="text"
+                  name="item"
+                  className="border-2 border-black rounded-full p-2"
+                  placeholder="Ex: Pizza"
+                  onChange={handleNameChange}
+                />
+                {/* <label htmlFor="second">Price</label> */}
+                <input
+                  type="text"
+                  name="price"
+                  className="border-2 border-black rounded-full p-2"
+                  placeholder="Ex: $10.00"
+                  onChange={handlePriceChange}
+                />
+              </form>
             ) : null}
-            {isAddingNewItem ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-            ) : null}
-            {isAddingNewItem && hasError ? (
-              <span>Error! Enter item and price.</span>
-            ) : null}
+            <div className="flex">
+              {isAddingNewItem ? (
+                <button
+                  type="button"
+                  className="border-2 border-black rounded-full p-2"
+                  onClick={handleSave}
+                >
+                  <CheckIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+              {isAddingNewItem ? (
+                <button
+                  type="button"
+                  className="border-2 border-black rounded-full p-2"
+                  onClick={handleCancel}
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+              {isAddingNewItem && hasError ? (
+                <span>Error! Enter item and price.</span>
+              ) : null}
+            </div>
+            <div className="flex justify-between">
+              <h1 className="font-bold">Items</h1>
+              {!isAddingNewItem ? (
+                <button
+                  type="button"
+                  // className="border-2 border-black rounded-full p-2"
+                  onClick={handleAddNewItem}
+                >
+                  <PlusCircleIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+            </div>
+            {renderItems()}
+            {`Total: $${displayTotal()}`}
           </div>
-          {renderItems()}
-          {`Total: $${displayTotal()}`}
-        </div>
-        <div>
-          {isAddingNewPerson ? (
-            <form>
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                name="name"
-                className="border-2 border-black rounded-full p-2"
-                onChange={handlePersonNameChange}
-              />
-            </form>
-          ) : null}
-          <div className="flex">
-            {!isAddingNewPerson ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleAddNewPerson}
-              >
-                Add Person
-              </button>
-            ) : null}
+          <div>
             {isAddingNewPerson ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleSavePerson}
-              >
-                Save
-              </button>
+              <form>
+                {/* <label htmlFor="name">Name</label> */}
+                <input
+                  type="text"
+                  name="name"
+                  className="border-2 border-black rounded-full p-2"
+                  placeholder="Ex: John"
+                  onChange={handlePersonNameChange}
+                />
+              </form>
             ) : null}
-            {isAddingNewPerson ? (
-              <button
-                type="button"
-                className="border-2 border-black rounded-full p-2"
-                onClick={handleCancelPerson}
-              >
-                Cancel
-              </button>
-            ) : null}
+            <div className="flex">
+              {isAddingNewPerson ? (
+                <button
+                  type="button"
+                  className="border-2 border-black rounded-full p-2"
+                  onClick={handleSavePerson}
+                >
+                  <CheckIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+              {isAddingNewPerson ? (
+                <button
+                  type="button"
+                  className="border-2 border-black rounded-full p-2"
+                  onClick={handleCancelPerson}
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+            </div>
+            <div className="flex justify-between">
+              <h1 className="font-bold">People</h1>
+              {!isAddingNewPerson ? (
+                <button
+                  type="button"
+                  // className="border-2 border-black rounded-full p-2"
+                  onClick={handleAddNewPerson}
+                >
+                  <PlusCircleIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+            </div>
+            <div>{displayPeople()}</div>
           </div>
-          <div>{displayPeople()}</div>
         </div>
       </main>
 
-      <footer className={styles.footer}>
+      <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
         >
           Powered by{' '}
-          <span className={styles.logo}>
+          <span>
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
