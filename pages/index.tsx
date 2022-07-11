@@ -10,16 +10,21 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import styles from '../styles/Home.module.css';
+// import styles from '../styles/Home.module.css';
 
 const item1 = {
-  name: 'hot dog',
+  name: 'Hot Dog',
   price: 1.5,
 };
 const item2 = {
-  name: 'waffle',
-  price: 2.33,
+  name: 'Waffle',
+  price: 2.25,
 };
+const item3 = {
+  name: 'Pizza',
+  price: 3.5,
+};
+const exampleItems = [item1, item2, item3];
 
 interface Item {
   name: string;
@@ -33,9 +38,11 @@ interface People {
 
 /*
 TODO:
-- Names of people
-- Split type (evenly/percentage)
+- Allow editing and deleting of items
 - Display sub total
+- Names of people
+  - Allow assigning of people to items
+  - Display percentage per person
 */
 
 const Home: NextPage = () => {
@@ -44,7 +51,8 @@ const Home: NextPage = () => {
   const [hasError, setHasError] = useState<boolean>(false);
   const [isAddingNewItem, setIsAddingNewItem] =
     useState<boolean>(false);
-  const [items, setItems] = useState<Item[]>([item1, item2]);
+  const [items, setItems] = useState<Item[]>(exampleItems);
+  const [isEditingItem, setIsEditingItem] = useState<number>(-1);
 
   const [newPerson, setNewPerson] = useState<string>('');
   const [isAddingNewPerson, setIsAddingNewPerson] =
@@ -53,10 +61,47 @@ const Home: NextPage = () => {
 
   function renderItems() {
     return items.map((item, idx) => (
-      <div key={idx} className="flex">
-        <div>{`${item.name} - $${item.price}`}</div>
-        <PencilIcon className="h-5 w-5" />
-        <TrashIcon className="h-5 w-5" />
+      <div key={idx} className="flex w-full">
+        <div className="flex justify-between border rounded border-slate-500 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
+          <form onSubmit={handleUpdate}>
+            {isEditingItem === idx ? (
+              <input
+                type="text"
+                name="item"
+                className="border-2 border-black rounded p-2 w-1/2"
+                placeholder="Ex: Pizza"
+                onChange={handleNameChange}
+                value={newItemName}
+              />
+            ) : (
+              <span>{item.name}</span>
+            )}
+            {isEditingItem === idx ? (
+              <input
+                type="text"
+                name="price"
+                className="border-2 border-black rounded p-2 w-1/2"
+                placeholder="Ex: $3.50"
+                onChange={handlePriceChange}
+                value={newPrice}
+              />
+            ) : (
+              <span>{`$${item.price}`}</span>
+            )}
+            <button type="submit" className="hidden" />
+          </form>
+        </div>
+        <div className="flex align-middle w-1/6">
+          <button
+            type="button"
+            onClick={() => handleEdit(idx, item.name, item.price)}
+          >
+            <PencilIcon className="h-5 w-5" />
+          </button>
+          <button type="button" onClick={() => handleDelete(idx)}>
+            <TrashIcon className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     ));
   }
@@ -78,15 +123,37 @@ const Home: NextPage = () => {
     }
   }
 
+  function handleUpdate(e: any) {
+    e.preventDefault();
+    console.log('testing');
+    let newArr = [...items];
+    newArr[isEditingItem] = {
+      name: newItemName,
+      price: Number(newPrice),
+    };
+    setItems(newArr);
+    setIsEditingItem(-1);
+  }
+
   function handleCancel() {
     setIsAddingNewItem(false);
   }
 
-  function handleNameChange(e) {
+  function handleEdit(idx: number, name: string, price: number) {
+    setIsEditingItem(idx);
+    setNewItemName(name);
+    setNewPrice(String(price));
+  }
+
+  function handleDelete(idx: number) {
+    setItems(items.filter((_, i) => i !== idx));
+  }
+
+  function handleNameChange(e: any) {
     setNewItemName(e.target.value);
   }
 
-  function handlePriceChange(e) {
+  function handlePriceChange(e: any) {
     setNewPrice(e.target.value);
   }
 
@@ -97,7 +164,7 @@ const Home: NextPage = () => {
     );
   }
 
-  function handlePersonNameChange(e) {
+  function handlePersonNameChange(e: any) {
     setNewPerson(e.target.value);
   }
 
@@ -135,15 +202,29 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="justify-center w-1/2">
+        <h1 className="font-bold text-4xl">EZ Split</h1>
         <div className="flex-col justify-start">
           <div>
+            <div className="flex justify-between">
+              <h1 className="font-bold text-2xl">Items</h1>
+              {!isAddingNewItem ? (
+                <button
+                  type="button"
+                  // className="border-2 border-black rounded-full p-2"
+                  onClick={handleAddNewItem}
+                >
+                  <PlusCircleIcon className="h-5 w-5" />
+                </button>
+              ) : null}
+            </div>
+            {renderItems()}
             {isAddingNewItem ? (
-              <form>
+              <form className="flex">
                 {/* <label htmlFor="first">Item</label> */}
                 <input
                   type="text"
                   name="item"
-                  className="border-2 border-black rounded-full p-2"
+                  className="border-2 border-black rounded p-2 w-1/2"
                   placeholder="Ex: Pizza"
                   onChange={handleNameChange}
                 />
@@ -151,7 +232,7 @@ const Home: NextPage = () => {
                 <input
                   type="text"
                   name="price"
-                  className="border-2 border-black rounded-full p-2"
+                  className="border-2 border-black rounded p-2 w-1/4"
                   placeholder="Ex: $10.00"
                   onChange={handlePriceChange}
                 />
@@ -180,29 +261,32 @@ const Home: NextPage = () => {
                 <span>Error! Enter item and price.</span>
               ) : null}
             </div>
+            <div className="flex justify-between p-2 font-bold">
+              <span>Total</span>
+              <span>{`$${displayTotal()}`}</span>
+            </div>
+          </div>
+          <div>
             <div className="flex justify-between">
-              <h1 className="font-bold">Items</h1>
-              {!isAddingNewItem ? (
+              <h1 className="font-bold text-2xl">People</h1>
+              {!isAddingNewPerson ? (
                 <button
                   type="button"
                   // className="border-2 border-black rounded-full p-2"
-                  onClick={handleAddNewItem}
+                  onClick={handleAddNewPerson}
                 >
                   <PlusCircleIcon className="h-5 w-5" />
                 </button>
               ) : null}
             </div>
-            {renderItems()}
-            {`Total: $${displayTotal()}`}
-          </div>
-          <div>
+            <div>{displayPeople()}</div>
             {isAddingNewPerson ? (
               <form>
                 {/* <label htmlFor="name">Name</label> */}
                 <input
                   type="text"
                   name="name"
-                  className="border-2 border-black rounded-full p-2"
+                  className="border-2 border-black rounded p-2"
                   placeholder="Ex: John"
                   onChange={handlePersonNameChange}
                 />
@@ -228,19 +312,6 @@ const Home: NextPage = () => {
                 </button>
               ) : null}
             </div>
-            <div className="flex justify-between">
-              <h1 className="font-bold">People</h1>
-              {!isAddingNewPerson ? (
-                <button
-                  type="button"
-                  // className="border-2 border-black rounded-full p-2"
-                  onClick={handleAddNewPerson}
-                >
-                  <PlusCircleIcon className="h-5 w-5" />
-                </button>
-              ) : null}
-            </div>
-            <div>{displayPeople()}</div>
           </div>
         </div>
       </main>

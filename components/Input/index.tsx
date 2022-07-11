@@ -1,4 +1,4 @@
-function Input(props) {
+function Input(props: any) {
   return (
     <form>
       <label htmlFor="first">Item</label>
