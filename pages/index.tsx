@@ -1,16 +1,10 @@
 import type { NextPage } from 'next';
-import {
-  TrashIcon,
-  PencilIcon,
-  PlusCircleIcon,
-  CheckIcon,
-  XIcon,
-} from '@heroicons/react/solid';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Icon from '../components/Icon';
+// import Button from '../components/Button';
+// import Input from '../components/Input';
 // import styles from '../styles/Home.module.css';
 
 const item1 = {
@@ -44,8 +38,6 @@ TODO:
   - Display percentage per person
 - CSS
   - Style line items
-  - Clean up styling for editing
-  - Icons
   - UX for adding items
 */
 
@@ -108,9 +100,9 @@ const Home: NextPage = () => {
             }
           >
             {isEditingItem === idx ? (
-              <CheckIcon className="h-5 w-5 text-green-500" />
+              <Icon name="check" color="green" />
             ) : (
-              <PencilIcon className="h-5 w-5 text-blue-500" />
+              <Icon name="pencil" color="blue" />
             )}
           </button>
           <button
@@ -122,9 +114,9 @@ const Home: NextPage = () => {
             }
           >
             {isEditingItem === idx ? (
-              <XIcon className="h-5 w-5 text-red-500" />
+              <Icon name="x" color="red" />
             ) : (
-              <TrashIcon className="h-5 w-5 text-red-500" />
+              <Icon name="trash" color="red" />
             )}
           </button>
         </div>
@@ -241,12 +233,8 @@ const Home: NextPage = () => {
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">Items</h1>
                 {!isAddingNewItem ? (
-                  <button
-                    type="button"
-                    // className="border-2 border-black rounded-full p-2"
-                    onClick={handleAddNewItem}
-                  >
-                    <PlusCircleIcon className="h-5 w-5 text-blue-500" />
+                  <button type="button" onClick={handleAddNewItem}>
+                    <Icon name="plus" color="blue" />
                   </button>
                 ) : null}
               </div>
@@ -255,7 +243,6 @@ const Home: NextPage = () => {
                 {isAddingNewItem ? (
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
                     <form className="flex">
-                      {/* <label htmlFor="first">Item</label> */}
                       <input
                         type="text"
                         name="item"
@@ -263,7 +250,6 @@ const Home: NextPage = () => {
                         placeholder="Ex: Pizza"
                         onChange={handleNameChange}
                       />
-                      {/* <label htmlFor="second">Price</label> */}
                       <input
                         type="text"
                         name="price"
@@ -276,21 +262,13 @@ const Home: NextPage = () => {
                 ) : null}
                 <div className="flex justify-around w-1/6 p2">
                   {isAddingNewItem ? (
-                    <button
-                      type="button"
-                      // className="border-2 border-black rounded-full p-2"
-                      onClick={handleSave}
-                    >
-                      <CheckIcon className="h-5 w-5 text-green-500" />
+                    <button type="button" onClick={handleSave}>
+                      <Icon name="check" color="green" />
                     </button>
                   ) : null}
                   {isAddingNewItem ? (
-                    <button
-                      type="button"
-                      // className="border-2 border-black rounded-full p-2"
-                      onClick={handleCancel}
-                    >
-                      <TrashIcon className="h-5 w-5 text-red-500" />
+                    <button type="button" onClick={handleCancel}>
+                      <Icon name="trash" color="red" />
                     </button>
                   ) : null}
                   {isAddingNewItem && hasError ? (
@@ -307,12 +285,8 @@ const Home: NextPage = () => {
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">People</h1>
                 {!isAddingNewPerson ? (
-                  <button
-                    type="button"
-                    // className="border-2 border-black rounded-full p-2"
-                    onClick={handleAddNewPerson}
-                  >
-                    <PlusCircleIcon className="h-5 w-5 text-blue-500" />
+                  <button type="button" onClick={handleAddNewPerson}>
+                    <Icon name="plus" color="blue" />
                   </button>
                 ) : null}
               </div>
@@ -320,8 +294,7 @@ const Home: NextPage = () => {
               <div className="flex">
                 {isAddingNewPerson ? (
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
-                    <form>
-                      {/* <label htmlFor="name">Name</label> */}
+                    <form onSubmit={handleSavePerson}>
                       <input
                         type="text"
                         name="name"
@@ -334,21 +307,16 @@ const Home: NextPage = () => {
                 ) : null}
                 <div className="flex justify-around w-1/6 p2">
                   {isAddingNewPerson ? (
-                    <button
-                      type="button"
-                      // className="border-2 border-black rounded-full p-2"
-                      onClick={handleSavePerson}
-                    >
-                      <CheckIcon className="h-5 w-5 text-green-500" />
+                    <button type="button" onClick={handleSavePerson}>
+                      <Icon name="check" color="green" />
                     </button>
                   ) : null}
                   {isAddingNewPerson ? (
                     <button
                       type="button"
-                      // className="border-2 border-black rounded-full p-2"
                       onClick={handleCancelPerson}
                     >
-                      <TrashIcon className="h-5 w-5 text-red-500" />
+                      <Icon name="trash" color="red" />
                     </button>
                   ) : null}
                 </div>
