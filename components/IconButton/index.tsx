@@ -23,18 +23,25 @@ const colorsMap: any = {
 interface Props {
   name: string;
   color: string;
+  onClick: any;
 }
 
-const Icon = (props: Props) => {
-  if (props.name === undefined || props.name === undefined) {
+const IconButton = (props: Props) => {
+  const { name, color, onClick } = props;
+
+  if (name === undefined || color === undefined) {
     console.error('Icon: name and color are required');
     return null;
   }
 
-  const Icon = iconMap[props.name];
-  const color = colorsMap[props.color];
+  const Icon = iconMap[name];
+  const mappedColor = colorsMap[color];
 
-  return <Icon className={`${color}`} />;
+  return (
+    <button type="button" onClick={onClick}>
+      <Icon className={`h-6 w-6 ${mappedColor}`} />
+    </button>
+  );
 };
 
-export default Icon;
+export default IconButton;

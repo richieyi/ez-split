@@ -2,9 +2,9 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Icon from '../components/Icon';
+import IconButton from '../components/IconButton';
+import Input from '../components/Input';
 // import Button from '../components/Button';
-// import Input from '../components/Input';
 // import styles from '../styles/Home.module.css';
 
 const item1 = {
@@ -20,6 +20,11 @@ const item3 = {
   price: 3.5,
 };
 const exampleItems = [item1, item2, item3];
+const examplePeople = [
+  { name: 'John' },
+  { name: 'Jane' },
+  { name: 'Bob' },
+];
 
 interface Item {
   name: string;
@@ -28,17 +33,17 @@ interface Item {
 
 interface People {
   name: string;
-  // percentage: number;
 }
 
 /*
 TODO:
 - Names of people
   - Allow assigning of people to items
-  - Display percentage per person
-- CSS
+  - Display total per person
+- CSS/UX
   - Style line items
   - UX for adding items
+    - Autofocus on input when adding
 */
 
 const Home: NextPage = () => {
@@ -53,7 +58,7 @@ const Home: NextPage = () => {
   const [newPerson, setNewPerson] = useState<string>('');
   const [isAddingNewPerson, setIsAddingNewPerson] =
     useState<boolean>(false);
-  const [people, setPeople] = useState<People[]>([]);
+  const [people, setPeople] = useState<People[]>(examplePeople);
 
   function renderItems() {
     return items.map((item, idx) => (
@@ -64,61 +69,56 @@ const Home: NextPage = () => {
             className="flex justify-between w-full"
           >
             {isEditingItem === idx ? (
-              <input
-                type="text"
-                name="item"
-                className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Ex: Pizza"
-                onChange={handleNameChange}
-                value={newItemName}
-              />
+              <>
+                <Input
+                  name="item"
+                  placeholder="Ex: Pizza"
+                  onChange={handleNameChange}
+                  value={newItemName}
+                />
+                <Input
+                  name="price"
+                  placeholder="Ex: $3.50"
+                  onChange={handlePriceChange}
+                  value={newPrice}
+                />
+              </>
             ) : (
-              <span>{item.name}</span>
-            )}
-            {isEditingItem === idx ? (
-              <input
-                type="text"
-                name="price"
-                className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Ex: $3.50"
-                onChange={handlePriceChange}
-                value={newPrice}
-              />
-            ) : (
-              <span>{`$${item.price}`}</span>
+              <>
+                <span>{item.name}</span>
+                <span>{`$${item.price}`}</span>
+              </>
             )}
             <button type="submit" className="hidden" />
           </form>
         </div>
         <div className="flex justify-around w-1/6 p2">
-          <button
-            type="button"
-            onClick={(e) =>
-              isEditingItem === idx
-                ? handleUpdate(e)
-                : handleEdit(idx, item.name, item.price)
-            }
-          >
-            {isEditingItem === idx ? (
-              <Icon name="check" color="green" />
-            ) : (
-              <Icon name="pencil" color="blue" />
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              isEditingItem > -1
-                ? handleCancelUpdate()
-                : handleDelete(idx)
-            }
-          >
-            {isEditingItem === idx ? (
-              <Icon name="x" color="red" />
-            ) : (
-              <Icon name="trash" color="red" />
-            )}
-          </button>
+          {isEditingItem === idx ? (
+            <IconButton
+              name="check"
+              color="green"
+              onClick={(e: any) => handleUpdate(e)}
+            />
+          ) : (
+            <IconButton
+              name="pencil"
+              color="blue"
+              onClick={() => handleEdit(idx, item.name, item.price)}
+            />
+          )}
+          {isEditingItem === idx ? (
+            <IconButton
+              name="x"
+              color="red"
+              onClick={handleCancelUpdate}
+            />
+          ) : (
+            <IconButton
+              name="trash"
+              color="red"
+              onClick={() => handleDelete(idx)}
+            />
+          )}
         </div>
       </div>
     ));
@@ -204,9 +204,14 @@ const Home: NextPage = () => {
     setIsAddingNewPerson(false);
   }
 
-  function displayPeople() {
+  function renderPeople() {
     return people.map((person, idx) => (
-      <div key={idx}>{person.name}</div>
+      <div
+        key={idx}
+        className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200"
+      >
+        <span>{person.name}</span>
+      </div>
     ));
   }
 
@@ -233,49 +238,48 @@ const Home: NextPage = () => {
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">Items</h1>
                 {!isAddingNewItem ? (
-                  <button type="button" onClick={handleAddNewItem}>
-                    <Icon name="plus" color="blue" />
-                  </button>
+                  <IconButton
+                    name="plus"
+                    color="blue"
+                    onClick={handleAddNewItem}
+                  />
                 ) : null}
               </div>
               {renderItems()}
-              <div className="flex">
-                {isAddingNewItem ? (
+              {isAddingNewItem ? (
+                <div className="flex">
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
-                    <form className="flex">
-                      <input
-                        type="text"
+                    <form className="flex" onSubmit={handleSave}>
+                      <Input
                         name="item"
-                        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                         placeholder="Ex: Pizza"
                         onChange={handleNameChange}
                       />
-                      <input
-                        type="text"
-                        name="price"
-                        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                        placeholder="Ex: $10.00"
+                      <Input
+                        name="item"
+                        placeholder="Ex: $3.50"
                         onChange={handlePriceChange}
                       />
+                      <button type="submit" className="hidden" />
                     </form>
                   </div>
-                ) : null}
-                <div className="flex justify-around w-1/6 p2">
-                  {isAddingNewItem ? (
-                    <button type="button" onClick={handleSave}>
-                      <Icon name="check" color="green" />
-                    </button>
-                  ) : null}
-                  {isAddingNewItem ? (
-                    <button type="button" onClick={handleCancel}>
-                      <Icon name="trash" color="red" />
-                    </button>
-                  ) : null}
-                  {isAddingNewItem && hasError ? (
-                    <span>Error! Enter item and price.</span>
-                  ) : null}
+                  <div className="flex justify-around w-1/6 p2">
+                    <IconButton
+                      name="check"
+                      color="green"
+                      onClick={handleSave}
+                    />
+                    <IconButton
+                      name="trash"
+                      color="red"
+                      onClick={handleCancel}
+                    />
+                    {/* {hasError ? (
+                      <span>Error! Enter item and price.</span>
+                    ) : null} */}
+                  </div>
                 </div>
-              </div>
+              ) : null}
               <div className="flex justify-between p-2 font-bold">
                 <span>Total</span>
                 <span>{`$${displayTotal()}`}</span>
@@ -285,42 +289,39 @@ const Home: NextPage = () => {
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">People</h1>
                 {!isAddingNewPerson ? (
-                  <button type="button" onClick={handleAddNewPerson}>
-                    <Icon name="plus" color="blue" />
-                  </button>
+                  <IconButton
+                    name="plus"
+                    color="blue"
+                    onClick={handleAddNewPerson}
+                  />
                 ) : null}
               </div>
-              <div>{displayPeople()}</div>
-              <div className="flex">
-                {isAddingNewPerson ? (
+              <div>{renderPeople()}</div>
+              {isAddingNewPerson ? (
+                <div className="flex">
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
                     <form onSubmit={handleSavePerson}>
-                      <input
-                        type="text"
+                      <Input
                         name="name"
-                        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                         placeholder="Ex: John"
                         onChange={handlePersonNameChange}
                       />
                     </form>
                   </div>
-                ) : null}
-                <div className="flex justify-around w-1/6 p2">
-                  {isAddingNewPerson ? (
-                    <button type="button" onClick={handleSavePerson}>
-                      <Icon name="check" color="green" />
-                    </button>
-                  ) : null}
-                  {isAddingNewPerson ? (
-                    <button
-                      type="button"
+                  <div className="flex justify-around w-1/6 p2">
+                    <IconButton
+                      name="check"
+                      color="green"
+                      onClick={handleSavePerson}
+                    />
+                    <IconButton
+                      name="trash"
+                      color="red"
                       onClick={handleCancelPerson}
-                    >
-                      <Icon name="trash" color="red" />
-                    </button>
-                  ) : null}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>
