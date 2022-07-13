@@ -51,7 +51,6 @@ TODO:
   - Limit chars of names and items
   - Regex for price input handling
   - Display error message when adding item or person
-  - Instructions
 */
 
 const Home: NextPage = () => {
@@ -353,7 +352,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="font-mono">
+    <div className="font-mono m-auto max-w-xl flex-col py-8 px-4">
       <Head>
         <title>EZ Split</title>
         <meta
@@ -364,113 +363,111 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="container w-1/2 ml-auto mr-auto">
-          <div className="flex justify-between ">
-            <h1 className="font-bold text-4xl mt-4 mb-8">EZ Split</h1>
-            <IconButton
-              name="question"
-              color="yellow"
-              onClick={() => setShowInstructions(!showInstructions)}
-            />
-          </div>
-          {renderInstructions()}
-          <div className="flex-col justify-start">
-            <div className="mb-8">
-              <div className="flex justify-between">
-                <h1 className="font-bold text-2xl mb-2">Items</h1>
-                {!isAddingItem ? (
+        <div className="flex justify-between ">
+          <h1 className="font-bold text-4xl mb-8">EZ Split</h1>
+          <IconButton
+            name="question"
+            color="yellow"
+            onClick={() => setShowInstructions(!showInstructions)}
+          />
+        </div>
+        {renderInstructions()}
+        <div className="flex-col justify-start">
+          <div className="mb-8">
+            <div className="flex justify-between">
+              <h1 className="font-bold text-2xl mb-2">Items</h1>
+              {!isAddingItem ? (
+                <IconButton
+                  name="plus"
+                  color="green"
+                  onClick={handleAddNewItem}
+                />
+              ) : null}
+            </div>
+            {renderItems()}
+            {isAddingItem ? (
+              <div className="flex">
+                <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
+                  <form className="flex" onSubmit={handleSaveItem}>
+                    <Input
+                      name="item"
+                      placeholder="Ex: Pizza"
+                      value={itemName}
+                      onChange={handleNameChange}
+                    />
+                    <Input
+                      name="item"
+                      placeholder="Ex: $3.50"
+                      value={itemPrice}
+                      onChange={handlePriceChange}
+                    />
+                    <button type="submit" className="hidden" />
+                  </form>
+                </div>
+                <div className="flex justify-around w-1/6 p2">
                   <IconButton
-                    name="plus"
+                    name="check"
                     color="green"
-                    onClick={handleAddNewItem}
+                    onClick={handleSaveItem}
                   />
-                ) : null}
-              </div>
-              {renderItems()}
-              {isAddingItem ? (
-                <div className="flex">
-                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
-                    <form className="flex" onSubmit={handleSaveItem}>
-                      <Input
-                        name="item"
-                        placeholder="Ex: Pizza"
-                        value={itemName}
-                        onChange={handleNameChange}
-                      />
-                      <Input
-                        name="item"
-                        placeholder="Ex: $3.50"
-                        value={itemPrice}
-                        onChange={handlePriceChange}
-                      />
-                      <button type="submit" className="hidden" />
-                    </form>
-                  </div>
-                  <div className="flex justify-around w-1/6 p2">
-                    <IconButton
-                      name="check"
-                      color="green"
-                      onClick={handleSaveItem}
-                    />
-                    <IconButton
-                      name="trash"
-                      color="red"
-                      onClick={handleCancelUpdateItem}
-                    />
-                    {/* {hasError ? (
+                  <IconButton
+                    name="trash"
+                    color="red"
+                    onClick={handleCancelUpdateItem}
+                  />
+                  {/* {hasError ? (
                       <span>Error! Enter item and price.</span>
                     ) : null} */}
-                  </div>
                 </div>
-              ) : null}
-              <div className="flex justify-between p-2 font-bold">
-                <span>Total</span>
-                <span>{`$${displayTotal()}`}</span>
               </div>
+            ) : null}
+            <div className="flex justify-between p-2 font-bold">
+              <span>Total</span>
+              <span>{`$${displayTotal()}`}</span>
             </div>
-            <div className="mb-8">
-              <div className="flex justify-between">
-                <h1 className="font-bold text-2xl">People</h1>
-                {!isAddingPerson ? (
+          </div>
+          <div className="mb-8">
+            <div className="flex justify-between">
+              <h1 className="font-bold text-2xl">People</h1>
+              {!isAddingPerson ? (
+                <IconButton
+                  name="plus"
+                  color="green"
+                  onClick={handleAddNewPerson}
+                />
+              ) : null}
+            </div>
+            <div>{renderPeople()}</div>
+            {isAddingPerson ? (
+              <div className="flex">
+                <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
+                  <form onSubmit={handleSavePerson}>
+                    <Input
+                      name="name"
+                      placeholder="Ex: John"
+                      onChange={handlePersonNameChange}
+                    />
+                  </form>
+                </div>
+                <div className="flex justify-around w-1/6 p2">
                   <IconButton
-                    name="plus"
+                    name="check"
                     color="green"
-                    onClick={handleAddNewPerson}
+                    onClick={handleSavePerson}
                   />
-                ) : null}
-              </div>
-              <div>{renderPeople()}</div>
-              {isAddingPerson ? (
-                <div className="flex">
-                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
-                    <form onSubmit={handleSavePerson}>
-                      <Input
-                        name="name"
-                        placeholder="Ex: John"
-                        onChange={handlePersonNameChange}
-                      />
-                    </form>
-                  </div>
-                  <div className="flex justify-around w-1/6 p2">
-                    <IconButton
-                      name="check"
-                      color="green"
-                      onClick={handleSavePerson}
-                    />
-                    <IconButton
-                      name="trash"
-                      color="red"
-                      onClick={handleCancelSavePerson}
-                    />
-                  </div>
+                  <IconButton
+                    name="trash"
+                    color="red"
+                    onClick={handleCancelSavePerson}
+                  />
                 </div>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </main>
 
-      <footer className="justify-center w-1/2 ml-auto mr-auto">
+      <footer>
         <span>
           Created by{' '}
           <a
@@ -481,6 +478,7 @@ const Home: NextPage = () => {
           >
             Richie Yi
           </a>
+          .
         </span>
       </footer>
     </div>
