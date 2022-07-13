@@ -198,6 +198,9 @@ const Home: NextPage = () => {
   }
 
   function handleAddNewItem() {
+    setEditingItemIdx(-1);
+    setItemName('');
+    setItemPrice('');
     setIsAddingItem(true);
   }
 
@@ -235,6 +238,7 @@ const Home: NextPage = () => {
   }
 
   function handleEditItem(idx: number, name: string, price: number) {
+    setIsAddingItem(false);
     setEditingItemIdx(idx);
     setItemName(name);
     setItemPrice(String(price));
@@ -255,7 +259,17 @@ const Home: NextPage = () => {
   }
 
   function handlePriceChange(e: any) {
-    setItemPrice(e.target.value);
+    const val = e.target.value;
+    const regex =
+      /"^\$?\-?([1-9]{1}[0-9]{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))$|^\-?\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))$|^\(\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))\)$"/;
+
+    /*
+    Regex found here: https://stackoverflow.com/a/354276
+    Prevent dollar sign and input limit of 6 chars (max: $999,999)
+    */
+    if (val !== '$' && !val.search(regex) && val.length < 7) {
+      setItemPrice(e.target.value);
+    }
   }
 
   function handleCancelUpdate() {
@@ -357,11 +371,13 @@ const Home: NextPage = () => {
                       <Input
                         name="item"
                         placeholder="Ex: Pizza"
+                        value={itemName}
                         onChange={handleNameChange}
                       />
                       <Input
                         name="item"
                         placeholder="Ex: $3.50"
+                        value={itemPrice}
                         onChange={handlePriceChange}
                       />
                       <button type="submit" className="hidden" />
