@@ -8,7 +8,7 @@ import Input from '../components/Input';
 // import styles from '../styles/Home.module.css';
 
 const item1 = {
-  name: 'Hot Dog',
+  name: 'Corn Dog',
   price: 1.5,
   assignee: null,
 };
@@ -25,8 +25,8 @@ const item3 = {
 const exampleItems = [item1, item2, item3];
 const examplePeople = [
   { name: 'John', total: 0 },
-  { name: 'Jane', total: 0 },
-  { name: 'Bob', total: 0 },
+  { name: 'Kevin', total: 0 },
+  { name: 'Danny', total: 0 },
 ];
 
 interface Item {
@@ -187,7 +187,7 @@ const Home: NextPage = () => {
                 <IconButton
                   name="trash"
                   color="red"
-                  onClick={() => handleDeleteItem(idx)}
+                  onClick={() => handleDeleteItem(item, idx)}
                 />
               </>
             )}
@@ -240,8 +240,14 @@ const Home: NextPage = () => {
     setItemPrice(String(price));
   }
 
-  function handleDeleteItem(idx: number) {
+  function handleDeleteItem(item: Item, idx: number) {
+    const newPeople = [...people];
+    if (item.assignee !== null) {
+      newPeople[item.assignee].total -= item.price;
+    }
+
     setItems(items.filter((_, i) => i !== idx));
+    setPeople(newPeople);
   }
 
   function handleNameChange(e: any) {
