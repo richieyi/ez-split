@@ -10,14 +10,17 @@ import Input from '../components/Input';
 const item1 = {
   name: 'Hot Dog',
   price: 1.5,
+  assignee: null,
 };
 const item2 = {
   name: 'Waffle',
   price: 2.25,
+  assignee: null,
 };
 const item3 = {
   name: 'Pizza',
   price: 3.5,
+  assignee: null,
 };
 const exampleItems = [item1, item2, item3];
 const examplePeople = [
@@ -29,6 +32,7 @@ const examplePeople = [
 interface Item {
   name: string;
   price: number;
+  assignee: string | null;
 }
 
 interface People {
@@ -44,97 +48,115 @@ TODO:
   - Style line items
   - UX for adding items
     - Autofocus on input when adding
+- Other
+  - Limit chars of names and items
+  - Regex for price input handling
+  - Display error message when adding item or person
 */
 
 const Home: NextPage = () => {
-  const [newItemName, setNewItemName] = useState<string>('');
-  const [newPrice, setNewPrice] = useState<string>('');
+  const [itemName, setItemName] = useState<string>('');
+  const [itemPrice, setItemPrice] = useState<string>('');
   const [hasError, setHasError] = useState<boolean>(false);
-  const [isAddingNewItem, setIsAddingNewItem] =
-    useState<boolean>(false);
+  const [isAddingItem, setIsAddingItem] = useState<boolean>(false);
   const [items, setItems] = useState<Item[]>(exampleItems);
-  const [isEditingItem, setIsEditingItem] = useState<number>(-1);
+  const [editingItemIdx, setEditingItemIdx] = useState<number>(-1);
 
-  const [newPerson, setNewPerson] = useState<string>('');
-  const [isAddingNewPerson, setIsAddingNewPerson] =
+  const [personName, setPersonName] = useState<string>('');
+  const [isAddingPerson, setIsAddingPerson] =
     useState<boolean>(false);
   const [people, setPeople] = useState<People[]>(examplePeople);
 
+  // const [activePerson, setActivePerson] = useState<number>(-1);
+  // console.log('active', activePerson);
+
   function renderItems() {
-    return items.map((item, idx) => (
-      <div key={idx} className="flex w-full">
-        <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
-          <form
-            onSubmit={handleUpdate}
-            className="flex justify-between w-full"
-          >
-            {isEditingItem === idx ? (
-              <>
+    return items.map((item, idx) => {
+      const isEditingItem = editingItemIdx === idx;
+      return (
+        <div key={idx} className="flex w-full">
+          {!isEditingItem ? (
+            <div
+              className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6"
+              onClick={() => console.log('hi')}
+            >
+              <span>{item.name}</span>
+              <span>{`$${item.price}`}</span>
+            </div>
+          ) : null}
+          {isEditingItem ? (
+            <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
+              <form
+                onSubmit={handleUpdate}
+                className="flex justify-between w-full"
+              >
                 <Input
                   name="item"
                   placeholder="Ex: Pizza"
                   onChange={handleNameChange}
-                  value={newItemName}
+                  value={itemName}
                 />
                 <Input
                   name="price"
                   placeholder="Ex: $3.50"
                   onChange={handlePriceChange}
-                  value={newPrice}
+                  value={itemPrice}
+                />
+                <button type="submit" className="hidden" />
+              </form>
+            </div>
+          ) : null}
+          <div className="flex justify-around w-1/6 p2">
+            {isEditingItem ? (
+              <>
+                <IconButton
+                  name="check"
+                  color="green"
+                  onClick={(e: any) => handleUpdate(e)}
+                />
+                <IconButton
+                  name="x"
+                  color="red"
+                  onClick={handleCancelUpdate}
                 />
               </>
             ) : (
               <>
-                <span>{item.name}</span>
-                <span>{`$${item.price}`}</span>
+                <IconButton
+                  name="pencil"
+                  color="blue"
+                  onClick={() =>
+                    handleEdit(idx, item.name, item.price)
+                  }
+                />
+                <IconButton
+                  name="trash"
+                  color="red"
+                  onClick={() => handleDelete(idx)}
+                />
               </>
             )}
-            <button type="submit" className="hidden" />
-          </form>
+          </div>
         </div>
-        <div className="flex justify-around w-1/6 p2">
-          {isEditingItem === idx ? (
-            <IconButton
-              name="check"
-              color="green"
-              onClick={(e: any) => handleUpdate(e)}
-            />
-          ) : (
-            <IconButton
-              name="pencil"
-              color="blue"
-              onClick={() => handleEdit(idx, item.name, item.price)}
-            />
-          )}
-          {isEditingItem === idx ? (
-            <IconButton
-              name="x"
-              color="red"
-              onClick={handleCancelUpdate}
-            />
-          ) : (
-            <IconButton
-              name="trash"
-              color="red"
-              onClick={() => handleDelete(idx)}
-            />
-          )}
-        </div>
-      </div>
-    ));
+      );
+    });
   }
 
   function handleAddNewItem() {
-    setIsAddingNewItem(true);
+    setIsAddingItem(true);
   }
 
   function handleSave() {
-    if (newItemName.length > 0 && newPrice.length > 0) {
+    if (itemName.length > 0 && itemPrice.length > 0) {
       setItems([
         ...items,
-        { name: newItemName, price: Number(newPrice) },
+        {
+          name: itemName,
+          price: Number(itemPrice),
+          assignee: null,
+        },
       ]);
-      setIsAddingNewItem(false);
+      setIsAddingItem(false);
       setHasError(false);
     } else {
       setHasError(true);
@@ -145,22 +167,23 @@ const Home: NextPage = () => {
     e.preventDefault();
     console.log('testing');
     let newArr = [...items];
-    newArr[isEditingItem] = {
-      name: newItemName,
-      price: Number(newPrice),
+    newArr[editingItemIdx] = {
+      name: itemName,
+      price: Number(itemPrice),
+      assignee: null,
     };
     setItems(newArr);
-    setIsEditingItem(-1);
+    setEditingItemIdx(-1);
   }
 
   function handleCancel() {
-    setIsAddingNewItem(false);
+    setIsAddingItem(false);
   }
 
   function handleEdit(idx: number, name: string, price: number) {
-    setIsEditingItem(idx);
-    setNewItemName(name);
-    setNewPrice(String(price));
+    setEditingItemIdx(idx);
+    setItemName(name);
+    setItemPrice(String(price));
   }
 
   function handleDelete(idx: number) {
@@ -168,15 +191,15 @@ const Home: NextPage = () => {
   }
 
   function handleNameChange(e: any) {
-    setNewItemName(e.target.value);
+    setItemName(e.target.value);
   }
 
   function handlePriceChange(e: any) {
-    setNewPrice(e.target.value);
+    setItemPrice(e.target.value);
   }
 
   function handleCancelUpdate() {
-    setIsEditingItem(-1);
+    setEditingItemIdx(-1);
   }
 
   function displayTotal() {
@@ -187,21 +210,21 @@ const Home: NextPage = () => {
   }
 
   function handlePersonNameChange(e: any) {
-    setNewPerson(e.target.value);
+    setPersonName(e.target.value);
   }
 
   function handleAddNewPerson() {
-    setIsAddingNewPerson(true);
+    setIsAddingPerson(true);
   }
 
   function handleSavePerson() {
-    setPeople([...people, { name: newPerson }]);
-    setIsAddingNewPerson(false);
+    setPeople([...people, { name: personName }]);
+    setIsAddingPerson(false);
   }
 
   function handleCancelPerson() {
-    setNewPerson('');
-    setIsAddingNewPerson(false);
+    setPersonName('');
+    setIsAddingPerson(false);
   }
 
   function renderPeople() {
@@ -209,6 +232,7 @@ const Home: NextPage = () => {
       <div
         key={idx}
         className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200"
+        // onClick={() => setActivePerson(idx)}
       >
         <span>{person.name}</span>
       </div>
@@ -237,7 +261,7 @@ const Home: NextPage = () => {
             <div>
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">Items</h1>
-                {!isAddingNewItem ? (
+                {!isAddingItem ? (
                   <IconButton
                     name="plus"
                     color="blue"
@@ -246,7 +270,7 @@ const Home: NextPage = () => {
                 ) : null}
               </div>
               {renderItems()}
-              {isAddingNewItem ? (
+              {isAddingItem ? (
                 <div className="flex">
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
                     <form className="flex" onSubmit={handleSave}>
@@ -288,7 +312,7 @@ const Home: NextPage = () => {
             <div>
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">People</h1>
-                {!isAddingNewPerson ? (
+                {!isAddingPerson ? (
                   <IconButton
                     name="plus"
                     color="blue"
@@ -297,7 +321,7 @@ const Home: NextPage = () => {
                 ) : null}
               </div>
               <div>{renderPeople()}</div>
-              {isAddingNewPerson ? (
+              {isAddingPerson ? (
                 <div className="flex">
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
                     <form onSubmit={handleSavePerson}>
@@ -346,6 +370,6 @@ const Home: NextPage = () => {
       </footer>
     </div>
   );
-};
+};;
 
 export default Home;
