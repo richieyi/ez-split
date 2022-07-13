@@ -32,7 +32,7 @@ const examplePeople = [
 interface Item {
   name: string;
   price: number;
-  assignee: string | null;
+  assignee: number | null;
 }
 
 interface People {
@@ -42,7 +42,6 @@ interface People {
 /*
 TODO:
 - Names of people
-  - Allow assigning of people to items
   - Display total per person
 - CSS/UX
   - Style line items
@@ -67,25 +66,56 @@ const Home: NextPage = () => {
     useState<boolean>(false);
   const [people, setPeople] = useState<People[]>(examplePeople);
 
-  // const [activePerson, setActivePerson] = useState<number>(-1);
-  // console.log('active', activePerson);
+  const [activePerson, setActivePerson] = useState<number>(-1);
+  console.log('active', activePerson);
+  console.log('items', items);
+  console.log('peeps', people);
+
+  function handleSetAsignee(
+    itemIdx: number,
+    isAlreadyAssigned: boolean
+  ) {
+    const newItems = [...items];
+
+    if (isAlreadyAssigned) {
+      items[itemIdx].assignee = null;
+    } else {
+      items[itemIdx].assignee = activePerson;
+    }
+
+    setItems(newItems);
+  }
 
   function renderItems() {
     return items.map((item, idx) => {
       const isEditingItem = editingItemIdx === idx;
+      const isAssignedToActivePerson = item.assignee === activePerson;
+      const assigneeName =
+        item.assignee !== null ? people[item.assignee].name : '';
+
       return (
         <div key={idx} className="flex w-full">
           {!isEditingItem ? (
             <div
-              className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6"
-              onClick={() => console.log('hi')}
+              className={`flex justify-between border rounded w-5/6 ${
+                isAssignedToActivePerson
+                  ? 'border-yellow-400'
+                  : 'border-slate-400'
+              } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-200 hover:shadow-lg shadow-cyan-500/50"`}
+              onClick={() =>
+                handleSetAsignee(idx, isAssignedToActivePerson)
+              }
             >
-              <span>{item.name}</span>
+              {assigneeName ? (
+                <span>{`${item.name} (${assigneeName})`}</span>
+              ) : (
+                <span>{item.name}</span>
+              )}
               <span>{`$${item.price}`}</span>
             </div>
           ) : null}
           {isEditingItem ? (
-            <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
+            <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 w-5/6">
               <form
                 onSubmit={handleUpdate}
                 className="flex justify-between w-full"
@@ -165,7 +195,6 @@ const Home: NextPage = () => {
 
   function handleUpdate(e: any) {
     e.preventDefault();
-    console.log('testing');
     let newArr = [...items];
     newArr[editingItemIdx] = {
       name: itemName,
@@ -228,18 +257,22 @@ const Home: NextPage = () => {
   }
 
   function renderPeople() {
-    return people.map((person, idx) => (
-      <div
-        key={idx}
-        className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200"
-        // onClick={() => setActivePerson(idx)}
-      >
-        <span>{person.name}</span>
-      </div>
-    ));
-  }
+    return people.map((person, idx) => {
+      const isActivePerson = activePerson === idx;
 
-  console.log('here', people);
+      return (
+        <div
+          key={idx}
+          className={`flex justify-between border rounded ${
+            isActivePerson ? 'border-green-400' : 'border-slate-400'
+          } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-200 hover:shadow-lg shadow-cyan-500/50"`}
+          onClick={() => setActivePerson(isActivePerson ? -1 : idx)}
+        >
+          <span>{person.name}</span>
+        </div>
+      );
+    });
+  }
 
   return (
     <div>
@@ -370,6 +403,6 @@ const Home: NextPage = () => {
       </footer>
     </div>
   );
-};;
+};
 
 export default Home;
