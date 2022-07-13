@@ -111,14 +111,14 @@ const Home: NextPage = () => {
         item.assignee !== null ? people[item.assignee].name : '';
 
       return (
-        <div key={idx} className="flex w-full">
+        <div key={Math.random()} className="flex w-full">
           {!isEditingItem ? (
             <div
-              className={`flex justify-between border rounded w-5/6 ${
+              className={`flex justify-between border rounded w-5/6 shadow-md ${
                 isAssignedToActivePerson
-                  ? 'border-yellow-400'
+                  ? 'border-green-400'
                   : 'border-slate-400'
-              } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-200 hover:shadow-lg shadow-cyan-500/50"`}
+              } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-xl"`}
               onClick={
                 activePerson !== -1
                   ? () =>
@@ -298,10 +298,10 @@ const Home: NextPage = () => {
 
       return (
         <div
-          key={idx}
-          className={`flex justify-between border rounded ${
+          key={Math.random()}
+          className={`flex justify-between border rounded shadow-md ${
             isActivePerson ? 'border-green-400' : 'border-slate-400'
-          } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-200 hover:shadow-lg shadow-cyan-500/50"`}
+          } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-xl shadow-cyan-500/50"`}
           onClick={() => setActivePerson(isActivePerson ? -1 : idx)}
         >
           <span>{person.name}</span>
@@ -314,7 +314,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
+    <div className="font-mono">
       <Head>
         <title>EZ Split</title>
         <meta
@@ -327,16 +327,18 @@ const Home: NextPage = () => {
       <main>
         <div className="container w-1/2 ml-auto mr-auto">
           <div>
-            <h1 className="font-bold text-4xl">EZ Split</h1>
+            <h1 className="font-bold text-4xl mt-4 mb-12">
+              EZ Split
+            </h1>
           </div>
           <div className="flex-col justify-start">
-            <div>
+            <div className="mb-8">
               <div className="flex justify-between">
-                <h1 className="font-bold text-2xl">Items</h1>
+                <h1 className="font-bold text-2xl mb-2">Items</h1>
                 {!isAddingItem ? (
                   <IconButton
                     name="plus"
-                    color="blue"
+                    color="green"
                     onClick={handleAddNewItem}
                   />
                 ) : null}
@@ -344,7 +346,7 @@ const Home: NextPage = () => {
               {renderItems()}
               {isAddingItem ? (
                 <div className="flex">
-                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
+                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
                     <form className="flex" onSubmit={handleSaveItem}>
                       <Input
                         name="item"
@@ -381,13 +383,13 @@ const Home: NextPage = () => {
                 <span>{`$${displayTotal()}`}</span>
               </div>
             </div>
-            <div>
+            <div className="mb-8">
               <div className="flex justify-between">
                 <h1 className="font-bold text-2xl">People</h1>
                 {!isAddingPerson ? (
                   <IconButton
                     name="plus"
-                    color="blue"
+                    color="green"
                     onClick={handleAddNewPerson}
                   />
                 ) : null}
@@ -395,7 +397,7 @@ const Home: NextPage = () => {
               <div>{renderPeople()}</div>
               {isAddingPerson ? (
                 <div className="flex">
-                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
+                  <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
                     <form onSubmit={handleSavePerson}>
                       <Input
                         name="name"
@@ -424,21 +426,17 @@ const Home: NextPage = () => {
       </main>
 
       <footer className="justify-center w-1/2 ml-auto mr-auto">
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span>
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              width={72}
-              height={16}
-            />
-          </span>
-        </a>
+        <span>
+          Created by{' '}
+          <a
+            className="text-blue-500"
+            href="https://github.com/richieyi"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Richie Yi
+          </a>
+        </span>
       </footer>
     </div>
   );

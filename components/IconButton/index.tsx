@@ -1,7 +1,7 @@
 import {
   TrashIcon,
   PencilIcon,
-  PlusCircleIcon,
+  PlusIcon,
   CheckIcon,
   XIcon,
 } from '@heroicons/react/solid';
@@ -9,7 +9,7 @@ import {
 const iconMap: any = {
   trash: TrashIcon,
   pencil: PencilIcon,
-  plus: PlusCircleIcon,
+  plus: PlusIcon,
   check: CheckIcon,
   x: XIcon,
 };
