@@ -51,9 +51,12 @@ TODO:
   - Limit chars of names and items
   - Regex for price input handling
   - Display error message when adding item or person
+  - Instructions
 */
 
 const Home: NextPage = () => {
+  const [showInstructions, setShowInstructions] = useState(false);
+
   const [itemName, setItemName] = useState<string>('');
   const [itemPrice, setItemPrice] = useState<string>('');
   const [hasError, setHasError] = useState<boolean>(false);
@@ -67,9 +70,7 @@ const Home: NextPage = () => {
   const [people, setPeople] = useState<People[]>(examplePeople);
 
   const [activePerson, setActivePerson] = useState<number>(-1);
-  console.log('active', activePerson);
   console.log('items', items);
-  console.log('peeps', people);
 
   function handleSetAsignee(
     itemIdx: number,
@@ -82,19 +83,19 @@ const Home: NextPage = () => {
     const currentlyAssignedPerson = items[itemIdx].assignee;
 
     if (itemAssignee === null) {
-      // Item is not assigned at all => give item to active person
+      // Item is not assigned at all => assign item to active person
       newItems[itemIdx].assignee = activePerson;
       newPeople[activePerson].total += itemPrice;
     } else if (itemAssignee !== null && isAssignedToActivePerson) {
-      // Item is assigned to active person => memove item from active person
+      // Item is assigned to active person => unassign item from active person
       newItems[itemIdx].assignee = null;
       newPeople[activePerson].total -= itemPrice;
     } else if (itemAssignee !== null && !isAssignedToActivePerson) {
-      // Remove item from non-active person and assign to active person
+      // Item is assigned, but not assigned to active person => re-assign item to active person
       newItems[itemIdx].assignee = activePerson;
       newPeople[activePerson].total += itemPrice;
 
-      if (currentlyAssignedPerson) {
+      if (currentlyAssignedPerson !== null) {
         newPeople[currentlyAssignedPerson].total -= itemPrice;
       }
     }
@@ -118,7 +119,7 @@ const Home: NextPage = () => {
                 isAssignedToActivePerson
                   ? 'border-green-400'
                   : 'border-slate-400'
-              } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-xl"`}
+              } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-lg"`}
               onClick={
                 activePerson !== -1
                   ? () =>
@@ -321,7 +322,7 @@ const Home: NextPage = () => {
           key={Math.random()}
           className={`flex justify-between border rounded shadow-md ${
             isActivePerson ? 'border-green-400' : 'border-slate-400'
-          } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-xl shadow-cyan-500/50"`}
+          } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-100 hover:shadow-lg shadow-cyan-500/50"`}
           onClick={() => setActivePerson(isActivePerson ? -1 : idx)}
         >
           <span>{person.name}</span>
@@ -331,6 +332,24 @@ const Home: NextPage = () => {
         </div>
       );
     });
+  }
+
+  function renderInstructions() {
+    if (showInstructions) {
+      return (
+        <div>
+          <div className="mb-2">
+            <span>Want to split a bill with no frills?</span>
+          </div>
+          <div className="mb-8">
+            <span>
+              Add items and names. Click a name and then click an item
+              to assign. EZ.
+            </span>
+          </div>
+        </div>
+      );
+    }
   }
 
   return (
@@ -346,11 +365,15 @@ const Home: NextPage = () => {
 
       <main>
         <div className="container w-1/2 ml-auto mr-auto">
-          <div>
-            <h1 className="font-bold text-4xl mt-4 mb-12">
-              EZ Split
-            </h1>
+          <div className="flex justify-between ">
+            <h1 className="font-bold text-4xl mt-4 mb-8">EZ Split</h1>
+            <IconButton
+              name="question"
+              color="yellow"
+              onClick={() => setShowInstructions(!showInstructions)}
+            />
           </div>
+          {renderInstructions()}
           <div className="flex-col justify-start">
             <div className="mb-8">
               <div className="flex justify-between">

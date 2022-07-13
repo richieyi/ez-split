@@ -3,6 +3,7 @@ import {
   PencilIcon,
   PlusIcon,
   CheckIcon,
+  QuestionMarkCircleIcon,
   XIcon,
 } from '@heroicons/react/solid';
 
@@ -11,6 +12,7 @@ const iconMap: any = {
   pencil: PencilIcon,
   plus: PlusIcon,
   check: CheckIcon,
+  question: QuestionMarkCircleIcon,
   x: XIcon,
 };
 
@@ -18,6 +20,7 @@ const colorsMap: any = {
   red: 'text-red-500',
   blue: 'text-blue-500',
   green: 'text-green-500',
+  yellow: 'text-yellow-500',
 };
 
 interface Props {
