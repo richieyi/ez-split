@@ -24,9 +24,9 @@ const item3 = {
 };
 const exampleItems = [item1, item2, item3];
 const examplePeople = [
-  { name: 'John' },
-  { name: 'Jane' },
-  { name: 'Bob' },
+  { name: 'John', total: 0 },
+  { name: 'Jane', total: 0 },
+  { name: 'Bob', total: 0 },
 ];
 
 interface Item {
@@ -37,14 +37,14 @@ interface Item {
 
 interface People {
   name: string;
+  total: number;
 }
 
 /*
 TODO:
 - Names of people
-  - Display total per person
+  - Allow editing/deleting of person
 - CSS/UX
-  - Style line items
   - UX for adding items
     - Autofocus on input when adding
 - Other
@@ -73,17 +73,34 @@ const Home: NextPage = () => {
 
   function handleSetAsignee(
     itemIdx: number,
-    isAlreadyAssigned: boolean
+    itemPrice: number,
+    itemAssignee: number | null,
+    isAssignedToActivePerson: boolean
   ) {
     const newItems = [...items];
+    const newPeople = [...people];
+    const currentlyAssignedPerson = items[itemIdx].assignee;
 
-    if (isAlreadyAssigned) {
-      items[itemIdx].assignee = null;
-    } else {
-      items[itemIdx].assignee = activePerson;
+    if (itemAssignee === null) {
+      // Item is not assigned at all => give item to active person
+      newItems[itemIdx].assignee = activePerson;
+      newPeople[activePerson].total += itemPrice;
+    } else if (itemAssignee !== null && isAssignedToActivePerson) {
+      // Item is assigned to active person => memove item from active person
+      newItems[itemIdx].assignee = null;
+      newPeople[activePerson].total -= itemPrice;
+    } else if (itemAssignee !== null && !isAssignedToActivePerson) {
+      // Remove item from non-active person and assign to active person
+      newItems[itemIdx].assignee = activePerson;
+      newPeople[activePerson].total += itemPrice;
+
+      if (currentlyAssignedPerson) {
+        newPeople[currentlyAssignedPerson].total -= itemPrice;
+      }
     }
 
     setItems(newItems);
+    setPeople(newPeople);
   }
 
   function renderItems() {
@@ -102,8 +119,16 @@ const Home: NextPage = () => {
                   ? 'border-yellow-400'
                   : 'border-slate-400'
               } mt-2 mb-2 p-2 hover:cursor-pointer hover:bg-slate-200 hover:shadow-lg shadow-cyan-500/50"`}
-              onClick={() =>
-                handleSetAsignee(idx, isAssignedToActivePerson)
+              onClick={
+                activePerson !== -1
+                  ? () =>
+                      handleSetAsignee(
+                        idx,
+                        item.price,
+                        item.assignee,
+                        isAssignedToActivePerson
+                      )
+                  : () => {}
               }
             >
               {assigneeName ? (
@@ -111,13 +136,13 @@ const Home: NextPage = () => {
               ) : (
                 <span>{item.name}</span>
               )}
-              <span>{`$${item.price}`}</span>
+              <span>{`$${item.price.toFixed(2)}`}</span>
             </div>
           ) : null}
           {isEditingItem ? (
             <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 w-5/6">
               <form
-                onSubmit={handleUpdate}
+                onSubmit={handleUpdateItem}
                 className="flex justify-between w-full"
               >
                 <Input
@@ -142,7 +167,7 @@ const Home: NextPage = () => {
                 <IconButton
                   name="check"
                   color="green"
-                  onClick={(e: any) => handleUpdate(e)}
+                  onClick={(e: any) => handleUpdateItem(e)}
                 />
                 <IconButton
                   name="x"
@@ -156,13 +181,13 @@ const Home: NextPage = () => {
                   name="pencil"
                   color="blue"
                   onClick={() =>
-                    handleEdit(idx, item.name, item.price)
+                    handleEditItem(idx, item.name, item.price)
                   }
                 />
                 <IconButton
                   name="trash"
                   color="red"
-                  onClick={() => handleDelete(idx)}
+                  onClick={() => handleDeleteItem(idx)}
                 />
               </>
             )}
@@ -176,7 +201,7 @@ const Home: NextPage = () => {
     setIsAddingItem(true);
   }
 
-  function handleSave() {
+  function handleSaveItem() {
     if (itemName.length > 0 && itemPrice.length > 0) {
       setItems([
         ...items,
@@ -193,7 +218,7 @@ const Home: NextPage = () => {
     }
   }
 
-  function handleUpdate(e: any) {
+  function handleUpdateItem(e: any) {
     e.preventDefault();
     let newArr = [...items];
     newArr[editingItemIdx] = {
@@ -205,17 +230,17 @@ const Home: NextPage = () => {
     setEditingItemIdx(-1);
   }
 
-  function handleCancel() {
+  function handleCancelUpdateItem() {
     setIsAddingItem(false);
   }
 
-  function handleEdit(idx: number, name: string, price: number) {
+  function handleEditItem(idx: number, name: string, price: number) {
     setEditingItemIdx(idx);
     setItemName(name);
     setItemPrice(String(price));
   }
 
-  function handleDelete(idx: number) {
+  function handleDeleteItem(idx: number) {
     setItems(items.filter((_, i) => i !== idx));
   }
 
@@ -247,14 +272,25 @@ const Home: NextPage = () => {
   }
 
   function handleSavePerson() {
-    setPeople([...people, { name: personName }]);
+    setPeople([...people, { name: personName, total: 0 }]);
     setIsAddingPerson(false);
   }
 
-  function handleCancelPerson() {
+  function handleCancelSavePerson() {
     setPersonName('');
     setIsAddingPerson(false);
   }
+
+  // function getPersonsTotal(personIdx: number) {
+  //   return items.reduce((prev, curr) => {
+  //     if (personIdx === curr.assignee) {
+  //       console.log('curr', curr);
+  //       return prev + curr.price;
+  //     } else {
+  //       return 0;
+  //     }
+  //   }, 0);
+  // }
 
   function renderPeople() {
     return people.map((person, idx) => {
@@ -269,6 +305,9 @@ const Home: NextPage = () => {
           onClick={() => setActivePerson(isActivePerson ? -1 : idx)}
         >
           <span>{person.name}</span>
+          <span>
+            {person.total ? `$${person.total.toFixed(2)}` : `$0`}
+          </span>
         </div>
       );
     });
@@ -306,7 +345,7 @@ const Home: NextPage = () => {
               {isAddingItem ? (
                 <div className="flex">
                   <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-200 w-5/6">
-                    <form className="flex" onSubmit={handleSave}>
+                    <form className="flex" onSubmit={handleSaveItem}>
                       <Input
                         name="item"
                         placeholder="Ex: Pizza"
@@ -324,12 +363,12 @@ const Home: NextPage = () => {
                     <IconButton
                       name="check"
                       color="green"
-                      onClick={handleSave}
+                      onClick={handleSaveItem}
                     />
                     <IconButton
                       name="trash"
                       color="red"
-                      onClick={handleCancel}
+                      onClick={handleCancelUpdateItem}
                     />
                     {/* {hasError ? (
                       <span>Error! Enter item and price.</span>
@@ -374,7 +413,7 @@ const Home: NextPage = () => {
                     <IconButton
                       name="trash"
                       color="red"
-                      onClick={handleCancelPerson}
+                      onClick={handleCancelSavePerson}
                     />
                   </div>
                 </div>
