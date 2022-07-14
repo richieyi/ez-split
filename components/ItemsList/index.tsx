@@ -27,7 +27,7 @@ function ItemsList(props: any) {
       item.assignee !== null ? people[item.assignee].name : '';
 
     return (
-      <div key={id} className="flex w-full">
+      <div key={id} className="flex">
         {!isUpdatingItem ? (
           <div
             className={`flex justify-between border rounded w-5/6 shadow-md ${

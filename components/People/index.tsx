@@ -9,8 +9,12 @@ function People(props: any) {
   const [personName, setPersonName] = useState<string>('');
   const [isAddingPerson, setIsAddingPerson] =
     useState<boolean>(false);
+  const [updatingPersonIdx, setUpdatingPersonIdx] =
+    useState<number>(-1);
 
   function handleAddNewPerson() {
+    setUpdatingPersonIdx(-1);
+    setPersonName('');
     setIsAddingPerson(true);
   }
 
@@ -18,9 +22,23 @@ function People(props: any) {
     setPersonName(e.target.value);
   }
 
-  function handleSavePerson() {
+  function handleSaveNewPerson() {
     setPeople([...people, { name: personName, total: 0 }]);
     setIsAddingPerson(false);
+    setUpdatingPersonIdx(-1);
+  }
+
+  function handleSaveUpdatedPerson(e: any) {
+    e.preventDefault();
+
+    const newPeople = [...people];
+    newPeople[updatingPersonIdx] = {
+      name: personName,
+      // TODO: FIX total
+      total: 0,
+    };
+    setPeople(newPeople);
+    setUpdatingPersonIdx(-1);
   }
 
   function handleCancelSavePerson() {
@@ -28,13 +46,29 @@ function People(props: any) {
     setIsAddingPerson(false);
   }
 
+  function handleUpdatePerson(idx: number, name: string) {
+    setIsAddingPerson(false);
+    setUpdatingPersonIdx(idx);
+    setPersonName(name);
+  }
+
+  function handleDeletePerson(idx: number) {
+    setPeople(people.filter((_: any, i: number) => i !== idx));
+  }
+
   const peopleListProps = {
     people,
     activePerson,
     setActivePerson,
+    updatingPersonIdx,
+    handlePersonNameChange,
+    personName,
+    handleUpdatePerson,
+    handleSaveUpdatedPerson,
+    handleDeletePerson,
   };
   const newPersonFormProps = {
-    handleSavePerson,
+    handleSaveNewPerson,
     handlePersonNameChange,
     handleCancelSavePerson,
   };

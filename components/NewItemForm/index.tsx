@@ -17,13 +17,13 @@ function NewItemForm(props: any) {
         <form className="flex" onSubmit={handleSaveNewItem}>
           <Input
             name="item"
-            placeholder="Ex: Pizza"
+            placeholder="Item (Ex: Pizza)"
             onChange={handleNameChange}
             value={itemName}
           />
           <Input
             name="item"
-            placeholder="Ex: $3.50"
+            placeholder="Price (Ex: 3.50)"
             onChange={handlePriceChange}
             value={itemPrice}
           />

@@ -3,7 +3,7 @@ import Input from '../Input';
 
 function NewPersonForm(props: any) {
   const {
-    handleSavePerson,
+    handleSaveNewPerson,
     handlePersonNameChange,
     handleCancelSavePerson,
   } = props;
@@ -11,10 +11,10 @@ function NewPersonForm(props: any) {
   return (
     <div className="flex">
       <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
-        <form onSubmit={handleSavePerson}>
+        <form onSubmit={handleSaveNewPerson}>
           <Input
             name="name"
-            placeholder="Ex: John"
+            placeholder="Nickname (Ex: John)"
             onChange={handlePersonNameChange}
           />
         </form>
@@ -23,7 +23,7 @@ function NewPersonForm(props: any) {
         <IconButton
           name="check"
           color="green"
-          onClick={handleSavePerson}
+          onClick={handleSaveNewPerson}
         />
         <IconButton
           name="trash"

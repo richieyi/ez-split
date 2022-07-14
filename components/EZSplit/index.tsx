@@ -17,15 +17,12 @@ interface People {
 
 /*
 TODO:
+- Tip & tax
 - Names of people
   - Allow updating/deleting of person
 - CSS/UX
   - UX for adding items
     - Autofocus on input when adding
-- Other
-  - Limit chars of names and items
-  - Regex for price input handling
-  - Display error message when adding item or person
 - Bugs
   - Input bug when editing an item
   - Updating item price doesn't update price for the person

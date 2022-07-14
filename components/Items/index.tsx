@@ -62,6 +62,7 @@ function Items(props: any) {
       newArr[updatingItemIdx] = {
         name: itemName,
         price: Number(itemPrice),
+        // TODO: FIX assignee
         assignee: null,
       };
       setItems(newArr);
@@ -166,7 +167,7 @@ function Items(props: any) {
       {isAddingItem ? <NewItemForm {...newItemFormProps} /> : null}
       <div className="flex justify-between p-2 font-bold">
         <span>Total</span>
-        <span>{`$${displayTotal()}`}</span>
+        <span>{`$${displayTotal().toFixed(2)}`}</span>
       </div>
     </div>
   );
