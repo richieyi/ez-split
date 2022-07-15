@@ -1,4 +1,4 @@
-import IconButton from '../IconButton';
+import SaveCancelButtons from '../SaveCancelButtons';
 import Input from '../Input';
 
 function NewItemForm(props: any) {
@@ -13,7 +13,7 @@ function NewItemForm(props: any) {
 
   return (
     <div className="flex">
-      <div className="flex justify-between border rounded border-slate-400 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
+      <div className="flex justify-between border-2 rounded border-slate-300 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
         <form className="flex" onSubmit={handleSaveNewItem}>
           <Input
             name="item"
@@ -30,18 +30,10 @@ function NewItemForm(props: any) {
           <button type="submit" className="hidden" />
         </form>
       </div>
-      <div className="flex justify-around w-1/6 p2">
-        <IconButton
-          name="check"
-          color="green"
-          onClick={handleSaveNewItem}
-        />
-        <IconButton
-          name="trash"
-          color="red"
-          onClick={handleCancelSaveItem}
-        />
-      </div>
+      <SaveCancelButtons
+        handleSave={handleSaveNewItem}
+        handleCancelSave={handleCancelSaveItem}
+      />
     </div>
   );
 }

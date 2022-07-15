@@ -10,7 +10,7 @@ interface Item {
   assignee: number | null;
 }
 
-interface People {
+interface Person {
   name: string;
   total: number;
 }
@@ -31,7 +31,7 @@ TODO:
 function EZSplit() {
   const [showInstructions, setShowInstructions] = useState(false);
   const [items, setItems] = useState<Item[]>(exampleItems);
-  const [people, setPeople] = useState<People[]>(examplePeople);
+  const [people, setPeople] = useState<Person[]>(examplePeople);
   const [activePerson, setActivePerson] = useState<number>(-1);
 
   console.log('items', items);

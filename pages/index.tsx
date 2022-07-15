@@ -4,7 +4,7 @@ import EZSplit from '../components/EZSplit';
 
 const Home: NextPage = () => {
   return (
-    <div className="font-mono m-auto max-w-xl flex-col py-8 px-4">
+    <div className="font-mono text-sm md:text-base m-auto max-w-xl flex-col py-8 px-4">
       <Head>
         <title>EZ Split</title>
         <meta

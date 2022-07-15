@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import IconButton from '../IconButton';
+import SectionHeader from '../SectionHeader';
 import PeopleList from '../PeopleList';
 import NewPersonForm from '../NewPersonForm';
 
@@ -32,12 +32,17 @@ function People(props: any) {
     e.preventDefault();
 
     const newPeople = [...people];
+    const total = newPeople[updatingPersonIdx].total;
     newPeople[updatingPersonIdx] = {
       name: personName,
-      // TODO: FIX total
-      total: 0,
+      total,
     };
     setPeople(newPeople);
+    setUpdatingPersonIdx(-1);
+  }
+
+  function handleCancelUpdatePerson() {
+    setPersonName('');
     setUpdatingPersonIdx(-1);
   }
 
@@ -65,6 +70,7 @@ function People(props: any) {
     personName,
     handleUpdatePerson,
     handleSaveUpdatedPerson,
+    handleCancelUpdatePerson,
     handleDeletePerson,
   };
   const newPersonFormProps = {
@@ -75,18 +81,11 @@ function People(props: any) {
 
   return (
     <div className="mb-8">
-      <div className="flex justify-between">
-        <h1 className="font-bold text-2xl">
-          People ({people.length})
-        </h1>
-        {!isAddingPerson ? (
-          <IconButton
-            name="plus"
-            color="green"
-            onClick={handleAddNewPerson}
-          />
-        ) : null}
-      </div>
+      <SectionHeader
+        headerTitle={`People (${people.length})`}
+        isAdding={isAddingPerson}
+        handleAddNew={handleAddNewPerson}
+      />
       <PeopleList {...peopleListProps} />
       {isAddingPerson ? (
         <NewPersonForm {...newPersonFormProps} />

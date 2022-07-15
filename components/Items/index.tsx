@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import IconButton from '../IconButton';
+import SectionHeader from '../SectionHeader';
 import ItemsList from '../ItemsList';
 import NewItemForm from '../NewItemForm';
 import { isValidAmount } from '../../utils';
@@ -58,12 +58,12 @@ function Items(props: any) {
     e.preventDefault();
 
     if (isValidItem()) {
-      let newArr = [...items];
+      const newArr = [...items];
+      const assignee = newArr[updatingItemIdx].assignee;
       newArr[updatingItemIdx] = {
         name: itemName,
         price: Number(itemPrice),
-        // TODO: FIX assignee
-        assignee: null,
+        assignee,
       };
       setItems(newArr);
       setUpdatingItemIdx(-1);
@@ -151,18 +151,11 @@ function Items(props: any) {
 
   return (
     <div className="mb-8">
-      <div className="flex justify-between">
-        <h1 className="font-bold text-2xl mb-2">
-          Items ({items.length})
-        </h1>
-        {!isAddingItem ? (
-          <IconButton
-            name="plus"
-            color="green"
-            onClick={handleAddNewItem}
-          />
-        ) : null}
-      </div>
+      <SectionHeader
+        headerTitle={`Items (${items.length})`}
+        isAdding={isAddingItem}
+        handleAddNew={handleAddNewItem}
+      />
       {<ItemsList {...itemsProps} />}
       {isAddingItem ? <NewItemForm {...newItemFormProps} /> : null}
       <div className="flex justify-between p-2 font-bold">
