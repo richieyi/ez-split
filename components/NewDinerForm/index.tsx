@@ -1,30 +1,30 @@
 import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 
-function NewPersonForm(props: any) {
+function NewDinerForm(props: any) {
   const {
-    handleSaveNewPerson,
-    handlePersonNameChange,
-    handleCancelSavePerson,
+    handleSaveNewDiner,
+    handleDinerNameChange,
+    handleCancelSaveDiner,
   } = props;
 
   return (
     <div className="flex">
       <div className="flex justify-between border-2 rounded border-slate-300 mt-2 mb-2 p-2 hover:bg-slate-100 w-5/6">
-        <form onSubmit={handleSaveNewPerson}>
+        <form onSubmit={handleSaveNewDiner}>
           <Input
             name="name"
             placeholder="Nickname (Ex: John)"
-            onChange={handlePersonNameChange}
+            onChange={handleDinerNameChange}
           />
         </form>
       </div>
       <SaveCancelButtons
-        handleSave={handleSaveNewPerson}
-        handleCancelSave={handleCancelSavePerson}
+        handleSave={handleSaveNewDiner}
+        handleCancelSave={handleCancelSaveDiner}
       />
     </div>
   );
 }
 
-export default NewPersonForm;
+export default NewDinerForm;

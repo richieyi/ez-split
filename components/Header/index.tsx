@@ -1,8 +1,9 @@
+import useInstructions from '../../hooks/useInstructions';
 import IconButton from '../IconButton';
 import Instructions from '../Instructions';
 
 function Header(props: any) {
-  const { showInstructions, setShowInstructions } = props;
+  const { showInstructions, setShowInstructions } = useInstructions();
 
   return (
     <>

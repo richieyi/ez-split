@@ -6,8 +6,8 @@ function Instructions() {
       </div>
       <div className="mb-8">
         <span>
-          Add items and names. Click a name and then click an item to
-          assign. EZ.
+          Add expenses and diners. Click a diner and then click an
+          expense to assign. EZ.
         </span>
       </div>
     </div>

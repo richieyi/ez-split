@@ -6,15 +6,15 @@ function UpdateForm(props: any) {
     handleSaveUpdated,
     handleNameChange,
     name,
-    handlePriceChange,
-    price,
+    handleCostChange,
+    cost,
   } = props;
 
   function renderInputs() {
-    if (type === 'person') {
+    if (type === 'diner') {
       return (
         <Input
-          name="item"
+          name="expense"
           placeholder="Nickname (Ex: John)"
           onChange={handleNameChange}
           value={name}
@@ -24,16 +24,16 @@ function UpdateForm(props: any) {
       return (
         <>
           <Input
-            name="item"
+            name="expense"
             placeholder="Ex: Pizza"
             onChange={handleNameChange}
             value={name}
           />
           <Input
-            name="price"
+            name="cost"
             placeholder="Ex: $3.50"
-            onChange={handlePriceChange}
-            value={price}
+            onChange={handleCostChange}
+            value={cost}
           />
         </>
       );
