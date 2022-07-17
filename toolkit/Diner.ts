@@ -30,9 +30,13 @@ class Diner {
     return this;
   }
 
-  public removeExpense(expense: Expense): this {
-    this.expenses = this.expenses.filter((exp) => exp !== expense);
-    expense.removeDiner(this);
+  public removeExpense(expenseToRemove: Expense): this {
+    console.log('old expenses', this.expenses);
+    this.expenses = this.expenses.filter(
+      (exp) => exp !== expenseToRemove
+    );
+    console.log('new expenses', this.expenses);
+    expenseToRemove.removeDiner(this);
     return this;
   }
 }

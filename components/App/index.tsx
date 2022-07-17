@@ -23,8 +23,8 @@ function App() {
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
     null
   );
-  console.log('diners', diners);
-  console.log('expenses', expenses);
+  // console.log('diners', diners);
+  // console.log('expenses', expenses);
 
   function handleAddNewExpense(e: any) {
     e.preventDefault();
@@ -48,32 +48,64 @@ function App() {
   function handleExpenseClick(expense: Expense) {
     setSelectedExpense(expense);
 
-    // if expense does exist -> remove expense
-    if (selectedDiner?.getExpenses().find((exp) => exp === expense)) {
-      selectedDiner?.removeExpense(expense);
-      // if expense does not exist in diner's expenses -> add expense
-    } else {
-      selectedDiner?.addExpense(expense);
+    if (selectedDiner) {
+      // if expense does exist -> remove expense
+      if (
+        selectedDiner.getExpenses().find((exp) => exp === expense)
+      ) {
+        selectedDiner.removeExpense(expense);
+        // if expense does not exist in diner's expenses -> add expense
+      } else {
+        selectedDiner?.addExpense(expense);
+      }
+      const newDiners = [...diners];
+      const idx = newDiners.findIndex(
+        (diner) => diner.getID() === selectedDiner?.getID()
+      );
+      newDiners.splice(idx, 1, selectedDiner);
+      setDiners(newDiners);
     }
-    // TODO FIX?: Only updates cost when resetting state
-    setDiners([...diners]);
+  }
+
+  function handleRemoveExpense(expenseToRemove: Expense) {
+    const newDiners = [...diners];
+    newDiners.forEach((diner) =>
+      diner.removeExpense(expenseToRemove)
+    );
+    setDiners(newDiners);
+
+    const newExpenses = [...expenses].filter(
+      (expense) => expense !== expenseToRemove
+    );
+    setExpenses(newExpenses);
+  }
+
+  function handleRemoveDiner(dinerToRemove: Diner) {
+    const newExpenses = [...expenses];
+    newExpenses.forEach((expense) =>
+      expense.removeDiner(dinerToRemove)
+    );
+    setExpenses(newExpenses);
+
+    const newDiners = [...diners].filter(
+      (diner) => diner !== dinerToRemove
+    );
+    setDiners(newDiners);
   }
 
   function renderExpenses() {
     return expenses.map((expense) => {
       const isSelected = selectedExpense === expense;
       return (
-        <div
-          key={expense.getID()}
-          className="flex justify-between"
-          onClick={() => handleExpenseClick(expense)}
-        >
-          <div className={isSelected ? 'text-red-500' : ''}>
+        <div key={expense.getID()} className="flex justify-between">
+          <div
+            className={isSelected ? 'text-red-500' : ''}
+            onClick={() => handleExpenseClick(expense)}
+          >
             <span>{expense.getName()}</span>{' '}
             <span>${expense.getCost()}</span>
           </div>
-          <button>
-            {/* <button onClick={() => handleRemoveExpense(expense)}> */}
+          <button onClick={() => handleRemoveExpense(expense)}>
             Remove
           </button>
         </div>
@@ -82,33 +114,27 @@ function App() {
   }
 
   function renderDinerTotal(diner: Diner) {
-    console.log('--- diner --- ', diner.getName());
-    if (diner.getExpenses().length > 0) {
-      console.log('returning more');
-      const total = diner.getExpenses().reduce((prev, curr) => {
-        return prev + curr.getCostPerDiner();
-      }, 0);
-      return total;
-    } else {
-      console.log('returning 0');
-      return 0;
-    }
+    const total = diner.getExpenses().reduce((prev, curr) => {
+      return prev + curr.getCostPerDiner();
+    }, 0);
+    return total;
   }
 
   function renderDiners() {
     return diners.map((diner, idx) => {
       const isSelected = selectedDiner === diner;
       return (
-        <div
-          key={diner.getID()}
-          className="flex justify-between"
-          onClick={() => setSelectedDiner(diner)}
-        >
-          <div className={isSelected ? 'text-red-500' : ''}>
+        <div key={diner.getID()} className="flex justify-between">
+          <div
+            className={isSelected ? 'text-red-500' : ''}
+            onClick={() => setSelectedDiner(diner)}
+          >
             <span>{diner.getName()}</span>{' '}
             <span>${renderDinerTotal(diner)}</span>
           </div>
-          <div>Remove</div>
+          <button onClick={() => handleRemoveDiner(diner)}>
+            Remove
+          </button>
         </div>
       );
     });

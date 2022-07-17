@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <App />
       </main>
 
-      <footer>
+      {/* <footer>
         <span>
           Created by{' '}
           <a
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           </a>
           .
         </span>
-      </footer>
+      </footer> */}
     </div>
   );
 };

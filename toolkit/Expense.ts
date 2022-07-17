@@ -41,17 +41,21 @@ class Expense {
     return this;
   }
 
-  public removeDiner(diner: Diner): this {
-    this.diners = this.diners.filter((din) => din !== diner);
+  public removeDiner(dinerToRemove: Diner): this {
+    this.diners = this.diners.filter(
+      (diner) => diner !== dinerToRemove
+    );
     this.updateCostPerDiner();
     return this;
   }
 
   public updateCostPerDiner(): void {
     const dinerCount = this.diners.length;
-    const totalCost = this.cost / dinerCount;
-    console.log('total cost', totalCost);
-    this.costPerDiner = this.cost / dinerCount;
+    if (dinerCount === 0) {
+      this.costPerDiner = 0;
+    } else {
+      this.costPerDiner = this.cost / dinerCount;
+    }
   }
 }
 
