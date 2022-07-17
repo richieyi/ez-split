@@ -27,6 +27,12 @@ class Expense {
     return this.cost;
   }
 
+  public updateExpense(newName: string, newCost: number) {
+    this.name = newName;
+    this.cost = newCost;
+    this.updateCostPerDiner();
+  }
+
   public getDiners(): Diner[] {
     return this.diners;
   }

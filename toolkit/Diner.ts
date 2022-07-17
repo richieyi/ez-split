@@ -20,9 +20,8 @@ class Diner {
     return this.name;
   }
 
-  public updateName(newName: string): string {
+  public updateDiner(newName: string): void {
     this.name = newName;
-    return this.name;
   }
 
   public getExpenses(): Expense[] {
@@ -41,6 +40,24 @@ class Diner {
     );
     expenseToRemove.removeDiner(this);
     return this;
+  }
+
+  // public updateExpense(expenseToUpdate: Expense): this {
+  //   console.log('here', this.expenses);
+  //   const idx = this.expenses.findIndex(
+  //     (expense) => expense.getID() === expenseToUpdate.getID()
+  //   );
+  //   if (idx >= 0) {
+  //     this.expenses.splice(idx, 1, expenseToUpdate);
+  //   }
+  //   return this;
+  // }
+
+  public getTotalExpenses(): number {
+    const total = this.getExpenses().reduce((prev, curr) => {
+      return prev + curr.getCostPerDiner();
+    }, 0);
+    return total;
   }
 }
 

@@ -1,3 +1,4 @@
+import exp from 'constants';
 import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
@@ -10,6 +11,7 @@ function App() {
   const [diners, setDiners] = useState<Diner[]>(exampleDiners);
   console.log('exp', expenses);
   console.log('din', diners);
+  console.log('---------');
 
   // Inputs for new expense/diner
   const [expense, setExpense] = useState<string>('');
@@ -17,6 +19,10 @@ function App() {
   const [diner, setDiner] = useState<string>('');
 
   // Inputs for updating expense/diner
+  const [expenseToUpdate, setExpenseToUpdate] =
+    useState<Expense | null>(null);
+  const [expenseNewName, setExpenseNewName] = useState<string>('');
+  const [expenseNewCost, setExpenseNewCost] = useState<string>('');
   const [dinerToUpdate, setDinerToUpdate] = useState<Diner | null>(
     null
   );
@@ -35,6 +41,8 @@ function App() {
     const newExpense = new Expense(expense, Number(cost));
     newExpenses.push(newExpense);
     setExpenses(newExpenses);
+
+    // Reset input
     setExpense('');
     setCost('');
   }
@@ -45,6 +53,8 @@ function App() {
     const newDiner = new Diner(diner);
     newDiners.push(newDiner);
     setDiners(newDiners);
+
+    // Reset input
     setDiner('');
   }
 
@@ -97,23 +107,82 @@ function App() {
     setDiners(newDiners);
   }
 
+  function handleUpdateExpense(expense: Expense) {
+    setExpenseToUpdate(expense);
+    setExpenseNewName(expense.getName());
+    setExpenseNewCost(String(expense.getCost()));
+  }
+
+  function resetExpenseToUpdate() {
+    setExpenseToUpdate(null);
+    setExpenseNewName('');
+    setExpenseNewCost('');
+  }
+
+  function handleSaveUpdatedExpense(e: any) {
+    e.preventDefault();
+
+    if (expenseToUpdate) {
+      expenseToUpdate.updateExpense(
+        expenseNewName,
+        Number(expenseNewCost)
+      );
+
+      const newExpenses = [...expenses];
+      const idx = newExpenses.findIndex(
+        (expense: any) => expense.getID() === expenseToUpdate.getID()
+      );
+      newExpenses.splice(idx, 1, expenseToUpdate);
+      setExpenses(newExpenses);
+      resetExpenseToUpdate();
+    }
+  }
+
   function renderExpenses() {
     return expenses.map((expense: Expense) => {
       const isSelected = selectedExpense === expense;
+      const isUpdating = expenseToUpdate === expense;
+
       return (
         <div key={expense.getID()} className="flex justify-between">
-          <div
-            className={isSelected ? 'text-red-500' : ''}
-            onClick={() => handleExpenseClick(expense)}
-          >
-            <span>{expense.getName()}</span>{' '}
-            <span>${expense.getCost()}</span>
-          </div>
+          {isUpdating ? (
+            <form onSubmit={handleSaveUpdatedExpense}>
+              <input
+                className="border"
+                value={expenseNewName}
+                onChange={(e) => setExpenseNewName(e.target.value)}
+              />
+              <input
+                className="border"
+                value={expenseNewCost}
+                onChange={(e) => setExpenseNewCost(e.target.value)}
+              />
+              <button
+                className="border"
+                onClick={handleSaveUpdatedExpense}
+              >
+                Save
+              </button>
+              <button
+                className="border"
+                onClick={resetExpenseToUpdate}
+              >
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <div
+              className={isSelected ? 'text-red-500' : ''}
+              onClick={() => handleExpenseClick(expense)}
+            >
+              <span>{expense.getName()}</span>{' '}
+              <span>${expense.getCost()}</span>
+            </div>
+          )}
           <div>
             <button
-              disabled
               className="border"
-              onClick={() => handleRemoveExpense(expense)}
+              onClick={() => handleUpdateExpense(expense)}
             >
               Update
             </button>
@@ -127,13 +196,6 @@ function App() {
         </div>
       );
     });
-  }
-
-  function renderDinerTotal(diner: Diner) {
-    const total = diner.getExpenses().reduce((prev, curr) => {
-      return prev + curr.getCostPerDiner();
-    }, 0);
-    return total;
   }
 
   function handleUpdateDiner(diner: Diner) {
@@ -150,7 +212,7 @@ function App() {
     e.preventDefault();
 
     if (dinerToUpdate) {
-      dinerToUpdate.updateName(dinerNewName);
+      dinerToUpdate.updateDiner(dinerNewName);
 
       const newDiners = [...diners];
       const idx = newDiners.findIndex(
@@ -193,7 +255,7 @@ function App() {
               onClick={() => setSelectedDiner(diner)}
             >
               <span>{diner.getName()}</span>{' '}
-              <span>${renderDinerTotal(diner)}</span>
+              <span>${diner.getTotalExpenses()}</span>
             </div>
           )}
           <div>
