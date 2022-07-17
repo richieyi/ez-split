@@ -1,12 +1,25 @@
+import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 
 function NewDinerForm(props: any) {
-  const {
-    handleSaveNewDiner,
-    handleDinerNameChange,
-    handleCancelSaveDiner,
-  } = props;
+  const { addDiner, handleHideForm } = props;
+
+  const [dinerName, setDinerName] = useState<string>('');
+
+  function handleSaveNewDiner() {
+    addDiner({
+      id: uuid(),
+      name: dinerName,
+      expenses: [],
+    });
+    handleHideForm();
+  }
+
+  function handleDinerNameChange(e: any) {
+    setDinerName(e.target.value);
+  }
 
   return (
     <div className="flex">
@@ -21,7 +34,7 @@ function NewDinerForm(props: any) {
       </div>
       <SaveCancelButtons
         handleSave={handleSaveNewDiner}
-        handleCancelSave={handleCancelSaveDiner}
+        handleCancelSave={handleHideForm}
       />
     </div>
   );

@@ -1,9 +1,9 @@
-import useInstructions from '../../hooks/useInstructions';
+import { useState } from 'react';
 import IconButton from '../IconButton';
 import Instructions from '../Instructions';
 
-function Header(props: any) {
-  const { showInstructions, setShowInstructions } = useInstructions();
+function Header() {
+  const [showInstructions, setShowInstructions] = useState(false);
 
   return (
     <>

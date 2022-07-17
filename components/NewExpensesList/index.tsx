@@ -1,7 +1,14 @@
+import { useState } from 'react';
 import useExpenses from '../../hooks/useExpenses';
+import NewExpenseForm from '../NewExpenseForm';
 
-function NewExpensesList(props: any) {
-  const { expenses, removeExpense } = useExpenses();
+function NewExpensesList() {
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const { expenses, removeExpense, addExpense } = useExpenses();
+
+  function handleHideForm() {
+    setShowForm(false);
+  }
 
   function renderExpenses() {
     return expenses.map((expense: any) => {
@@ -11,7 +18,7 @@ function NewExpensesList(props: any) {
             {expense.name} {expense.cost}
           </div>
           <button onClick={() => removeExpense(expense.id)}>
-            Remove
+            Remove Expense
           </button>
         </div>
       );
@@ -22,6 +29,14 @@ function NewExpensesList(props: any) {
     <div>
       <h1>--Expenses--</h1>
       <div>{renderExpenses()}</div>
+      {!showForm ? (
+        <div onClick={() => setShowForm(true)}>Add New Expense</div>
+      ) : (
+        <NewExpenseForm
+          addExpense={addExpense}
+          handleHideForm={handleHideForm}
+        />
+      )}
     </div>
   );
 }

@@ -6,15 +6,21 @@ import { exampleDiners } from '../utils/examples';
 
 const initialState = exampleDiners;
 
-interface Expense {
+interface Diner {
   id: string;
   name: string;
-  cost: number;
-  assignee: number | null;
+  expenses: [];
 }
 
 function useDiners() {
   const [diners, dispatch] = useReducer(dinersReducer, initialState);
+
+  function addDiner(diner: Diner) {
+    dispatch({
+      type: DINERS_TYPES.ADD_DINER,
+      payload: diner,
+    });
+  }
 
   function removeDiner(id: string) {
     dispatch({
@@ -32,6 +38,7 @@ function useDiners() {
 
   return {
     diners,
+    addDiner,
     removeDiner,
   };
 }

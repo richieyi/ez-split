@@ -1,15 +1,31 @@
+import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import SaveCancelButtons from '../SaveCancelButtons';
 import Input from '../Input';
 
 function NewExpenseForm(props: any) {
-  const {
-    handleSaveNewExpense,
-    handleNameChange,
-    expenseName,
-    handleCostChange,
-    expenseCost,
-    handleCancelSaveExpense,
-  } = props;
+  const { addExpense, handleHideForm } = props;
+
+  const [expenseName, setExpenseName] = useState<string>('');
+  const [expenseCost, setExpenseCost] = useState<string>('');
+
+  function handleSaveNewExpense() {
+    addExpense({
+      id: uuid(),
+      name: expenseName,
+      cost: expenseCost,
+      diners: [],
+    });
+    handleHideForm();
+  }
+
+  function handleNameChange(e: any) {
+    setExpenseName(e.target.value);
+  }
+
+  function handleCostChange(e: any) {
+    setExpenseCost(e.target.value);
+  }
 
   return (
     <div className="flex">
@@ -32,7 +48,7 @@ function NewExpenseForm(props: any) {
       </div>
       <SaveCancelButtons
         handleSave={handleSaveNewExpense}
-        handleCancelSave={handleCancelSaveExpense}
+        handleCancelSave={handleHideForm}
       />
     </div>
   );

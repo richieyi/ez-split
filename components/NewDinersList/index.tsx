@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import useDiners from '../../hooks/useDiners';
+import NewDinerForm from '../NewDinerForm';
 
-function NewDinersList(props: any) {
-  const { diners, removeDiner } = useDiners();
+function NewDinersList() {
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const { diners, addDiner, removeDiner } = useDiners();
 
   function renderDiners() {
     return diners.map((diner: any) => {
@@ -22,6 +25,14 @@ function NewDinersList(props: any) {
     <div>
       <h1>--Diners--</h1>
       <div>{renderDiners()}</div>
+      {!showForm ? (
+        <div onClick={() => setShowForm(true)}>Add New Diner</div>
+      ) : (
+        <NewDinerForm
+          addDiner={addDiner}
+          handleHideForm={() => setShowForm(false)}
+        />
+      )}
     </div>
   );
 }

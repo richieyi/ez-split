@@ -10,7 +10,7 @@ interface Expense {
   id: string;
   name: string;
   cost: number;
-  assignee: number | null;
+  diners: [];
 }
 
 function useExpenses() {
@@ -18,6 +18,13 @@ function useExpenses() {
     expensesReducer,
     initialState
   );
+
+  function addExpense(expense: Expense) {
+    dispatch({
+      type: EXPENSES_TYPES.ADD_EXPENSE,
+      payload: expense,
+    });
+  }
 
   function removeExpense(id: string) {
     dispatch({
@@ -35,6 +42,7 @@ function useExpenses() {
 
   return {
     expenses,
+    addExpense,
     removeExpense,
   };
 }
