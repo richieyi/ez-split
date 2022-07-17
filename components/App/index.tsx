@@ -18,17 +18,62 @@ function App() {
   const [expense, setExpense] = useState<string>('');
   const [cost, setCost] = useState<string>('');
 
+  const [selectedExpense, setSelectedExpense] =
+    useState<Expense | null>(null);
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
     null
   );
+  console.log('diners', diners);
+  console.log('expenses', expenses);
+
+  function handleAddExpense(e: any) {
+    e.preventDefault();
+    const newExpenses = [...expenses];
+    const newExpense = new Expense(expense, Number(cost));
+    newExpenses.push(newExpense);
+    setExpenses(newExpenses);
+    setExpense('');
+    setCost('');
+  }
+
+  function handleAddDiner(e: any) {
+    e.preventDefault();
+    const newDiners = [...diners];
+    const newDiner = new Diner(diner);
+    newDiners.push(newDiner);
+    setDiners(newDiners);
+    setDiner('');
+  }
 
   function renderExpenses() {
-    return expenses.map((expense) => (
-      <div key={expense.getID()}>
-        <span>{expense.getName()}</span>{' '}
-        <span>${expense.getCost()}</span>
-      </div>
-    ));
+    return expenses.map((expense) => {
+      const isSelected = selectedExpense === expense;
+      return (
+        <div
+          key={expense.getID()}
+          className="flex justify-between"
+          onClick={() => handleAddExpenseToDiner(expense)}
+        >
+          <div className={isSelected ? 'text-red-500' : ''}>
+            <span>{expense.getName()}</span>{' '}
+            <span>${expense.getCost()}</span>
+          </div>
+          <button>Remove</button>
+        </div>
+      );
+    });
+  }
+
+  function handleAddExpenseToDiner(expense: Expense) {
+    setSelectedExpense(expense);
+    selectedDiner?.addExpense(expense);
+  }
+
+  function renderDinerTotal(diner: Diner) {
+    const total = diner.getExpenses().reduce((prev, curr) => {
+      return prev + curr.getCost();
+    }, 0);
+    return <div>{total}</div>;
   }
 
   function renderDiners() {
@@ -37,10 +82,14 @@ function App() {
       return (
         <div
           key={diner.getID()}
-          className={isSelected ? 'text-red-500' : ''}
+          className="flex justify-between"
           onClick={() => setSelectedDiner(diner)}
         >
-          {diner.getName()}
+          <div className={isSelected ? 'text-red-500' : ''}>
+            <span>{diner.getName()}</span>
+            <span>{renderDinerTotal(diner)}</span>
+          </div>
+          <div>Remove</div>
         </div>
       );
     });
@@ -52,32 +101,44 @@ function App() {
         <h1>--- Expenses ---</h1>
         <div>{renderExpenses()}</div>
         <div>
-          <input
-            className="border"
-            placeholder="expense name"
-            value={expense}
-            onChange={(e) => setExpense(e.target.value)}
-          />
-          <input
-            className="border"
-            placeholder="cost"
-            value={cost}
-            onChange={(e) => setCost(e.target.value)}
-          />
-          <button className="border">Add</button>
+          <form onSubmit={handleAddExpense}>
+            <input
+              className="border"
+              placeholder="expense name"
+              value={expense}
+              onChange={(e) => setExpense(e.target.value)}
+            />
+            <input
+              className="border"
+              placeholder="cost"
+              value={cost}
+              onChange={(e) => setCost(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="border"
+              onClick={handleAddExpense}
+            >
+              Add Expense
+            </button>
+          </form>
         </div>
       </div>
       <div>
         <h1>--- Diners ---</h1>
         <div>{renderDiners()}</div>
         <div>
-          <input
-            className="border"
-            placeholder="diner name"
-            value={diner}
-            onChange={(e) => setDiner(e.target.value)}
-          />
-          <button className="border">Add</button>
+          <form onSubmit={handleAddDiner}>
+            <input
+              className="border"
+              placeholder="diner name"
+              value={diner}
+              onChange={(e) => setDiner(e.target.value)}
+            />
+            <button className="border" onClick={handleAddDiner}>
+              Add Diner
+            </button>
+          </form>
         </div>
       </div>
     </>
