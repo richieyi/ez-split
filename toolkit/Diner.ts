@@ -31,7 +31,8 @@ class Diner {
   }
 
   public removeExpense(expense: Expense): this {
-    this.expenses.find((exp) => exp.getName() === expense.getName());
+    this.expenses = this.expenses.filter((exp) => exp !== expense);
+    expense.removeDiner(this);
     return this;
   }
 }

@@ -26,7 +26,7 @@ function App() {
   console.log('diners', diners);
   console.log('expenses', expenses);
 
-  function handleAddExpense(e: any) {
+  function handleAddNewExpense(e: any) {
     e.preventDefault();
     const newExpenses = [...expenses];
     const newExpense = new Expense(expense, Number(cost));
@@ -36,13 +36,27 @@ function App() {
     setCost('');
   }
 
-  function handleAddDiner(e: any) {
+  function handleAddNewDiner(e: any) {
     e.preventDefault();
     const newDiners = [...diners];
     const newDiner = new Diner(diner);
     newDiners.push(newDiner);
     setDiners(newDiners);
     setDiner('');
+  }
+
+  function handleExpenseClick(expense: Expense) {
+    setSelectedExpense(expense);
+
+    // if expense does exist -> remove expense
+    if (selectedDiner?.getExpenses().find((exp) => exp === expense)) {
+      selectedDiner?.removeExpense(expense);
+      // if expense does not exist in diner's expenses -> add expense
+    } else {
+      selectedDiner?.addExpense(expense);
+    }
+    // TODO FIX?: Only updates cost when resetting state
+    setDiners([...diners]);
   }
 
   function renderExpenses() {
@@ -52,32 +66,37 @@ function App() {
         <div
           key={expense.getID()}
           className="flex justify-between"
-          onClick={() => handleAddExpenseToDiner(expense)}
+          onClick={() => handleExpenseClick(expense)}
         >
           <div className={isSelected ? 'text-red-500' : ''}>
             <span>{expense.getName()}</span>{' '}
             <span>${expense.getCost()}</span>
           </div>
-          <button>Remove</button>
+          <button>
+            {/* <button onClick={() => handleRemoveExpense(expense)}> */}
+            Remove
+          </button>
         </div>
       );
     });
   }
 
-  function handleAddExpenseToDiner(expense: Expense) {
-    setSelectedExpense(expense);
-    selectedDiner?.addExpense(expense);
-  }
-
   function renderDinerTotal(diner: Diner) {
-    const total = diner.getExpenses().reduce((prev, curr) => {
-      return prev + curr.getCost();
-    }, 0);
-    return <div>{total}</div>;
+    console.log('--- diner --- ', diner.getName());
+    if (diner.getExpenses().length > 0) {
+      console.log('returning more');
+      const total = diner.getExpenses().reduce((prev, curr) => {
+        return prev + curr.getCostPerDiner();
+      }, 0);
+      return total;
+    } else {
+      console.log('returning 0');
+      return 0;
+    }
   }
 
   function renderDiners() {
-    return diners.map((diner) => {
+    return diners.map((diner, idx) => {
       const isSelected = selectedDiner === diner;
       return (
         <div
@@ -86,8 +105,8 @@ function App() {
           onClick={() => setSelectedDiner(diner)}
         >
           <div className={isSelected ? 'text-red-500' : ''}>
-            <span>{diner.getName()}</span>
-            <span>{renderDinerTotal(diner)}</span>
+            <span>{diner.getName()}</span>{' '}
+            <span>${renderDinerTotal(diner)}</span>
           </div>
           <div>Remove</div>
         </div>
@@ -101,7 +120,7 @@ function App() {
         <h1>--- Expenses ---</h1>
         <div>{renderExpenses()}</div>
         <div>
-          <form onSubmit={handleAddExpense}>
+          <form onSubmit={handleAddNewExpense}>
             <input
               className="border"
               placeholder="expense name"
@@ -117,7 +136,7 @@ function App() {
             <button
               type="submit"
               className="border"
-              onClick={handleAddExpense}
+              onClick={handleAddNewExpense}
             >
               Add Expense
             </button>
@@ -128,14 +147,14 @@ function App() {
         <h1>--- Diners ---</h1>
         <div>{renderDiners()}</div>
         <div>
-          <form onSubmit={handleAddDiner}>
+          <form onSubmit={handleAddNewDiner}>
             <input
               className="border"
               placeholder="diner name"
               value={diner}
               onChange={(e) => setDiner(e.target.value)}
             />
-            <button className="border" onClick={handleAddDiner}>
+            <button className="border" onClick={handleAddNewDiner}>
               Add Diner
             </button>
           </form>
