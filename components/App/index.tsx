@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import Header from '../Header';
-import { default as ExpensesSection } from '../Expenses';
-import { default as DinersSection } from '../Diners';
-import useCustomHook from './useCustomHook';
 import NewExpensesList from '../NewExpensesList';
 import NewDinersList from '../NewDinersList';
+// import { default as ExpensesSection } from '../Expenses';
+// import { default as DinersSection } from '../Diners';
+// import useCustomHook from './useCustomHook';
 
 /*
 TODO:
@@ -19,37 +20,10 @@ TODO:
 */
 
 function App() {
-  // const {
-  //   expenses,
-  //   setExpenses,
-  //   diners,
-  //   setDiners,
-  //   activeDiner,
-  //   setActiveDiner,
-  //   handleSetAsignee,
-  // } = useCustomHook();
-
-  // const expensesProps = {
-  //   expenses,
-  //   setExpenses,
-  //   diners,
-  //   setDiners,
-  //   activeDiner,
-  //   handleSetAsignee,
-  // };
-  // const dinersProps = {
-  //   diners,
-  //   setDiners,
-  //   activeDiner,
-  //   setActiveDiner,
-  // };
-
   return (
     <>
       <Header />
       <div className="flex-col">
-        {/* <ExpensesSection {...expensesProps} />
-        <DinersSection {...dinersProps} /> */}
         <NewExpensesList />
         <NewDinersList />
       </div>
@@ -58,3 +32,28 @@ function App() {
 }
 
 export default App;
+
+// const {
+//   expenses,
+//   setExpenses,
+//   diners,
+//   setDiners,
+//   activeDiner,
+//   setActiveDiner,
+//   handleSetAsignee,
+// } = useCustomHook();
+
+// const expensesProps = {
+//   expenses,
+//   setExpenses,
+//   diners,
+//   setDiners,
+//   activeDiner,
+//   handleSetAsignee,
+// };
+// const dinersProps = {
+//   diners,
+//   setDiners,
+//   activeDiner,
+//   setActiveDiner,
+// };

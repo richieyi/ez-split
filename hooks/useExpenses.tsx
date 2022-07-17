@@ -40,10 +40,18 @@ function useExpenses() {
     // setDiners(newDiners);
   }
 
+  function updateExpense(expense: Expense) {
+    dispatch({
+      type: EXPENSES_TYPES.UPDATE_EXPENSE,
+      payload: expense,
+    });
+  }
+
   return {
     expenses,
     addExpense,
     removeExpense,
+    updateExpense,
   };
 }
 

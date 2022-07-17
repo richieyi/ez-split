@@ -36,10 +36,18 @@ function useDiners() {
     // setDiners(newDiners);
   }
 
+  function updateDiner(diner: Diner) {
+    dispatch({
+      type: DINERS_TYPES.UPDATE_DINER,
+      payload: diner,
+    });
+  }
+
   return {
     diners,
     addDiner,
     removeDiner,
+    updateDiner,
   };
 }
 
