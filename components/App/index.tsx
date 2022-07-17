@@ -2,29 +2,32 @@ import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
 import { exampleDiners, exampleExpenses } from '../../utils/examples';
-// import Header from '../Header';
-// import NewExpensesList from '../NewExpensesList';
-// import NewDinersList from '../NewDinersList';
-// import { default as ExpensesSection } from '../Expenses';
-// import { default as DinersSection } from '../Diners';
-// import useCustomHook from './useCustomHook';
 
 function App() {
+  // List of expenses/diners
   const [expenses, setExpenses] =
     useState<Expense[]>(exampleExpenses);
   const [diners, setDiners] = useState<Diner[]>(exampleDiners);
+  console.log('exp', expenses);
+  console.log('din', diners);
 
-  const [diner, setDiner] = useState<string>('');
+  // Inputs for new expense/diner
   const [expense, setExpense] = useState<string>('');
   const [cost, setCost] = useState<string>('');
+  const [diner, setDiner] = useState<string>('');
 
+  // Inputs for updating expense/diner
+  const [dinerToUpdate, setDinerToUpdate] = useState<Diner | null>(
+    null
+  );
+  const [dinerNewName, setDinerNewName] = useState<string>('');
+
+  // Selected expense/diner
   const [selectedExpense, setSelectedExpense] =
     useState<Expense | null>(null);
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
     null
   );
-  // console.log('diners', diners);
-  // console.log('expenses', expenses);
 
   function handleAddNewExpense(e: any) {
     e.preventDefault();
@@ -49,18 +52,19 @@ function App() {
     setSelectedExpense(expense);
 
     if (selectedDiner) {
-      // if expense does exist -> remove expense
+      // if expense does exist in diner's expenses -> remove expense
       if (
         selectedDiner.getExpenses().find((exp) => exp === expense)
       ) {
         selectedDiner.removeExpense(expense);
         // if expense does not exist in diner's expenses -> add expense
       } else {
-        selectedDiner?.addExpense(expense);
+        selectedDiner.addExpense(expense);
       }
+
       const newDiners = [...diners];
       const idx = newDiners.findIndex(
-        (diner) => diner.getID() === selectedDiner?.getID()
+        (diner) => diner.getID() === selectedDiner.getID()
       );
       newDiners.splice(idx, 1, selectedDiner);
       setDiners(newDiners);
@@ -94,7 +98,7 @@ function App() {
   }
 
   function renderExpenses() {
-    return expenses.map((expense) => {
+    return expenses.map((expense: Expense) => {
       const isSelected = selectedExpense === expense;
       return (
         <div key={expense.getID()} className="flex justify-between">
@@ -105,9 +109,21 @@ function App() {
             <span>{expense.getName()}</span>{' '}
             <span>${expense.getCost()}</span>
           </div>
-          <button onClick={() => handleRemoveExpense(expense)}>
-            Remove
-          </button>
+          <div>
+            <button
+              disabled
+              className="border"
+              onClick={() => handleRemoveExpense(expense)}
+            >
+              Update
+            </button>
+            <button
+              className="border"
+              onClick={() => handleRemoveExpense(expense)}
+            >
+              Remove
+            </button>
+          </div>
         </div>
       );
     });
@@ -120,21 +136,80 @@ function App() {
     return total;
   }
 
+  function handleUpdateDiner(diner: Diner) {
+    setDinerToUpdate(diner);
+    setDinerNewName(diner.getName());
+  }
+
+  function resetDinerToUpdate() {
+    setDinerToUpdate(null);
+    setDinerNewName('');
+  }
+
+  function handleSaveUpdatedDiner(e: any) {
+    e.preventDefault();
+
+    if (dinerToUpdate) {
+      dinerToUpdate.updateName(dinerNewName);
+
+      const newDiners = [...diners];
+      const idx = newDiners.findIndex(
+        (diner) => diner.getID() === dinerToUpdate.getID()
+      );
+      newDiners.splice(idx, 1, dinerToUpdate);
+      setDiners(newDiners);
+      resetDinerToUpdate();
+    }
+  }
+
   function renderDiners() {
-    return diners.map((diner, idx) => {
+    return diners.map((diner: Diner) => {
       const isSelected = selectedDiner === diner;
+      const isUpdating = dinerToUpdate === diner;
+
       return (
         <div key={diner.getID()} className="flex justify-between">
-          <div
-            className={isSelected ? 'text-red-500' : ''}
-            onClick={() => setSelectedDiner(diner)}
-          >
-            <span>{diner.getName()}</span>{' '}
-            <span>${renderDinerTotal(diner)}</span>
+          {isUpdating ? (
+            <form onSubmit={handleSaveUpdatedDiner}>
+              <input
+                className="border"
+                value={dinerNewName}
+                onChange={(e) => setDinerNewName(e.target.value)}
+              />
+              <button
+                className="border"
+                type="submit"
+                onClick={handleSaveUpdatedDiner}
+              >
+                Save
+              </button>
+              <button className="border" onClick={resetDinerToUpdate}>
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <div
+              className={isSelected ? 'text-red-500' : ''}
+              onClick={() => setSelectedDiner(diner)}
+            >
+              <span>{diner.getName()}</span>{' '}
+              <span>${renderDinerTotal(diner)}</span>
+            </div>
+          )}
+          <div>
+            <button
+              className="border"
+              onClick={() => handleUpdateDiner(diner)}
+            >
+              Update
+            </button>
+            <button
+              className="border"
+              onClick={() => handleRemoveDiner(diner)}
+            >
+              Remove
+            </button>
           </div>
-          <button onClick={() => handleRemoveDiner(diner)}>
-            Remove
-          </button>
         </div>
       );
     });
@@ -191,39 +266,3 @@ function App() {
 }
 
 export default App;
-
-// function App() {
-//   return (
-//     <>
-//       <Header />
-//       <div className="flex-col">
-//         <NewExpensesList />
-//         <NewDinersList />
-//       </div>
-//     </>
-//   );
-// }
-// const {
-//   expenses,
-//   setExpenses,
-//   diners,
-//   setDiners,
-//   activeDiner,
-//   setActiveDiner,
-//   handleSetAsignee,
-// } = useCustomHook();
-
-// const expensesProps = {
-//   expenses,
-//   setExpenses,
-//   diners,
-//   setDiners,
-//   activeDiner,
-//   handleSetAsignee,
-// };
-// const dinersProps = {
-//   diners,
-//   setDiners,
-//   activeDiner,
-//   setActiveDiner,
-// };

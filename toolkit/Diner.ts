@@ -20,6 +20,11 @@ class Diner {
     return this.name;
   }
 
+  public updateName(newName: string): string {
+    this.name = newName;
+    return this.name;
+  }
+
   public getExpenses(): Expense[] {
     return this.expenses;
   }
@@ -31,11 +36,9 @@ class Diner {
   }
 
   public removeExpense(expenseToRemove: Expense): this {
-    console.log('old expenses', this.expenses);
     this.expenses = this.expenses.filter(
       (exp) => exp !== expenseToRemove
     );
-    console.log('new expenses', this.expenses);
     expenseToRemove.removeDiner(this);
     return this;
   }
