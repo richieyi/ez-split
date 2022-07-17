@@ -1,12 +1,19 @@
 import Expense from './Expense';
+import { v4 as uuid } from 'uuid';
 
 class Diner {
+  private id: string;
   private name: string;
   private expenses: Expense[];
 
   constructor(name: string) {
+    this.id = uuid();
     this.name = name;
     this.expenses = [];
+  }
+
+  public getID(): string {
+    return this.id;
   }
 
   public getName(): string {
