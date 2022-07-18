@@ -266,13 +266,12 @@ function App() {
   return (
     <>
       <h1 className="text-center text-4xl font-bold my-4">
-        EZ Split
+        EZ Split ✔️
       </h1>
-      {/* <div className="flex-col md:flex-row w-full gap-8"> */}
       <div className="flex-col md:flex md:flex-row w-full gap-8">
         <div className="flex-1">
           <h1 className="text-2xl font-bold my-4 md:text-center text-left">
-            Expenses 🍴️
+            Expenses 🍖
           </h1>
           <div>
             <ExpensesList {...expensesListProps} />
