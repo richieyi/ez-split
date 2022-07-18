@@ -4,7 +4,7 @@ import App from '../components/App';
 
 const Home: NextPage = () => {
   return (
-    <div className="text-sm md:text-base m-auto max-w-xl flex-col py-8 px-4">
+    <div className="text-sm md:text-base m-auto max-w-xl flex-col py-4 px-4">
       <Head>
         <title>EZ Split</title>
         <meta
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <App />
       </main>
 
-      {/* <footer>
+      <footer>
         <span>
           Created by{' '}
           <a
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           </a>
           .
         </span>
-      </footer> */}
+      </footer>
     </div>
   );
 };

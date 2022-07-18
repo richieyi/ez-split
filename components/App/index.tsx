@@ -2,8 +2,10 @@ import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
 import { exampleDiners, exampleExpenses } from '../../utils/examples';
-import IconButton from '../IconButton';
-import Input from '../Input';
+import DinersList from '../DinersList';
+import ExpensesList from '../ExpensesList';
+import NewDinerForm from '../NewDinerForm';
+import NewExpenseForm from '../NewExpenseForm';
 
 function App() {
   // List of expenses/diners
@@ -146,81 +148,6 @@ function App() {
     }
   }
 
-  function renderExpenses() {
-    return expenses.map((expense: Expense) => {
-      const isSelected = selectedExpense === expense;
-      const isUpdating = expenseToUpdate === expense;
-
-      return (
-        <div
-          key={expense.getID()}
-          className="flex justify-between border rounded p-2 my-2"
-        >
-          {isUpdating ? (
-            <div>
-              <form
-                onSubmit={handleSaveUpdatedExpense}
-                className="flex"
-              >
-                <Input
-                  name="expenseNewName"
-                  placeholder="Steak"
-                  value={expenseNewName}
-                  onChange={(e: any) =>
-                    setExpenseNewName(e.target.value)
-                  }
-                />
-                <Input
-                  name="expenseNewCost"
-                  placeholder="50"
-                  value={expenseNewCost}
-                  onChange={(e: any) =>
-                    setExpenseNewCost(e.target.value)
-                  }
-                />
-              </form>
-              <IconButton
-                name="check"
-                color="green"
-                onClick={handleSaveUpdatedExpense}
-              />
-              <IconButton
-                name="x"
-                color="red"
-                onClick={resetExpenseToUpdate}
-              />
-            </div>
-          ) : (
-            <div
-              className={isSelected ? 'text-red-500' : ''}
-              onClick={() => handleExpenseClick(expense)}
-            >
-              <span>{expense.getName()}</span>{' '}
-              <span>${expense.getCost()}</span>
-              <div>
-                {expense.getDiners().map((diner) => (
-                  <span key={diner.getID()}>{diner.getName()} </span>
-                ))}
-              </div>
-            </div>
-          )}
-          <div>
-            <IconButton
-              name="pencil"
-              color="blue"
-              onClick={() => handleUpdateExpense(expense)}
-            />
-            <IconButton
-              name="trash"
-              color="red"
-              onClick={() => handleRemoveExpense(expense)}
-            />
-          </div>
-        </div>
-      );
-    });
-  }
-
   function handleUpdateDiner(diner: Diner) {
     setDinerToUpdate(diner);
     setDinerNewName(diner.getName());
@@ -247,100 +174,62 @@ function App() {
     }
   }
 
-  function renderDiners() {
-    return diners.map((diner: Diner) => {
-      const isSelected = selectedDiner === diner;
-      const isUpdating = dinerToUpdate === diner;
+  const expensesListProps = {
+    expenses,
+    selectedExpense,
+    expenseToUpdate,
+    handleSaveUpdatedExpense,
+    expenseNewName,
+    setExpenseNewName,
+    expenseNewCost,
+    setExpenseNewCost,
+    resetExpenseToUpdate,
+    handleExpenseClick,
+    handleUpdateExpense,
+    handleRemoveExpense,
+  };
+  const newExpenseFormProps = {
+    handleAddNewExpense,
+    expense,
+    setExpense,
+    cost,
+    setCost,
+    resetNewExpense,
+  };
 
-      return (
-        <div
-          key={diner.getID()}
-          className="flex justify-between border rounded p-2 my-2"
-        >
-          {isUpdating ? (
-            <form onSubmit={handleSaveUpdatedDiner}>
-              <Input
-                name="dinerNewName"
-                placeholder="John"
-                value={dinerNewName}
-                onChange={(e: any) => setDinerNewName(e.target.value)}
-              />
-              <IconButton
-                name="check"
-                color="green"
-                onClick={handleSaveUpdatedDiner}
-              />
-              <IconButton
-                name="x"
-                color="red"
-                onClick={resetDinerToUpdate}
-              />
-            </form>
-          ) : (
-            <div
-              className={isSelected ? 'text-red-500' : ''}
-              onClick={() => setSelectedDiner(diner)}
-            >
-              <span>{diner.getName()}</span>{' '}
-              <span>${diner.getTotalExpenses()}</span>
-            </div>
-          )}
-          <div>
-            <IconButton
-              name="pencil"
-              color="blue"
-              onClick={() => handleUpdateDiner(diner)}
-            />
-            <IconButton
-              name="trash"
-              color="red"
-              onClick={() => handleRemoveDiner(diner)}
-            />
-          </div>
-        </div>
-      );
-    });
-  }
+  const newDinerFormProps = {
+    handleAddNewDiner,
+    diner,
+    setDiner,
+    resetNewDiner,
+  };
+  const dinersListProps = {
+    diners,
+    selectedDiner,
+    dinerToUpdate,
+    handleSaveUpdatedDiner,
+    dinerNewName,
+    setDinerNewName,
+    resetDinerToUpdate,
+    setSelectedDiner,
+    handleUpdateDiner,
+    handleRemoveDiner,
+  };
 
   return (
     <>
       <div>
         <h1 className="text-2xl font-bold my-4">Expenses</h1>
-        <div>{renderExpenses()}</div>
+        <div>
+          <ExpensesList {...expensesListProps} />
+        </div>
         {isAddingNewExpense ? (
-          <div className="border rounded-sm p-2">
-            <form onSubmit={handleAddNewExpense} className="flex">
-              <Input
-                placeholder="Expense Name"
-                name="expense"
-                value={expense}
-                onChange={(e: any) => setExpense(e.target.value)}
-              />
-              <Input
-                placeholder="Cost"
-                name="cost"
-                value={cost}
-                onChange={(e: any) => setCost(e.target.value)}
-              />
-            </form>
-            <div>
-              <IconButton
-                name="check"
-                color="green"
-                onClick={handleAddNewExpense}
-              />
-              <IconButton
-                name="x"
-                color="red"
-                onClick={resetNewExpense}
-              />
-            </div>
-          </div>
+          <NewExpenseForm {...newExpenseFormProps} />
         ) : (
           <div className="flex justify-center">
             <button
               onClick={() => setIsAddingNewExpense(true)}
-              className="border rounded-sm p-2"
+              className="border rounded p-2"
             >
               Add New Expense
             </button>
@@ -349,35 +238,16 @@ function App() {
       </div>
       <div>
         <h1 className="text-2xl font-bold my-4">Diners</h1>
-        <div>{renderDiners()}</div>
+        <div>
+          <DinersList {...dinersListProps} />
+        </div>
         {isAddingNewDiner ? (
-          <div className="border rounded-sm p-2">
-            <form onSubmit={handleAddNewDiner}>
-              <Input
-                name="dinerName"
-                placeholder="Diner Name"
-                value={diner}
-                onChange={(e: any) => setDiner(e.target.value)}
-              />
-            </form>
-            <div>
-              <IconButton
-                name="check"
-                color="green"
-                onClick={handleAddNewDiner}
-              />
-              <IconButton
-                name="x"
-                color="red"
-                onClick={resetNewDiner}
-              />
-            </div>
-          </div>
+          <NewDinerForm {...newDinerFormProps} />
         ) : (
           <div className="flex justify-center">
             <button
               onClick={() => setIsAddingNewDiner(true)}
-              className="border rounded-sm p-2"
+              className="border rounded p-2"
             >
               Add New Diner
             </button>

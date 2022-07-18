@@ -5,6 +5,7 @@ import {
   CheckIcon,
   QuestionMarkCircleIcon,
   XIcon,
+  DotsVerticalIcon,
 } from '@heroicons/react/solid';
 
 const iconMap: any = {
@@ -14,6 +15,7 @@ const iconMap: any = {
   check: CheckIcon,
   question: QuestionMarkCircleIcon,
   x: XIcon,
+  dots: DotsVerticalIcon,
 };
 
 const colorsMap: any = {
@@ -21,16 +23,18 @@ const colorsMap: any = {
   blue: 'text-blue-500',
   green: 'text-green-500',
   yellow: 'text-yellow-500',
+  black: 'text-black-500',
 };
 
 interface Props {
   name: string;
   color: string;
   onClick: any;
+  className?: string;
 }
 
 const IconButton = (props: Props) => {
-  const { name, color, onClick } = props;
+  const { name, color, onClick, className } = props;
 
   if (name === undefined || color === undefined) {
     console.error('Icon: name and color are required');
@@ -41,8 +45,8 @@ const IconButton = (props: Props) => {
   const mappedColor = colorsMap[color];
 
   return (
-    <button type="button" onClick={onClick}>
-      <Icon className={`h-6 w-6 m-2 bg-gray-100 ${mappedColor}`} />
+    <button type="button" onClick={onClick} className={className}>
+      <Icon className={`h-6 w-6 m-2 ${mappedColor}`} />
     </button>
   );
 };
