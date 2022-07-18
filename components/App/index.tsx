@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
@@ -9,9 +8,6 @@ function App() {
   const [expenses, setExpenses] =
     useState<Expense[]>(exampleExpenses);
   const [diners, setDiners] = useState<Diner[]>(exampleDiners);
-  console.log('exp', expenses);
-  console.log('din', diners);
-  console.log('---------');
 
   // Inputs for new expense/diner
   const [expense, setExpense] = useState<string>('');
