@@ -44,8 +44,14 @@ const IconButton = (props: Props) => {
   const Icon = iconMap[name];
   const mappedColor = colorsMap[color];
 
+  function handleClick(e: any) {
+    e.stopPropagation();
+
+    onClick(e);
+  }
+
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button type="button" onClick={handleClick} className={className}>
       <Icon className={`h-6 w-6 m-2 ${mappedColor}`} />
     </button>
   );

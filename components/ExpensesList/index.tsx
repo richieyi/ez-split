@@ -28,7 +28,8 @@ function ExpensesList(props: any) {
         key={expense.getID()}
         className={`flex justify-between items-center border rounded p-2 my-2 ${
           isUpdating ? '' : 'hover:bg-slate-300'
-        } bg-white`}
+        } bg-white hover:cursor-pointer`}
+        onClick={() => handleExpenseClick(expense)}
       >
         {isUpdating ? (
           <div className="w-full">
@@ -56,12 +57,11 @@ function ExpensesList(props: any) {
           </div>
         ) : (
           <div
-            className={`flex justify-between hover:cursor-pointer w-full ${
+            className={`flex justify-between w-full ${
               isSelected ? 'text-green-500' : ''
             }`}
-            onClick={() => handleExpenseClick(expense)}
           >
-            <span className="font-bold">{expense.getName()}</span>{' '}
+            <span className="font-bold">🍴 {expense.getName()}</span>{' '}
             <span>${expense.getCost()}</span>
           </div>
         )}

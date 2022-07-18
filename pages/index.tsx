@@ -4,7 +4,7 @@ import App from '../components/App';
 
 const Home: NextPage = () => {
   return (
-    <div className="text-sm md:text-base m-auto max-w-xl flex-col py-4 px-4">
+    <div className="text-sm md:text-base m-auto max-w-xl md:max-w-3xl flex-col py-4 px-4">
       <Head>
         <title>EZ Split</title>
         <meta
@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className="mb-6 md:mb-12">
         <App />
       </main>
 

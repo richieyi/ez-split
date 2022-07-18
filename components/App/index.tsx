@@ -172,7 +172,7 @@ function App() {
   function handleSaveUpdatedDiner(e: any) {
     e.preventDefault();
 
-    if (dinerToUpdate && diner.length > 0) {
+    if (dinerToUpdate && dinerNewName.length > 0) {
       dinerToUpdate.updateDiner(dinerNewName);
 
       const newDiners = [...diners];
@@ -268,41 +268,48 @@ function App() {
       <h1 className="text-center text-4xl font-bold my-4">
         EZ Split
       </h1>
-      <div>
-        <h1 className="text-2xl font-bold my-4">Expenses ✔️</h1>
-        <div>
-          <ExpensesList {...expensesListProps} />
-        </div>
-        {isAddingNewExpense ? (
-          <NewExpenseForm {...newExpenseFormProps} />
-        ) : (
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsAddingNewExpense(true)}
-              className="border rounded p-2 hover:bg-slate-300 bg-white"
-            >
-              Add New Expense
-            </button>
+      {/* <div className="flex-col md:flex-row w-full gap-8"> */}
+      <div className="flex-col md:flex md:flex-row w-full gap-8">
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold my-4 md:text-center text-left">
+            Expenses 🍴️
+          </h1>
+          <div>
+            <ExpensesList {...expensesListProps} />
           </div>
-        )}
-      </div>
-      <div>
-        <h1 className="text-2xl font-bold my-4">Diners 🧍‍♂️</h1>
-        <div>
-          <DinersList {...dinersListProps} />
+          {isAddingNewExpense ? (
+            <NewExpenseForm {...newExpenseFormProps} />
+          ) : (
+            <div className="flex justify-center">
+              <button
+                onClick={() => setIsAddingNewExpense(true)}
+                className="border rounded p-2 hover:bg-slate-300 bg-white"
+              >
+                Add New Expense
+              </button>
+            </div>
+          )}
         </div>
-        {isAddingNewDiner ? (
-          <NewDinerForm {...newDinerFormProps} />
-        ) : (
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsAddingNewDiner(true)}
-              className="border rounded p-2 hover:bg-slate-300 bg-white"
-            >
-              Add New Diner
-            </button>
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold my-4 md:text-center text-left">
+            Diners 🧑‍🍳
+          </h1>
+          <div>
+            <DinersList {...dinersListProps} />
           </div>
-        )}
+          {isAddingNewDiner ? (
+            <NewDinerForm {...newDinerFormProps} />
+          ) : (
+            <div className="flex justify-center">
+              <button
+                onClick={() => setIsAddingNewDiner(true)}
+                className="border rounded p-2 hover:bg-slate-300 bg-white"
+              >
+                Add New Diner
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

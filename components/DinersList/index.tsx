@@ -2,6 +2,7 @@ import Diner from '../../toolkit/Diner';
 import Input from '../Input';
 import MoreButton from '../MoreButton';
 import SaveCancelButtons from '../SaveCancelButtons';
+import Emoji from '../Emoji';
 
 function DinersList(props: any) {
   const {
@@ -26,7 +27,8 @@ function DinersList(props: any) {
         key={diner.getID()}
         className={`flex justify-between items-center border rounded p-2 my-2 ${
           isUpdating ? '' : 'hover:bg-slate-300'
-        } bg-white`}
+        } bg-white hover:cursor-pointer`}
+        onClick={() => setSelectedDiner(diner)}
       >
         {isUpdating ? (
           <div className="w-full">
@@ -45,12 +47,13 @@ function DinersList(props: any) {
           </div>
         ) : (
           <div
-            className={`flex justify-between hover:cursor-pointer w-full ${
+            className={`flex justify-between w-full ${
               isSelected ? 'text-green-500' : ''
             }`}
-            onClick={() => setSelectedDiner(diner)}
           >
-            <span className="font-bold">{diner.getName()}</span>{' '}
+            <span className="font-bold">
+              <Emoji type="diner" /> {diner.getName()}
+            </span>
             <span>${diner.getTotalExpenses()}</span>
           </div>
         )}
