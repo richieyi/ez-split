@@ -1,6 +1,5 @@
 import Diner from '../../toolkit/Diner';
 import Input from '../Input';
-import IconButton from '../IconButton';
 import MoreButton from '../MoreButton';
 import SaveCancelButtons from '../SaveCancelButtons';
 
@@ -11,7 +10,7 @@ function DinersList(props: any) {
     dinerToUpdate,
     handleSaveUpdatedDiner,
     dinerNewName,
-    setDinerNewName,
+    handleDinerNameChange,
     resetDinerToUpdate,
     setSelectedDiner,
     handleUpdateDiner,
@@ -25,7 +24,9 @@ function DinersList(props: any) {
     return (
       <div
         key={diner.getID()}
-        className="flex justify-between items-center border rounded p-2 my-2 hover:bg-slate-200"
+        className={`flex justify-between items-center border rounded p-2 my-2 ${
+          isUpdating ? '' : 'hover:bg-slate-300'
+        } bg-white`}
       >
         {isUpdating ? (
           <div className="w-full">
@@ -34,7 +35,7 @@ function DinersList(props: any) {
                 name="dinerNewName"
                 placeholder="John"
                 value={dinerNewName}
-                onChange={(e: any) => setDinerNewName(e.target.value)}
+                onChange={handleDinerNameChange}
               />
             </form>
             <SaveCancelButtons

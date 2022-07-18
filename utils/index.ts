@@ -4,7 +4,7 @@ export function isValidAmount(val: string): boolean {
 
   /*
     Regex found here: https://stackoverflow.com/a/354276
-    Prevent dollar sign and input limit of 6 chars (max: $999,999)
+    Prevent dollar sign
     */
 
   return !val.search(regex);

@@ -1,4 +1,3 @@
-import IconButton from '../IconButton';
 import Input from '../Input';
 import Expense from '../../toolkit/Expense';
 import MoreButton from '../MoreButton';
@@ -11,9 +10,9 @@ function ExpensesList(props: any) {
     expenseToUpdate,
     handleSaveUpdatedExpense,
     expenseNewName,
-    setExpenseNewName,
+    handleExpenseNameChange,
     expenseNewCost,
-    setExpenseNewCost,
+    handleExpenseCostChange,
     resetExpenseToUpdate,
     handleExpenseClick,
     handleUpdateExpense,
@@ -27,29 +26,27 @@ function ExpensesList(props: any) {
     return (
       <div
         key={expense.getID()}
-        className="flex justify-between items-center border rounded p-2 my-2 hover:bg-slate-200"
+        className={`flex justify-between items-center border rounded p-2 my-2 ${
+          isUpdating ? '' : 'hover:bg-slate-300'
+        } bg-white`}
       >
         {isUpdating ? (
-          <div>
+          <div className="w-full">
             <form
               onSubmit={handleSaveUpdatedExpense}
               className="flex"
             >
               <Input
                 name="expenseNewName"
-                placeholder="Steak"
+                placeholder="Expense name"
                 value={expenseNewName}
-                onChange={(e: any) =>
-                  setExpenseNewName(e.target.value)
-                }
+                onChange={handleExpenseNameChange}
               />
               <Input
                 name="expenseNewCost"
-                placeholder="50"
+                placeholder="Cost"
                 value={expenseNewCost}
-                onChange={(e: any) =>
-                  setExpenseNewCost(e.target.value)
-                }
+                onChange={handleExpenseCostChange}
               />
             </form>
             <SaveCancelButtons

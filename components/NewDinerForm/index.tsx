@@ -1,18 +1,22 @@
 import Input from '../Input';
-import IconButton from '../IconButton';
 import SaveCancelButtons from '../SaveCancelButtons';
 
 function NewDinerForm(props: any) {
-  const { handleAddNewDiner, diner, setDiner, resetNewDiner } = props;
+  const {
+    handleAddNewDiner,
+    diner,
+    handleDinerNameChange,
+    resetNewDiner,
+  } = props;
 
   return (
     <div className="border rounded p-4">
       <form onSubmit={handleAddNewDiner}>
         <Input
           name="dinerName"
-          placeholder="Diner Name"
+          placeholder="Diner's nickname"
           value={diner}
-          onChange={(e: any) => setDiner(e.target.value)}
+          onChange={handleDinerNameChange}
         />
       </form>
       <SaveCancelButtons
