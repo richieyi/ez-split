@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
 import { exampleDiners, exampleExpenses } from '../../utils/examples';
+import IconButton from '../IconButton';
 
 function App() {
   // List of expenses/diners
@@ -10,6 +11,10 @@ function App() {
   const [diners, setDiners] = useState<Diner[]>(exampleDiners);
 
   // Inputs for new expense/diner
+  const [isAddingNewExpense, setIsAddingNewExpense] =
+    useState<boolean>(false);
+  const [isAddingNewDiner, setIsAddingNewDiner] =
+    useState<boolean>(false);
   const [expense, setExpense] = useState<string>('');
   const [cost, setCost] = useState<string>('');
   const [diner, setDiner] = useState<string>('');
@@ -31,16 +36,24 @@ function App() {
     null
   );
 
+  function resetNewExpense() {
+    setExpense('');
+    setCost('');
+    setIsAddingNewExpense(false);
+  }
+
   function handleAddNewExpense(e: any) {
     e.preventDefault();
     const newExpenses = [...expenses];
     const newExpense = new Expense(expense, Number(cost));
     newExpenses.push(newExpense);
     setExpenses(newExpenses);
+    resetNewExpense();
+  }
 
-    // Reset input
-    setExpense('');
-    setCost('');
+  function resetNewDiner() {
+    setDiner('');
+    setIsAddingNewDiner(false);
   }
 
   function handleAddNewDiner(e: any) {
@@ -49,9 +62,7 @@ function App() {
     const newDiner = new Diner(diner);
     newDiners.push(newDiner);
     setDiners(newDiners);
-
-    // Reset input
-    setDiner('');
+    resetNewDiner();
   }
 
   function handleExpenseClick(expense: Expense) {
@@ -153,18 +164,16 @@ function App() {
                 value={expenseNewCost}
                 onChange={(e) => setExpenseNewCost(e.target.value)}
               />
-              <button
-                className="border"
+              <IconButton
+                name="check"
+                color="green"
                 onClick={handleSaveUpdatedExpense}
-              >
-                Save
-              </button>
-              <button
-                className="border"
+              />
+              <IconButton
+                name="x"
+                color="red"
                 onClick={resetExpenseToUpdate}
-              >
-                Cancel
-              </button>
+              />
             </form>
           ) : (
             <div
@@ -176,18 +185,16 @@ function App() {
             </div>
           )}
           <div>
-            <button
-              className="border"
+            <IconButton
+              name="pencil"
+              color="blue"
               onClick={() => handleUpdateExpense(expense)}
-            >
-              Update
-            </button>
-            <button
-              className="border"
+            />
+            <IconButton
+              name="trash"
+              color="red"
               onClick={() => handleRemoveExpense(expense)}
-            >
-              Remove
-            </button>
+            />
           </div>
         </div>
       );
@@ -234,16 +241,16 @@ function App() {
                 value={dinerNewName}
                 onChange={(e) => setDinerNewName(e.target.value)}
               />
-              <button
-                className="border"
-                type="submit"
+              <IconButton
+                name="check"
+                color="green"
                 onClick={handleSaveUpdatedDiner}
-              >
-                Save
-              </button>
-              <button className="border" onClick={resetDinerToUpdate}>
-                Cancel
-              </button>
+              />
+              <IconButton
+                name="x"
+                color="red"
+                onClick={resetDinerToUpdate}
+              />
             </form>
           ) : (
             <div
@@ -255,18 +262,16 @@ function App() {
             </div>
           )}
           <div>
-            <button
-              className="border"
+            <IconButton
+              name="pencil"
+              color="blue"
               onClick={() => handleUpdateDiner(diner)}
-            >
-              Update
-            </button>
-            <button
-              className="border"
+            />
+            <IconButton
+              name="trash"
+              color="red"
               onClick={() => handleRemoveDiner(diner)}
-            >
-              Remove
-            </button>
+            />
           </div>
         </div>
       );
@@ -279,44 +284,66 @@ function App() {
         <h1>--- Expenses ---</h1>
         <div>{renderExpenses()}</div>
         <div>
-          <form onSubmit={handleAddNewExpense}>
-            <input
-              className="border"
-              placeholder="expense name"
-              value={expense}
-              onChange={(e) => setExpense(e.target.value)}
-            />
-            <input
-              className="border"
-              placeholder="cost"
-              value={cost}
-              onChange={(e) => setCost(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="border"
-              onClick={handleAddNewExpense}
-            >
-              Add Expense
+          {isAddingNewExpense ? (
+            <form onSubmit={handleAddNewExpense}>
+              <input
+                className="border"
+                placeholder="expense name"
+                value={expense}
+                onChange={(e) => setExpense(e.target.value)}
+              />
+              <input
+                className="border"
+                placeholder="cost"
+                value={cost}
+                onChange={(e) => setCost(e.target.value)}
+              />
+              <IconButton
+                name="check"
+                color="green"
+                onClick={handleAddNewExpense}
+              />
+              <IconButton
+                name="x"
+                color="red"
+                onClick={resetNewExpense}
+              />
+            </form>
+          ) : (
+            <button onClick={() => setIsAddingNewExpense(true)}>
+              Add New Expense
             </button>
-          </form>
+          )}
         </div>
       </div>
       <div>
         <h1>--- Diners ---</h1>
         <div>{renderDiners()}</div>
         <div>
-          <form onSubmit={handleAddNewDiner}>
-            <input
-              className="border"
-              placeholder="diner name"
-              value={diner}
-              onChange={(e) => setDiner(e.target.value)}
-            />
-            <button className="border" onClick={handleAddNewDiner}>
-              Add Diner
+          {isAddingNewDiner ? (
+            <form onSubmit={handleAddNewDiner}>
+              <input
+                className="border"
+                placeholder="diner name"
+                value={diner}
+                onChange={(e) => setDiner(e.target.value)}
+              />
+              <IconButton
+                name="check"
+                color="green"
+                onClick={handleAddNewDiner}
+              />
+              <IconButton
+                name="x"
+                color="red"
+                onClick={resetNewDiner}
+              />
+            </form>
+          ) : (
+            <button onClick={() => setIsAddingNewDiner(true)}>
+              Add New Diner
             </button>
-          </form>
+          )}
         </div>
       </div>
     </>
