@@ -2,7 +2,7 @@ import Expense from '../toolkit/Expense';
 import Diner from '../toolkit/Diner';
 
 const expense1 = new Expense('Chicken', 15);
-const expense2 = new Expense('Steak', 10);
+const expense2 = new Expense('Steak', 40);
 const expense3 = new Expense('Salad', 10);
 const expense4 = new Expense('Potatoes', 5);
 
