@@ -1,7 +1,6 @@
 import Diner from '../../toolkit/Diner';
-import Input from '../Input';
+import DinerForm from '../DinerForm';
 import MoreButton from '../MoreButton';
-import SaveCancelButtons from '../SaveCancelButtons';
 
 function DinersList(props: any) {
   const {
@@ -9,7 +8,7 @@ function DinersList(props: any) {
     selectedDiner,
     dinerToUpdate,
     handleSaveUpdatedDiner,
-    dinerNewName,
+    dinerUpdatedName,
     handleDinerNameChange,
     resetDinerToUpdate,
     setSelectedDiner,
@@ -25,23 +24,19 @@ function DinersList(props: any) {
       <div
         key={diner.getID()}
         className={`flex justify-between items-center border rounded p-2 my-2 ${
-          isUpdating ? '' : 'hover:bg-slate-300'
-        } bg-white hover:cursor-pointer`}
-        onClick={() => setSelectedDiner(isSelected ? null : diner)}
+          isUpdating ? '' : 'hover:cursor-pointer hover:bg-slate-300'
+        } bg-white`}
+        onClick={
+          isUpdating ? () => {} : () => setSelectedDiner(diner)
+        }
       >
         {isUpdating ? (
           <div className="w-full">
-            <form onSubmit={handleSaveUpdatedDiner}>
-              <Input
-                name="dinerNewName"
-                placeholder="John"
-                value={dinerNewName}
-                onChange={handleDinerNameChange}
-              />
-            </form>
-            <SaveCancelButtons
-              handleSave={handleSaveUpdatedDiner}
-              handleCancel={resetDinerToUpdate}
+            <DinerForm
+              handleSaveDiner={handleSaveUpdatedDiner}
+              diner={dinerUpdatedName}
+              handleDinerNameChange={handleDinerNameChange}
+              handleCancelDiner={resetDinerToUpdate}
             />
           </div>
         ) : (

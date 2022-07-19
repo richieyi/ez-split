@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Diner from '../../toolkit/Diner';
 import Expense from '../../toolkit/Expense';
-import { isValidAmount } from '../../utils';
 import { exampleDiners, exampleExpenses } from '../../utils/examples';
 import DinersList from '../DinersList';
 import ExpensesList from '../ExpensesList';
-import NewDinerForm from '../NewDinerForm';
-import NewExpenseForm from '../NewExpenseForm';
+import DinerForm from '../DinerForm';
+import ExpenseForm from '../ExpenseForm';
+import NewItemButton from '../NewItemButton';
 
 function App() {
   // List of expenses/diners
@@ -26,12 +26,15 @@ function App() {
   // Inputs for updating expense/diner
   const [expenseToUpdate, setExpenseToUpdate] =
     useState<Expense | null>(null);
-  const [expenseNewName, setExpenseNewName] = useState<string>('');
-  const [expenseNewCost, setExpenseNewCost] = useState<string>('');
+  const [expenseUpdatedName, setExpenseUpdatedName] =
+    useState<string>('');
+  const [expenseUpdatedCost, setExpenseUpdatedCost] =
+    useState<string>('');
   const [dinerToUpdate, setDinerToUpdate] = useState<Diner | null>(
     null
   );
-  const [dinerNewName, setDinerNewName] = useState<string>('');
+  const [dinerUpdatedName, setDinerUpdatedName] =
+    useState<string>('');
 
   // Selected expense/diner
   const [selectedExpense, setSelectedExpense] =
@@ -126,14 +129,14 @@ function App() {
 
   function handleUpdateExpense(expense: Expense) {
     setExpenseToUpdate(expense);
-    setExpenseNewName(expense.getName());
-    setExpenseNewCost(String(expense.getCost()));
+    setExpenseUpdatedName(expense.getName());
+    setExpenseUpdatedCost(String(expense.getCost()));
   }
 
   function resetExpenseToUpdate() {
     setExpenseToUpdate(null);
-    setExpenseNewName('');
-    setExpenseNewCost('');
+    setExpenseUpdatedName('');
+    setExpenseUpdatedCost('');
   }
 
   function handleSaveUpdatedExpense(e: any) {
@@ -141,12 +144,12 @@ function App() {
 
     if (
       expenseToUpdate &&
-      expenseNewName.length > 0 &&
-      expenseNewCost.length > 0
+      expenseUpdatedName.length > 0 &&
+      expenseUpdatedCost.length > 0
     ) {
       expenseToUpdate.updateExpense(
-        expenseNewName,
-        Number(expenseNewCost)
+        expenseUpdatedName,
+        Number(expenseUpdatedCost)
       );
 
       const newExpenses = [...expenses];
@@ -161,19 +164,19 @@ function App() {
 
   function handleUpdateDiner(diner: Diner) {
     setDinerToUpdate(diner);
-    setDinerNewName(diner.getName());
+    setDinerUpdatedName(diner.getName());
   }
 
   function resetDinerToUpdate() {
     setDinerToUpdate(null);
-    setDinerNewName('');
+    setDinerUpdatedName('');
   }
 
   function handleSaveUpdatedDiner(e: any) {
     e.preventDefault();
 
-    if (dinerToUpdate && dinerNewName.length > 0) {
-      dinerToUpdate.updateDiner(dinerNewName);
+    if (dinerToUpdate && dinerUpdatedName.length > 0) {
+      dinerToUpdate.updateDiner(dinerUpdatedName);
 
       const newDiners = [...diners];
       const idx = newDiners.findIndex(
@@ -185,82 +188,46 @@ function App() {
     }
   }
 
-  function handleExpenseNameChange(e: any) {
-    if (e.target.value.length <= 12) {
-      if (isAddingNewExpense) {
-        setExpense(e.target.value);
-      }
-      if (expenseToUpdate) {
-        setExpenseNewName(e.target.value);
-      }
-    }
-  }
-
-  function handleExpenseCostChange(e: any) {
-    if (
-      e.target.value === '' ||
-      (isValidAmount(e.target.value) && e.target.value.length <= 7)
-    ) {
-      if (isAddingNewExpense) {
-        setCost(e.target.value);
-      }
-      if (expenseToUpdate) {
-        setExpenseNewCost(e.target.value);
-      }
-    }
-  }
-
   const expensesListProps = {
     expenses,
     selectedExpense,
     expenseToUpdate,
     handleSaveUpdatedExpense,
-    expenseNewName,
-    handleExpenseNameChange,
-    expenseNewCost,
-    handleExpenseCostChange,
+    expenseUpdatedName,
+    handleExpenseNameChange: setExpenseUpdatedName,
+    expenseUpdatedCost,
+    handleExpenseCostChange: setExpenseUpdatedCost,
     resetExpenseToUpdate,
     handleExpenseClick,
     handleUpdateExpense,
     handleRemoveExpense,
   };
   const newExpenseFormProps = {
-    handleAddNewExpense,
+    handleSaveExpense: handleAddNewExpense,
     expense,
-    handleExpenseNameChange,
+    handleExpenseNameChange: setExpense,
     cost,
-    handleExpenseCostChange,
-    resetNewExpense,
+    handleExpenseCostChange: setCost,
+    handleCancelExpense: resetNewExpense,
   };
 
-  function handleDinerNameChange(e: any) {
-    if (e.target.value.length <= 12) {
-      if (isAddingNewDiner) {
-        setDiner(e.target.value);
-      }
-      if (dinerToUpdate) {
-        setDinerNewName(e.target.value);
-      }
-    }
-  }
-
-  const newDinerFormProps = {
-    handleAddNewDiner,
-    diner,
-    handleDinerNameChange,
-    resetNewDiner,
-  };
   const dinersListProps = {
     diners,
     selectedDiner,
     dinerToUpdate,
     handleSaveUpdatedDiner,
-    dinerNewName,
-    handleDinerNameChange,
+    dinerUpdatedName,
+    handleDinerNameChange: setDinerUpdatedName,
     resetDinerToUpdate,
     setSelectedDiner,
     handleUpdateDiner,
     handleRemoveDiner,
+  };
+  const newDinerFormProps = {
+    handleSaveDiner: handleAddNewDiner,
+    diner,
+    handleDinerNameChange: setDiner,
+    handelCancelDiner: resetNewDiner,
   };
 
   return (
@@ -273,40 +240,32 @@ function App() {
           <h1 className="text-2xl font-bold my-4 md:text-center text-left">
             Expenses 🍖
           </h1>
-          <div>
-            <ExpensesList {...expensesListProps} />
-          </div>
+          <ExpensesList {...expensesListProps} />
           {isAddingNewExpense ? (
-            <NewExpenseForm {...newExpenseFormProps} />
-          ) : (
-            <div className="flex justify-center">
-              <button
-                onClick={() => setIsAddingNewExpense(true)}
-                className="border rounded p-2 hover:bg-slate-300 bg-white"
-              >
-                Add New Expense
-              </button>
+            <div className="border rounded p-2 bg-white">
+              <ExpenseForm {...newExpenseFormProps} />
             </div>
+          ) : (
+            <NewItemButton
+              setIsAddingNewItem={() => setIsAddingNewExpense(true)}
+              itemType="Expense"
+            />
           )}
         </div>
         <div className="flex-1">
           <h1 className="text-2xl font-bold my-4 md:text-center text-left">
             Diners 🧑‍🍳
           </h1>
-          <div>
-            <DinersList {...dinersListProps} />
-          </div>
+          <DinersList {...dinersListProps} />
           {isAddingNewDiner ? (
-            <NewDinerForm {...newDinerFormProps} />
-          ) : (
-            <div className="flex justify-center">
-              <button
-                onClick={() => setIsAddingNewDiner(true)}
-                className="border rounded p-2 hover:bg-slate-300 bg-white"
-              >
-                Add New Diner
-              </button>
+            <div className="border rounded p-2 bg-white">
+              <DinerForm {...newDinerFormProps} />
             </div>
+          ) : (
+            <NewItemButton
+              setIsAddingNewItem={() => setIsAddingNewDiner(true)}
+              itemType="Diner"
+            />
           )}
         </div>
       </div>

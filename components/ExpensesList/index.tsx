@@ -1,7 +1,6 @@
-import Input from '../Input';
 import Expense from '../../toolkit/Expense';
 import MoreButton from '../MoreButton';
-import SaveCancelButtons from '../SaveCancelButtons';
+import ExpenseForm from '../ExpenseForm';
 
 function ExpensesList(props: any) {
   const {
@@ -9,9 +8,9 @@ function ExpensesList(props: any) {
     selectedExpense,
     expenseToUpdate,
     handleSaveUpdatedExpense,
-    expenseNewName,
+    expenseUpdatedName,
     handleExpenseNameChange,
-    expenseNewCost,
+    expenseUpdatedCost,
     handleExpenseCostChange,
     resetExpenseToUpdate,
     handleExpenseClick,
@@ -27,34 +26,21 @@ function ExpensesList(props: any) {
       <div
         key={expense.getID()}
         className={`flex justify-between items-center border rounded p-2 my-2 ${
-          isUpdating ? '' : 'hover:bg-slate-300'
-        } bg-white hover:cursor-pointer`}
-        onClick={() =>
-          handleExpenseClick(isSelected ? null : expense)
+          isUpdating ? '' : 'hover:cursor-pointer hover:bg-slate-300'
+        } bg-white`}
+        onClick={
+          isUpdating ? () => {} : () => handleExpenseClick(expense)
         }
       >
         {isUpdating ? (
           <div className="w-full">
-            <form
-              onSubmit={handleSaveUpdatedExpense}
-              className="flex"
-            >
-              <Input
-                name="expenseNewName"
-                placeholder="Expense name"
-                value={expenseNewName}
-                onChange={handleExpenseNameChange}
-              />
-              <Input
-                name="expenseNewCost"
-                placeholder="Cost"
-                value={expenseNewCost}
-                onChange={handleExpenseCostChange}
-              />
-            </form>
-            <SaveCancelButtons
-              handleSave={handleSaveUpdatedExpense}
-              handleCancel={resetExpenseToUpdate}
+            <ExpenseForm
+              handleSaveExpense={handleSaveUpdatedExpense}
+              expense={expenseUpdatedName}
+              handleExpenseNameChange={handleExpenseNameChange}
+              cost={expenseUpdatedCost}
+              handleExpenseCostChange={handleExpenseCostChange}
+              handleCancelExpense={resetExpenseToUpdate}
             />
           </div>
         ) : (
