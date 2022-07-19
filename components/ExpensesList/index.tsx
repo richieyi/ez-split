@@ -3,6 +3,7 @@ import Expense from '../../toolkit/Expense';
 import MoreButton from '../MoreButton';
 import ExpenseForm from '../ExpenseForm';
 import NewItemButton from '../NewItemButton';
+import Diner from '../../toolkit/Diner';
 
 interface Props {
   expenses: Expense[];
@@ -10,6 +11,7 @@ interface Props {
   handleExpenseClick: (expense: Expense) => void;
   handleRemoveExpense: (expense: Expense) => void;
   setExpenses: (expenses: Expense[]) => void;
+  selectedDiner: Diner | null;
 }
 
 function ExpensesList(props: Props) {
@@ -19,6 +21,7 @@ function ExpensesList(props: Props) {
     handleExpenseClick,
     handleRemoveExpense,
     setExpenses,
+    selectedDiner,
   } = props;
 
   const [isAddingNewExpense, setIsAddingNewExpense] =
@@ -94,6 +97,14 @@ function ExpensesList(props: Props) {
 
   function renderExpenses() {
     return expenses.map((expense: Expense) => {
+      let selectedDinerHasExpense = false;
+      if (
+        expense
+          .getDiners()
+          .find((diner) => diner.getID() === selectedDiner?.getID())
+      ) {
+        selectedDinerHasExpense = true;
+      }
       const isSelected = selectedExpense === expense;
       const isUpdating = expenseToUpdate === expense;
 
@@ -113,7 +124,7 @@ function ExpensesList(props: Props) {
             <>
               <div
                 className={`flex justify-between w-full ${
-                  isSelected ? 'text-green-500' : ''
+                  selectedDinerHasExpense ? 'text-orange-500' : ''
                 }`}
               >
                 <span className="font-bold">

@@ -72,6 +72,7 @@ function App() {
     handleExpenseClick,
     handleRemoveExpense,
     setExpenses,
+    selectedDiner,
   };
   const dinersListProps = {
     diners,
