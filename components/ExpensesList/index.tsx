@@ -5,43 +5,71 @@ import ExpenseForm from '../ExpenseForm';
 import NewItemButton from '../NewItemButton';
 
 function ExpensesList(props: any) {
-  const [isAddingNewExpense, setIsAddingNewExpense] =
-    useState<boolean>(false);
-  const [expense, setExpense] = useState<string>('');
-  const [cost, setCost] = useState<string>('');
-
   const {
     expenses,
     selectedExpense,
-    expenseToUpdate,
-    handleSaveUpdatedExpense,
-    expenseUpdatedName,
-    handleExpenseNameChange,
-    expenseUpdatedCost,
-    handleExpenseCostChange,
-    resetExpenseToUpdate,
     handleExpenseClick,
-    handleUpdateExpense,
     handleRemoveExpense,
     setExpenses,
   } = props;
 
+  const [isAddingNewExpense, setIsAddingNewExpense] =
+    useState<boolean>(false);
+  const [expenseToUpdate, setExpenseToUpdate] =
+    useState<Expense | null>(null);
+
+  const expenseFormProps = {
+    name: expenseToUpdate?.getName(),
+    cost: String(expenseToUpdate?.getCost()),
+    handleSaveExpense: handleSaveUpdatedExpense,
+    handleCancelExpense: resetExpenseToUpdate,
+  };
   const newExpenseFormProps = {
     handleSaveExpense: handleAddNewExpense,
-    expense,
-    handleExpenseNameChange: setExpense,
-    cost,
-    handleExpenseCostChange: setCost,
     handleCancelExpense: resetNewExpense,
   };
 
+  function handleUpdateExpense(expense: Expense) {
+    setExpenseToUpdate(expense);
+  }
+
+  function resetExpenseToUpdate() {
+    setExpenseToUpdate(null);
+  }
+
+  function handleSaveUpdatedExpense(
+    e: any,
+    expenseName: string,
+    expenseCost: string
+  ) {
+    e.preventDefault();
+
+    if (
+      expenseToUpdate &&
+      expenseName.length > 0 &&
+      expenseCost.length > 0
+    ) {
+      expenseToUpdate.updateExpense(expenseName, Number(expenseCost));
+
+      const newExpenses = [...expenses];
+      const idx = newExpenses.findIndex(
+        (expense: any) => expense.getID() === expenseToUpdate.getID()
+      );
+      newExpenses.splice(idx, 1, expenseToUpdate);
+      setExpenses(newExpenses);
+      resetExpenseToUpdate();
+    }
+  }
+
   function resetNewExpense() {
-    setExpense('');
-    setCost('');
     setIsAddingNewExpense(false);
   }
 
-  function handleAddNewExpense(e: any) {
+  function handleAddNewExpense(
+    e: any,
+    expense: string,
+    cost: string
+  ) {
     e.preventDefault();
 
     if (expense.length > 0 && cost.length > 0) {
@@ -72,14 +100,7 @@ function ExpensesList(props: any) {
         >
           {isUpdating ? (
             <div className="w-full">
-              <ExpenseForm
-                handleSaveExpense={handleSaveUpdatedExpense}
-                expense={expenseUpdatedName}
-                handleExpenseNameChange={handleExpenseNameChange}
-                cost={expenseUpdatedCost}
-                handleExpenseCostChange={handleExpenseCostChange}
-                handleCancelExpense={resetExpenseToUpdate}
-              />
+              <ExpenseForm {...expenseFormProps} />
             </div>
           ) : (
             <div
@@ -93,7 +114,7 @@ function ExpensesList(props: any) {
               <span>${expense.getCost().toFixed(2)}</span>
             </div>
           )}
-          {expenseToUpdate === expense ? null : (
+          {isUpdating ? null : (
             <MoreButton
               handleUpdate={() => handleUpdateExpense(expense)}
               handleRemove={() => handleRemoveExpense(expense)}

@@ -1,34 +1,37 @@
+import { useState } from 'react';
 import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 
 function DinerForm(props: any) {
-  const {
-    handleSaveDiner,
-    diner,
-    handleDinerNameChange,
-    handleCancelDiner,
-  } = props;
+  const { name, handleSaveDiner, handleCancelDiner } = props;
+
+  const [dinerName, setDiner] = useState<string>(name || '');
+
+  function onSaveDiner(e: any) {
+    e.preventDefault();
+    handleSaveDiner(e, dinerName);
+  }
 
   function handleNameChange(e: any) {
     const val = e.target.value;
     if (val.length <= 10) {
-      handleDinerNameChange(val);
+      setDiner(val);
     }
   }
 
   return (
     <>
-      <form onSubmit={handleSaveDiner}>
+      <form onSubmit={onSaveDiner}>
         <Input
           name="dinerName"
           placeholder="Diner's nickname"
-          value={diner}
+          value={dinerName}
           onChange={handleNameChange}
         />
         <button type="submit" className="hidden" />
       </form>
       <SaveCancelButtons
-        handleSave={handleSaveDiner}
+        handleSave={onSaveDiner}
         handleCancel={handleCancelDiner}
       />
     </>

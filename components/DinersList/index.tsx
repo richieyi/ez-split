@@ -5,42 +5,65 @@ import MoreButton from '../MoreButton';
 import NewItemButton from '../NewItemButton';
 
 function DinersList(props: any) {
-  const [isAddingNewDiner, setIsAddingNewDiner] =
-    useState<boolean>(false);
-  const [diner, setDiner] = useState<string>('');
-
   const {
     diners,
     selectedDiner,
-    dinerToUpdate,
-    handleSaveUpdatedDiner,
-    dinerUpdatedName,
-    handleDinerNameChange,
-    resetDinerToUpdate,
     setSelectedDiner,
-    handleUpdateDiner,
     handleRemoveDiner,
     setDiners,
   } = props;
 
+  const [isAddingNewDiner, setIsAddingNewDiner] =
+    useState<boolean>(false);
+  const [dinerToUpdate, setDinerToUpdate] = useState<Diner | null>(
+    null
+  );
+  console.log(dinerToUpdate);
+
+  const dinerFormProps = {
+    name: dinerToUpdate?.getName(),
+    handleSaveDiner: handleSaveUpdatedDiner,
+    handleCancelDiner: resetDinerToUpdate,
+  };
   const newDinerFormProps = {
     handleSaveDiner: handleAddNewDiner,
-    diner,
-    handleDinerNameChange: setDiner,
     handleCancelDiner: resetNewDiner,
   };
 
+  function handleUpdateDiner(diner: Diner) {
+    setDinerToUpdate(diner);
+  }
+
+  function resetDinerToUpdate() {
+    setDinerToUpdate(null);
+  }
+
+  function handleSaveUpdatedDiner(e: any, dinerName: string) {
+    e.preventDefault();
+
+    if (dinerToUpdate && dinerName.length > 0) {
+      dinerToUpdate.updateDiner(dinerName);
+
+      const newDiners = [...diners];
+      const idx = newDiners.findIndex(
+        (diner) => diner.getID() === dinerToUpdate.getID()
+      );
+      newDiners.splice(idx, 1, dinerToUpdate);
+      setDiners(newDiners);
+      resetDinerToUpdate();
+    }
+  }
+
   function resetNewDiner() {
-    setDiner('');
     setIsAddingNewDiner(false);
   }
 
-  function handleAddNewDiner(e: any) {
+  function handleAddNewDiner(e: any, dinerName: string) {
     e.preventDefault();
 
-    if (diner.length > 0) {
+    if (dinerName.length > 0) {
       const newDiners = [...diners];
-      const newDiner = new Diner(diner);
+      const newDiner = new Diner(dinerName);
       newDiners.push(newDiner);
       setDiners(newDiners);
       resetNewDiner();
@@ -66,12 +89,7 @@ function DinersList(props: any) {
         >
           {isUpdating ? (
             <div className="w-full">
-              <DinerForm
-                handleSaveDiner={handleSaveUpdatedDiner}
-                diner={dinerUpdatedName}
-                handleDinerNameChange={handleDinerNameChange}
-                handleCancelDiner={resetDinerToUpdate}
-              />
+              <DinerForm {...dinerFormProps} />
             </div>
           ) : (
             <div
@@ -83,7 +101,7 @@ function DinersList(props: any) {
               <span>${diner.getTotalExpenses().toFixed(2)}</span>
             </div>
           )}
-          {dinerToUpdate === diner ? null : (
+          {isUpdating ? null : (
             <MoreButton
               handleUpdate={() => handleUpdateDiner(diner)}
               handleRemove={() => handleRemoveDiner(diner)}

@@ -1,50 +1,53 @@
+import { useState } from 'react';
 import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 import { isValidAmount } from '../../utils';
 
 function ExpenseForm(props: any) {
-  const {
-    handleSaveExpense,
-    expense,
-    handleExpenseNameChange,
-    cost,
-    handleExpenseCostChange,
-    handleCancelExpense,
-  } = props;
+  const { name, cost, handleSaveExpense, handleCancelExpense } =
+    props;
+
+  const [expenseName, setExpense] = useState<string>(name || '');
+  const [expenseCost, setCost] = useState<string>(cost || '');
+
+  function onSaveExpense(e: any) {
+    e.preventDefault();
+    handleSaveExpense(e, expenseName, expenseCost);
+  }
 
   function handleNameChange(e: any) {
     const val = e.target.value;
     if (val.length <= 10) {
-      handleExpenseNameChange(val);
+      setExpense(val);
     }
   }
 
   function handleCostChange(e: any) {
     const val = e.target.value;
     if (val === '' || (isValidAmount(val) && val.length <= 7)) {
-      handleExpenseCostChange(val);
+      setCost(val);
     }
   }
 
   return (
     <>
-      <form onSubmit={handleSaveExpense} className="flex">
+      <form onSubmit={onSaveExpense} className="flex">
         <Input
           placeholder="Expense name"
-          name="expense"
-          value={expense}
+          name="expenseName"
+          value={expenseName}
           onChange={handleNameChange}
         />
         <Input
           placeholder="Cost"
-          name="cost"
-          value={cost}
+          name="expenseCost"
+          value={expenseCost}
           onChange={handleCostChange}
         />
         <button type="submit" className="hidden" />
       </form>
       <SaveCancelButtons
-        handleSave={handleSaveExpense}
+        handleSave={onSaveExpense}
         handleCancel={handleCancelExpense}
       />
     </>
