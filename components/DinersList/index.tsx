@@ -4,7 +4,15 @@ import DinerForm from '../DinerForm';
 import MoreButton from '../MoreButton';
 import NewItemButton from '../NewItemButton';
 
-function DinersList(props: any) {
+interface Props {
+  diners: Diner[];
+  selectedDiner: Diner | null;
+  setSelectedDiner: (diner: Diner) => void;
+  handleRemoveDiner: (diner: Diner) => void;
+  setDiners: (diners: Diner[]) => void;
+}
+
+function DinersList(props: Props) {
   const {
     diners,
     selectedDiner,
@@ -18,7 +26,6 @@ function DinersList(props: any) {
   const [dinerToUpdate, setDinerToUpdate] = useState<Diner | null>(
     null
   );
-  console.log(dinerToUpdate);
 
   const dinerFormProps = {
     name: dinerToUpdate?.getName(),
@@ -87,25 +94,27 @@ function DinersList(props: any) {
             isUpdating ? () => {} : () => setSelectedDiner(diner)
           }
         >
-          {isUpdating ? (
+          {!isUpdating ? (
+            <>
+              <div
+                className={`flex justify-between w-full ${
+                  isSelected ? 'text-green-500' : ''
+                }`}
+              >
+                <span className="font-bold">
+                  🧑‍🍳 {diner.getName()}
+                </span>
+                <span>${diner.getTotalExpenses().toFixed(2)}</span>
+              </div>
+              <MoreButton
+                handleUpdate={() => handleUpdateDiner(diner)}
+                handleRemove={() => handleRemoveDiner(diner)}
+              />
+            </>
+          ) : (
             <div className="w-full">
               <DinerForm {...dinerFormProps} />
             </div>
-          ) : (
-            <div
-              className={`flex justify-between w-full ${
-                isSelected ? 'text-green-500' : ''
-              }`}
-            >
-              <span className="font-bold">🧑‍🍳 {diner.getName()}</span>
-              <span>${diner.getTotalExpenses().toFixed(2)}</span>
-            </div>
-          )}
-          {isUpdating ? null : (
-            <MoreButton
-              handleUpdate={() => handleUpdateDiner(diner)}
-              handleRemove={() => handleRemoveDiner(diner)}
-            />
           )}
         </div>
       );

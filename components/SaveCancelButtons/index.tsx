@@ -1,6 +1,11 @@
 import IconButton from '../IconButton';
 
-function SaveCancelButtons(props: any) {
+interface Props {
+  handleSave: (e: any) => void;
+  handleCancel: () => void;
+}
+
+function SaveCancelButtons(props: Props) {
   const { handleSave, handleCancel } = props;
 
   return (

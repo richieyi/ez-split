@@ -4,7 +4,15 @@ import MoreButton from '../MoreButton';
 import ExpenseForm from '../ExpenseForm';
 import NewItemButton from '../NewItemButton';
 
-function ExpensesList(props: any) {
+interface Props {
+  expenses: Expense[];
+  selectedExpense: Expense | null;
+  handleExpenseClick: (expense: Expense) => void;
+  handleRemoveExpense: (expense: Expense) => void;
+  setExpenses: (expenses: Expense[]) => void;
+}
+
+function ExpensesList(props: Props) {
   const {
     expenses,
     selectedExpense,
@@ -67,14 +75,17 @@ function ExpensesList(props: any) {
 
   function handleAddNewExpense(
     e: any,
-    expense: string,
-    cost: string
+    expenseName: string,
+    expenseCost: string
   ) {
     e.preventDefault();
 
-    if (expense.length > 0 && cost.length > 0) {
+    if (expenseName.length > 0 && expenseCost.length > 0) {
+      const newExpense = new Expense(
+        expenseName,
+        Number(expenseCost)
+      );
       const newExpenses = [...expenses];
-      const newExpense = new Expense(expense, Number(cost));
       newExpenses.push(newExpense);
       setExpenses(newExpenses);
       resetNewExpense();
@@ -98,27 +109,27 @@ function ExpensesList(props: any) {
             isUpdating ? () => {} : () => handleExpenseClick(expense)
           }
         >
-          {isUpdating ? (
+          {!isUpdating ? (
+            <>
+              <div
+                className={`flex justify-between w-full ${
+                  isSelected ? 'text-green-500' : ''
+                }`}
+              >
+                <span className="font-bold">
+                  🍖 {expense.getName()}
+                </span>
+                <span>${expense.getCost().toFixed(2)}</span>
+              </div>
+              <MoreButton
+                handleUpdate={() => handleUpdateExpense(expense)}
+                handleRemove={() => handleRemoveExpense(expense)}
+              />
+            </>
+          ) : (
             <div className="w-full">
               <ExpenseForm {...expenseFormProps} />
             </div>
-          ) : (
-            <div
-              className={`flex justify-between w-full ${
-                isSelected ? 'text-green-500' : ''
-              }`}
-            >
-              <span className="font-bold">
-                🍖 {expense.getName()}
-              </span>
-              <span>${expense.getCost().toFixed(2)}</span>
-            </div>
-          )}
-          {isUpdating ? null : (
-            <MoreButton
-              handleUpdate={() => handleUpdateExpense(expense)}
-              handleRemove={() => handleRemoveExpense(expense)}
-            />
           )}
         </div>
       );

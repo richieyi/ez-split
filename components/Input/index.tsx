@@ -1,3 +1,10 @@
+interface Props {
+  name: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: any) => void;
+}
+
 function Input(props: any) {
   const { name, placeholder, value, onChange } = props;
 

@@ -2,17 +2,23 @@ import { useState } from 'react';
 import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 
-function DinerForm(props: any) {
+interface Props {
+  name?: string;
+  handleSaveDiner: (e: any, dinerName: string) => void;
+  handleCancelDiner: () => void;
+}
+
+function DinerForm(props: Props) {
   const { name, handleSaveDiner, handleCancelDiner } = props;
 
   const [dinerName, setDiner] = useState<string>(name || '');
 
-  function onSaveDiner(e: any) {
+  function onSaveDiner(e: any): void {
     e.preventDefault();
     handleSaveDiner(e, dinerName);
   }
 
-  function handleNameChange(e: any) {
+  function handleNameChange(e: any): void {
     const val = e.target.value;
     if (val.length <= 10) {
       setDiner(val);

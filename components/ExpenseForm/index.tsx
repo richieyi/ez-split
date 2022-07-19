@@ -3,7 +3,18 @@ import Input from '../Input';
 import SaveCancelButtons from '../SaveCancelButtons';
 import { isValidAmount } from '../../utils';
 
-function ExpenseForm(props: any) {
+interface Props {
+  name?: string;
+  cost?: string;
+  handleSaveExpense: (
+    e: any,
+    expenseName: string,
+    expenseCost: string
+  ) => void;
+  handleCancelExpense: () => void;
+}
+
+function ExpenseForm(props: Props) {
   const { name, cost, handleSaveExpense, handleCancelExpense } =
     props;
 
