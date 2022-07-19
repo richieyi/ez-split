@@ -14,7 +14,7 @@ function ExpenseForm(props: any) {
 
   function handleNameChange(e: any) {
     const val = e.target.value;
-    if (val.length <= 12) {
+    if (val.length <= 10) {
       handleExpenseNameChange(val);
     }
   }

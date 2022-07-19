@@ -6,12 +6,12 @@ function DinerForm(props: any) {
     handleSaveDiner,
     diner,
     handleDinerNameChange,
-    handelCancelDiner,
+    handleCancelDiner,
   } = props;
 
   function handleNameChange(e: any) {
     const val = e.target.value;
-    if (val.length <= 12) {
+    if (val.length <= 10) {
       handleDinerNameChange(val);
     }
   }
@@ -29,7 +29,7 @@ function DinerForm(props: any) {
       </form>
       <SaveCancelButtons
         handleSave={handleSaveDiner}
-        handleCancel={handelCancelDiner}
+        handleCancel={handleCancelDiner}
       />
     </>
   );

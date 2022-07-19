@@ -9,12 +9,15 @@ const Home: NextPage = () => {
         <title>EZ Split</title>
         <meta
           name="description"
-          content="Easily split up your bill with friends"
+          content="Easily split bills with friends."
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="mb-6 md:mb-12">
+        <h1 className="text-center text-4xl font-bold my-4">
+          EZ Split ✔️
+        </h1>
         <App />
       </main>
 
