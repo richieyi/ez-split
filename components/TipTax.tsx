@@ -58,7 +58,7 @@ function TipTax(props: Props) {
 
   return (
     <div className="flex-1">
-      <h1 className="text-2xl font-bold my-4 md:text-center text-left">
+      <h1 className="text-2xl font-bold my-4 lg:text-center text-left">
         Tip + Tax 💰
       </h1>
       <div className="border rounded my-2 p-2 bg-white flex justify-between">

@@ -106,7 +106,7 @@ function App() {
   };
 
   return (
-    <div className="flex-col md:flex md:flex-row w-full gap-8">
+    <div className="flex-col lg:flex lg:flex-row w-full gap-8">
       <ExpensesList {...expensesListProps} />
       <DinersList {...dinersListProps} />
       <TipTax {...tipTaxProps} />

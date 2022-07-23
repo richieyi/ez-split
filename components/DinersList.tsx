@@ -137,7 +137,7 @@ function DinersList(props: Props) {
 
   return (
     <div className="flex-1">
-      <h1 className="text-2xl font-bold my-4 md:text-center text-left">
+      <h1 className="text-2xl font-bold my-4 lg:text-center text-left">
         Diners 🧑‍🍳
       </h1>
       {renderDiners()}
