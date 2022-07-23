@@ -4,6 +4,7 @@ import Expense from '../../toolkit/Expense';
 import { exampleDiners, exampleExpenses } from '../../utils/examples';
 import DinersList from '../DinersList';
 import ExpensesList from '../ExpensesList';
+import TipTax from '../TipTax';
 
 function App() {
   // List of expenses/diners
@@ -11,17 +12,13 @@ function App() {
     useState<Expense[]>(exampleExpenses);
   const [diners, setDiners] = useState<Diner[]>(exampleDiners);
 
-  // Selected expense/diner
-  const [selectedExpense, setSelectedExpense] =
-    useState<Expense | null>(null);
+  // Selected diner
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
     null
   );
 
   // When diner is selected and expense is clicked
   function handleExpenseClick(expense: Expense) {
-    setSelectedExpense(expense);
-
     if (!selectedDiner) return;
 
     // If diner has expense, remove
@@ -66,9 +63,14 @@ function App() {
     setDiners(newDiners);
   }
 
+  function calculateSubtotal() {
+    return expenses.reduce((prev: number, expense: Expense) => {
+      return prev + expense.getCost();
+    }, 0);
+  }
+
   const expensesListProps = {
     expenses,
-    selectedExpense,
     handleExpenseClick,
     handleRemoveExpense,
     setExpenses,
@@ -86,6 +88,7 @@ function App() {
     <div className="flex-col md:flex md:flex-row w-full gap-8">
       <ExpensesList {...expensesListProps} />
       <DinersList {...dinersListProps} />
+      <TipTax subtotal={calculateSubtotal()} />
     </div>
   );
 }

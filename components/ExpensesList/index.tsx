@@ -7,7 +7,6 @@ import Diner from '../../toolkit/Diner';
 
 interface Props {
   expenses: Expense[];
-  selectedExpense: Expense | null;
   handleExpenseClick: (expense: Expense) => void;
   handleRemoveExpense: (expense: Expense) => void;
   setExpenses: (expenses: Expense[]) => void;
@@ -17,7 +16,6 @@ interface Props {
 function ExpensesList(props: Props) {
   const {
     expenses,
-    selectedExpense,
     handleExpenseClick,
     handleRemoveExpense,
     setExpenses,
@@ -105,7 +103,6 @@ function ExpensesList(props: Props) {
       ) {
         selectedDinerHasExpense = true;
       }
-      const isSelected = selectedExpense === expense;
       const isUpdating = expenseToUpdate === expense;
 
       return (

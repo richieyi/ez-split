@@ -4,7 +4,7 @@ import App from '../components/App';
 
 const Home: NextPage = () => {
   return (
-    <div className="text-sm md:text-base m-auto max-w-xl md:max-w-3xl flex-col py-4 px-4">
+    <div className="text-sm md:text-base m-auto max-w-xl md:max-w-5xl flex-col py-4 px-4">
       <Head>
         <title>EZ Split</title>
         <meta
