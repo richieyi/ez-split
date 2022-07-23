@@ -1,4 +1,4 @@
-import IconButton from '../IconButton';
+import IconButton from './IconButton';
 
 interface Props {
   handleSave: (e: any) => void;

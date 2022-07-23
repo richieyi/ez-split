@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Expense from '../../toolkit/Expense';
-import MoreButton from '../MoreButton';
-import ExpenseForm from '../ExpenseForm';
-import NewItemButton from '../NewItemButton';
-import Diner from '../../toolkit/Diner';
+import Expense from '../toolkit/Expense';
+import MoreButton from './MoreButton';
+import ExpenseForm from './ExpenseForm';
+import NewItemButton from './NewItemButton';
+import Diner from '../toolkit/Diner';
 
 interface Props {
   expenses: Expense[];

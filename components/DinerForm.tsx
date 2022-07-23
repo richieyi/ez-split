@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Input from '../Input';
-import SaveCancelButtons from '../SaveCancelButtons';
+import Input from './Input';
+import SaveCancelButtons from './SaveCancelButtons';
 
 interface Props {
   name?: string;

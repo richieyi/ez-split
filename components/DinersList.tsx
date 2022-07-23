@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Diner from '../../toolkit/Diner';
-import DinerForm from '../DinerForm';
-import MoreButton from '../MoreButton';
-import NewItemButton from '../NewItemButton';
+import Diner from '../toolkit/Diner';
+import DinerForm from './DinerForm';
+import MoreButton from './MoreButton';
+import NewItemButton from './NewItemButton';
 
 interface Props {
   diners: Diner[];
@@ -24,8 +24,6 @@ function DinersList(props: Props) {
     tipTaxTotal,
     subtotal,
   } = props;
-  console.log('sub', subtotal);
-  console.log('tip tax', tipTaxTotal);
 
   const [isAddingNewDiner, setIsAddingNewDiner] =
     useState<boolean>(false);

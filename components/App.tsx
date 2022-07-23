@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import Diner from '../../toolkit/Diner';
-import Expense from '../../toolkit/Expense';
-import { exampleDiners, exampleExpenses } from '../../utils/examples';
-import DinersList from '../DinersList';
-import ExpensesList from '../ExpensesList';
-import TipTax from '../TipTax';
+import Diner from '../toolkit/Diner';
+import Expense from '../toolkit/Expense';
+import { exampleDiners, exampleExpenses } from '../utils/examples';
+import DinersList from './DinersList';
+import ExpensesList from './ExpensesList';
+import TipTax from './TipTax';
 
 function App() {
   // List of expenses/diners

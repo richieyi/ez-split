@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { isValidAmount } from '../../utils';
-import SaveCancelButtons from '../SaveCancelButtons';
+import { isValidAmount } from '../utils';
+import SaveCancelButtons from './SaveCancelButtons';
 
 interface Props {
   tip: string;
@@ -13,8 +13,8 @@ interface Props {
 
 function TipTax(props: Props) {
   const { tip, tax, setTip, setTax, subtotal, finalTotal } = props;
-  const inputElTip = useRef(null);
-  const inputElTax = useRef(null);
+  const inputElTip = useRef<any>(null);
+  const inputElTax = useRef<any>(null);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
