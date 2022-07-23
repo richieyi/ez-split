@@ -5,7 +5,7 @@ interface Props {
   onChange: (e: any) => void;
 }
 
-function Input(props: any) {
+function Input(props: Props) {
   const { name, placeholder, value, onChange } = props;
 
   return (

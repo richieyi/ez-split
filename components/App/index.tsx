@@ -17,6 +17,10 @@ function App() {
     null
   );
 
+  // Tip & tax
+  const [tip, setTip] = useState<string>('8.50');
+  const [tax, setTax] = useState<string>('12.75');
+
   // When diner is selected and expense is clicked
   function handleExpenseClick(expense: Expense) {
     if (!selectedDiner) return;
@@ -69,6 +73,12 @@ function App() {
     }, 0);
   }
 
+  function calculateFinalTotal() {
+    return calculateSubtotal() + Number(tip) + Number(tax);
+  }
+
+  const subtotal = calculateSubtotal();
+  const finalTotal = calculateFinalTotal();
   const expensesListProps = {
     expenses,
     handleExpenseClick,
@@ -82,13 +92,24 @@ function App() {
     setSelectedDiner,
     handleRemoveDiner,
     setDiners,
+    tipTaxTotal: Number(tip) + Number(tax),
+    subtotal,
+    finalTotal,
+  };
+  const tipTaxProps = {
+    tip,
+    setTip,
+    tax,
+    setTax,
+    subtotal,
+    finalTotal,
   };
 
   return (
     <div className="flex-col md:flex md:flex-row w-full gap-8">
       <ExpensesList {...expensesListProps} />
       <DinersList {...dinersListProps} />
-      <TipTax subtotal={calculateSubtotal()} />
+      <TipTax {...tipTaxProps} />
     </div>
   );
 }

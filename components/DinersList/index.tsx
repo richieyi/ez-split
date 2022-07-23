@@ -10,6 +10,8 @@ interface Props {
   setSelectedDiner: (diner: Diner) => void;
   handleRemoveDiner: (diner: Diner) => void;
   setDiners: (diners: Diner[]) => void;
+  tipTaxTotal: number;
+  subtotal: number;
 }
 
 function DinersList(props: Props) {
@@ -19,7 +21,11 @@ function DinersList(props: Props) {
     setSelectedDiner,
     handleRemoveDiner,
     setDiners,
+    tipTaxTotal,
+    subtotal,
   } = props;
+  console.log('sub', subtotal);
+  console.log('tip tax', tipTaxTotal);
 
   const [isAddingNewDiner, setIsAddingNewDiner] =
     useState<boolean>(false);
@@ -77,10 +83,16 @@ function DinersList(props: Props) {
     }
   }
 
+  function renderDinerFinalTotal(dinerTotalExpenses: number): number {
+    const percentage = dinerTotalExpenses / subtotal;
+    return percentage * tipTaxTotal;
+  }
+
   function renderDiners() {
     return diners.map((diner: Diner) => {
       const isSelected = selectedDiner === diner;
       const isUpdating = dinerToUpdate === diner;
+      const dinerTotalExpenses = diner.getTotalExpenses();
 
       return (
         <div
@@ -104,7 +116,11 @@ function DinersList(props: Props) {
                 <span className="font-bold">
                   🧑‍🍳 {diner.getName()}
                 </span>
-                <span>${diner.getTotalExpenses().toFixed(2)}</span>
+                <span>
+                  $
+                  {dinerTotalExpenses +
+                    renderDinerFinalTotal(dinerTotalExpenses)}
+                </span>
               </div>
               <MoreButton
                 handleUpdate={() => handleUpdateDiner(diner)}

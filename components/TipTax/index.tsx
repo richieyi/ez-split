@@ -1,32 +1,26 @@
 import React, { useRef, useState } from 'react';
-import { isValidAmount } from '../utils';
-import SaveCancelButtons from './SaveCancelButtons';
+import { isValidAmount } from '../../utils';
+import SaveCancelButtons from '../SaveCancelButtons';
 
 interface Props {
+  tip: string;
+  tax: string;
+  setTip: (tip: string) => void;
+  setTax: (tax: string) => void;
   subtotal: number;
+  finalTotal: number;
 }
 
-/*
-  TODO:
-    - Distribute tip & tax to diners based on % of sub total
-  */
-
 function TipTax(props: Props) {
-  const { subtotal } = props;
+  const { tip, tax, setTip, setTax, subtotal, finalTotal } = props;
   const inputElTip = useRef(null);
   const inputElTax = useRef(null);
 
-  const [tip, setTip] = useState<string>('8.50');
-  const [tax, setTax] = useState<string>('12.75');
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  function calculateTotal() {
-    return subtotal + Number(tip) + Number(tax);
-  }
-
   function handleSave() {
-    const newTip = inputElTip.current.value;
-    const newTax = inputElTax.current.value;
+    const newTip = inputElTip?.current?.value;
+    const newTax = inputElTax?.current?.value;
     if (isValidAmount(newTip) && isValidAmount(newTax)) {
       setTip(newTip);
       setTax(newTax);
@@ -87,7 +81,7 @@ function TipTax(props: Props) {
           </div>
           <div className="border rounded my-2 p-2 bg-white flex justify-between">
             <span className="font-bold">Total</span>
-            <span>{`$${calculateTotal().toFixed(2)}`}</span>
+            <span>{`$${finalTotal.toFixed(2)}`}</span>
           </div>
           <div className="flex justify-center">
             <button
