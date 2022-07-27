@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import App from '../components/App';
+import Bill from '../components/Bill';
 
 const Home: NextPage = () => {
   return (
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <h1 className="text-center text-4xl font-bold my-4">
           EZ Split ✔️
         </h1>
-        <App />
+        <Bill />
       </main>
 
       <footer>

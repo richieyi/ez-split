@@ -116,8 +116,10 @@ function DinersList(props: Props) {
                 </span>
                 <span>
                   $
-                  {dinerTotalExpenses +
-                    renderDinerFinalTotal(dinerTotalExpenses)}
+                  {(
+                    dinerTotalExpenses +
+                    renderDinerFinalTotal(dinerTotalExpenses)
+                  ).toFixed(2)}
                 </span>
               </div>
               <MoreButton

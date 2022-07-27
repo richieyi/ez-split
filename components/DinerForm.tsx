@@ -13,12 +13,12 @@ function DinerForm(props: Props) {
 
   const [dinerName, setDiner] = useState<string>(name || '');
 
-  function onSaveDiner(e: any): void {
+  function onSaveDiner(e: any) {
     e.preventDefault();
     handleSaveDiner(e, dinerName);
   }
 
-  function handleNameChange(e: any): void {
+  function handleNameChange(e: any) {
     const val = e.target.value;
     if (val.length <= 10) {
       setDiner(val);
