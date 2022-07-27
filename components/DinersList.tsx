@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Diner from '../toolkit/Diner';
 import DinerForm from './DinerForm';
-import MoreButton from './MoreButton';
+import DinersListItem from './DinersListItem';
 import NewItemButton from './NewItemButton';
 
 interface Props {
@@ -31,11 +31,6 @@ function DinersList(props: Props) {
     null
   );
 
-  const dinerFormProps = {
-    name: dinerToUpdate?.getName(),
-    handleSaveDiner: handleSaveUpdatedDiner,
-    handleCancelDiner: resetDinerToUpdate,
-  };
   const newDinerFormProps = {
     handleSaveDiner: handleAddNewDiner,
     handleCancelDiner: resetNewDiner,
@@ -81,60 +76,26 @@ function DinersList(props: Props) {
     }
   }
 
-  function renderDinerFinalTotal(dinerTotalExpenses: number): number {
-    const percentage = dinerTotalExpenses / subtotal;
-    return percentage * tipTaxTotal;
-  }
+  const dinerListItemProps = {
+    selectedDiner,
+    dinerToUpdate,
+    setSelectedDiner,
+    handleSaveUpdatedDiner,
+    resetDinerToUpdate,
+    handleUpdateDiner,
+    handleRemoveDiner,
+    subtotal,
+    tipTaxTotal,
+  };
 
   function renderDiners() {
-    return diners.map((diner: Diner) => {
-      const isSelected = selectedDiner === diner;
-      const isUpdating = dinerToUpdate === diner;
-      const dinerTotalExpenses = diner.getTotalExpenses();
-
-      return (
-        <div
-          key={diner.getID()}
-          className={`flex justify-between items-center border rounded p-2 my-2 ${
-            isUpdating
-              ? ''
-              : 'hover:cursor-pointer hover:bg-slate-300'
-          } bg-white`}
-          onClick={
-            isUpdating ? () => {} : () => setSelectedDiner(diner)
-          }
-        >
-          {!isUpdating ? (
-            <>
-              <div
-                className={`flex justify-between w-full ${
-                  isSelected ? 'text-green-500' : ''
-                }`}
-              >
-                <span className="font-bold">
-                  🧑‍🍳 {diner.getName()}
-                </span>
-                <span>
-                  $
-                  {(
-                    dinerTotalExpenses +
-                    renderDinerFinalTotal(dinerTotalExpenses)
-                  ).toFixed(2)}
-                </span>
-              </div>
-              <MoreButton
-                handleUpdate={() => handleUpdateDiner(diner)}
-                handleRemove={() => handleRemoveDiner(diner)}
-              />
-            </>
-          ) : (
-            <div className="w-full">
-              <DinerForm {...dinerFormProps} />
-            </div>
-          )}
-        </div>
-      );
-    });
+    return diners.map((diner: Diner) => (
+      <DinersListItem
+        key={diner.getID()}
+        diner={diner}
+        {...dinerListItemProps}
+      />
+    ));
   }
 
   return (

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Expense from '../toolkit/Expense';
-import MoreButton from './MoreButton';
 import ExpenseForm from './ExpenseForm';
 import NewItemButton from './NewItemButton';
 import Diner from '../toolkit/Diner';
+import ExpensesListItem from './ExpensesListItem';
 
 interface Props {
   expenses: Expense[];
@@ -27,12 +27,6 @@ function ExpensesList(props: Props) {
   const [expenseToUpdate, setExpenseToUpdate] =
     useState<Expense | null>(null);
 
-  const expenseFormProps = {
-    name: expenseToUpdate?.getName(),
-    cost: String(expenseToUpdate?.getCost()),
-    handleSaveExpense: handleSaveUpdatedExpense,
-    handleCancelExpense: resetExpenseToUpdate,
-  };
   const newExpenseFormProps = {
     handleSaveExpense: handleAddNewExpense,
     handleCancelExpense: resetNewExpense,
@@ -93,55 +87,24 @@ function ExpensesList(props: Props) {
     }
   }
 
-  function renderExpenses() {
-    return expenses.map((expense: Expense) => {
-      let selectedDinerHasExpense = false;
-      if (
-        expense
-          .getDiners()
-          .find((diner) => diner.getID() === selectedDiner?.getID())
-      ) {
-        selectedDinerHasExpense = true;
-      }
-      const isUpdating = expenseToUpdate === expense;
+  const expensesListItemProps = {
+    expenseToUpdate,
+    selectedDiner,
+    handleExpenseClick,
+    handleUpdateExpense,
+    handleRemoveExpense,
+    handleSaveUpdatedExpense,
+    resetExpenseToUpdate,
+  };
 
-      return (
-        <div
-          key={expense.getID()}
-          className={`flex justify-between items-center border rounded p-2 my-2 ${
-            isUpdating
-              ? ''
-              : 'hover:cursor-pointer hover:bg-slate-300'
-          } bg-white`}
-          onClick={
-            isUpdating ? () => {} : () => handleExpenseClick(expense)
-          }
-        >
-          {!isUpdating ? (
-            <>
-              <div
-                className={`flex justify-between w-full ${
-                  selectedDinerHasExpense ? 'text-orange-500' : ''
-                }`}
-              >
-                <span className="font-bold">
-                  🍖 {expense.getName()}
-                </span>
-                <span>${expense.getCost().toFixed(2)}</span>
-              </div>
-              <MoreButton
-                handleUpdate={() => handleUpdateExpense(expense)}
-                handleRemove={() => handleRemoveExpense(expense)}
-              />
-            </>
-          ) : (
-            <div className="w-full">
-              <ExpenseForm {...expenseFormProps} />
-            </div>
-          )}
-        </div>
-      );
-    });
+  function renderExpenses() {
+    return expenses.map((expense: Expense) => (
+      <ExpensesListItem
+        key={expense.getID()}
+        expense={expense}
+        {...expensesListItemProps}
+      />
+    ));
   }
 
   return (
