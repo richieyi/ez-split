@@ -3,27 +3,31 @@ import Diner from '../toolkit/Diner';
 import DinerForm from './DinerForm';
 import DinersListItem from './DinersListItem';
 import NewItemButton from './NewItemButton';
+import { useDinerStore } from '../hooks/useBillStore';
+import { useExpenseStore } from '../hooks/useExpenseStore';
 
 interface Props {
-  diners: Diner[];
+  // diners: Diner[];
   selectedDiner: Diner | null;
   setSelectedDiner: (diner: Diner) => void;
-  handleRemoveDiner: (diner: Diner) => void;
-  setDiners: (diners: Diner[]) => void;
+  // handleRemoveDiner: (diner: Diner) => void;
+  // setDiners: (diners: Diner[]) => void;
   tipTaxTotal: number;
   subtotal: number;
 }
 
 function DinersList(props: Props) {
   const {
-    diners,
+    // diners,
     selectedDiner,
     setSelectedDiner,
-    handleRemoveDiner,
-    setDiners,
+    // handleRemoveDiner,
+    // setDiners,
     tipTaxTotal,
     subtotal,
   } = props;
+  const { expenses, setExpenses } = useExpenseStore();
+  const { diners, setDiners, removeDiner } = useDinerStore();
 
   const [isAddingNewDiner, setIsAddingNewDiner] =
     useState<boolean>(false);
@@ -35,6 +39,16 @@ function DinersList(props: Props) {
     handleSaveDiner: handleAddNewDiner,
     handleCancelDiner: resetNewDiner,
   };
+
+  function handleRemoveDiner(dinerToRemove: Diner) {
+    const newExpenses = [...expenses];
+    newExpenses.forEach((expense) =>
+      expense.removeDiner(dinerToRemove)
+    );
+    setExpenses(newExpenses);
+
+    removeDiner(dinerToRemove);
+  }
 
   function handleUpdateDiner(diner: Diner) {
     setDinerToUpdate(diner);

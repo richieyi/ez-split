@@ -4,8 +4,9 @@ import Expense from '../toolkit/Expense';
 import DinersList from './DinersList';
 import ExpensesList from './ExpensesList';
 import TipAndTax from './TipAndTax';
-import useBillLists from '../hooks/useBillLists';
 import { calculateSubtotal } from '../utils';
+import { useDinerStore } from '../hooks/useBillStore';
+import { useExpenseStore } from '../hooks/useExpenseStore';
 
 interface TipTax {
   tip: number;
@@ -13,14 +14,8 @@ interface TipTax {
 }
 
 function Bill() {
-  const {
-    expenses,
-    setExpenses,
-    diners,
-    setDiners,
-    handleRemoveExpense,
-    handleRemoveDiner,
-  } = useBillLists();
+  const { expenses } = useExpenseStore();
+  const { diners, setDiners } = useDinerStore();
 
   // Selected diner
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
@@ -56,18 +51,18 @@ function Bill() {
   const finalTotal = subtotal + tipTaxTotal;
 
   const expensesListProps = {
-    expenses,
+    // expenses,
     handleExpenseClick,
-    handleRemoveExpense,
-    setExpenses,
+    // handleRemoveExpense,
+    // setExpenses,
     selectedDiner,
   };
   const dinersListProps = {
-    diners,
+    // diners,
     selectedDiner,
     setSelectedDiner,
-    handleRemoveDiner,
-    setDiners,
+    // handleRemoveDiner,
+    // setDiners,
     tipTaxTotal,
     subtotal,
     finalTotal,

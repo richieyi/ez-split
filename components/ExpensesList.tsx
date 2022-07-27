@@ -4,23 +4,28 @@ import ExpenseForm from './ExpenseForm';
 import NewItemButton from './NewItemButton';
 import Diner from '../toolkit/Diner';
 import ExpensesListItem from './ExpensesListItem';
+import { useDinerStore } from '../hooks/useBillStore';
+import { useExpenseStore } from '../hooks/useExpenseStore';
 
 interface Props {
-  expenses: Expense[];
+  // expenses: Expense[];
   handleExpenseClick: (expense: Expense) => void;
-  handleRemoveExpense: (expense: Expense) => void;
-  setExpenses: (expenses: Expense[]) => void;
+  // handleRemoveExpense: (expense: Expense) => void;
+  // setExpenses: (expenses: Expense[]) => void;
   selectedDiner: Diner | null;
 }
 
 function ExpensesList(props: Props) {
   const {
-    expenses,
+    // expenses,
     handleExpenseClick,
-    handleRemoveExpense,
-    setExpenses,
+    // handleRemoveExpense,
+    // setExpenses,
     selectedDiner,
   } = props;
+  const { expenses, setExpenses, addExpense, removeExpense } =
+    useExpenseStore();
+  const { diners, setDiners } = useDinerStore();
 
   const [isAddingNewExpense, setIsAddingNewExpense] =
     useState<boolean>(false);
@@ -31,6 +36,16 @@ function ExpensesList(props: Props) {
     handleSaveExpense: handleAddNewExpense,
     handleCancelExpense: resetNewExpense,
   };
+
+  function handleRemoveExpense(expenseToRemove: Expense) {
+    const newDiners = [...diners];
+    newDiners.forEach((diner) =>
+      diner.removeExpense(expenseToRemove)
+    );
+    setDiners(newDiners);
+
+    removeExpense(expenseToRemove);
+  }
 
   function handleUpdateExpense(expense: Expense) {
     setExpenseToUpdate(expense);
@@ -80,9 +95,10 @@ function ExpensesList(props: Props) {
         expenseName,
         Number(expenseCost)
       );
-      const newExpenses = [...expenses];
-      newExpenses.push(newExpense);
-      setExpenses(newExpenses);
+      // const newExpenses = [...expenses];
+      // newExpenses.push(newExpense);
+      // setExpenses(newExpenses);
+      addExpense(newExpense);
       resetNewExpense();
     }
   }
