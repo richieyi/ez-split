@@ -7,7 +7,7 @@ import TipAndTax from './TipAndTax';
 import useBillLists from '../hooks/useBillLists';
 import { calculateSubtotal } from '../utils';
 
-interface TipTax {
+export interface TipTax {
   tip: number;
   tax: number;
 }

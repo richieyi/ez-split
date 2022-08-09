@@ -1,11 +1,13 @@
-interface Props {
+import { ChangeEvent } from 'react';
+
+interface InputProps {
   name: string;
   placeholder: string;
   value: string;
-  onChange: (e: any) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function Input(props: Props) {
+function Input(props: InputProps) {
   const { name, placeholder, value, onChange } = props;
 
   return (

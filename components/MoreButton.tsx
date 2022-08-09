@@ -3,12 +3,12 @@ import Diner from '../toolkit/Diner';
 import Expense from '../toolkit/Expense';
 import IconButton from './IconButton';
 
-interface Props {
+interface MoreButtonProps {
   handleUpdate: (item: Diner | Expense) => void;
   handleRemove: (item: Diner | Expense) => void;
 }
 
-function MoreButton(props: Props) {
+function MoreButton(props: MoreButtonProps) {
   const [showMore, setShowMore] = useState<boolean>(false);
   const { handleUpdate, handleRemove } = props;
 

@@ -1,11 +1,12 @@
+import { ChangeEvent } from 'react';
 import IconButton from './IconButton';
 
-interface Props {
-  handleSave: (e: any) => void;
+interface SaveCancelButtonsProps {
+  handleSave: (e: ChangeEvent<HTMLFormElement>) => void;
   handleCancel: () => void;
 }
 
-function SaveCancelButtons(props: Props) {
+function SaveCancelButtons(props: SaveCancelButtonsProps) {
   const { handleSave, handleCancel } = props;
 
   return (

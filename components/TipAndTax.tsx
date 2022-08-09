@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { isValidAmount } from '../utils';
 import SaveCancelButtons from './SaveCancelButtons';
 
-interface Props {
+interface TipAndTaxProps {
   tipTax: any;
   setTipTax: any;
   subtotal: number;
   finalTotal: number;
 }
 
-function TipAndTax(props: Props) {
+function TipAndTax(props: TipAndTaxProps) {
   const {
     tipTax: { tip, tax },
     setTipTax,
@@ -21,7 +21,7 @@ function TipAndTax(props: Props) {
   const [newTax, setNewTax] = useState<string>(tax);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  function handleTipChange(e: any) {
+  function handleTipChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     if (
       value === '' ||
@@ -31,7 +31,7 @@ function TipAndTax(props: Props) {
     }
   }
 
-  function handleTaxChange(e: any) {
+  function handleTaxChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     if (
       value === '' ||

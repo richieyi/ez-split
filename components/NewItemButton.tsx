@@ -1,9 +1,9 @@
-interface Props {
+interface NewItemButtonProps {
   setIsAddingNewItem: () => void;
   itemType: string;
 }
 
-function NewItemButton(props: Props) {
+function NewItemButton(props: NewItemButtonProps) {
   const { setIsAddingNewItem, itemType } = props;
 
   return (

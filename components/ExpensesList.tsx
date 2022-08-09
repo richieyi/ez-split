@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Expense from '../toolkit/Expense';
 import ExpenseForm from './ExpenseForm';
 import NewItemButton from './NewItemButton';
 import Diner from '../toolkit/Diner';
 import ExpensesListItem from './ExpensesListItem';
 
-interface Props {
+interface ExpensesListProps {
   expenses: Expense[];
   handleExpenseClick: (expense: Expense) => void;
   handleRemoveExpense: (expense: Expense) => void;
@@ -13,7 +13,7 @@ interface Props {
   selectedDiner: Diner | null;
 }
 
-function ExpensesList(props: Props) {
+function ExpensesList(props: ExpensesListProps) {
   const {
     expenses,
     handleExpenseClick,
@@ -41,7 +41,7 @@ function ExpensesList(props: Props) {
   }
 
   function handleSaveUpdatedExpense(
-    e: any,
+    e: ChangeEvent<HTMLFormElement>,
     expenseName: string,
     expenseCost: string
   ) {
@@ -56,7 +56,8 @@ function ExpensesList(props: Props) {
 
       const newExpenses = [...expenses];
       const idx = newExpenses.findIndex(
-        (expense: any) => expense.getID() === expenseToUpdate.getID()
+        (expense: Expense) =>
+          expense.getID() === expenseToUpdate.getID()
       );
       newExpenses.splice(idx, 1, expenseToUpdate);
       setExpenses(newExpenses);
@@ -69,7 +70,7 @@ function ExpensesList(props: Props) {
   }
 
   function handleAddNewExpense(
-    e: any,
+    e: ChangeEvent<HTMLFormElement>,
     expenseName: string,
     expenseCost: string
   ) {

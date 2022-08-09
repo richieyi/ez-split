@@ -7,6 +7,7 @@ import {
   XIcon,
   DotsVerticalIcon,
 } from '@heroicons/react/solid';
+import { MouseEvent } from 'react';
 
 const iconMap: any = {
   trash: TrashIcon,
@@ -26,14 +27,14 @@ const colorsMap: any = {
   black: 'text-black-500',
 };
 
-interface Props {
+interface IconButtonProps {
   name: string;
   color: string;
   onClick: any;
   className?: string;
 }
 
-const IconButton = (props: Props) => {
+const IconButton = (props: IconButtonProps) => {
   const { name, color, onClick, className } = props;
 
   if (name === undefined || color === undefined) {
@@ -44,7 +45,7 @@ const IconButton = (props: Props) => {
   const Icon = iconMap[name];
   const mappedColor = colorsMap[color];
 
-  function handleClick(e: any) {
+  function handleClick(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
 
     onClick(e);

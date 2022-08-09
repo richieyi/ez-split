@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Diner from '../toolkit/Diner';
 import DinerForm from './DinerForm';
 import DinersListItem from './DinersListItem';
 import NewItemButton from './NewItemButton';
 
-interface Props {
+interface DinersListProps {
   diners: Diner[];
   selectedDiner: Diner | null;
   setSelectedDiner: (diner: Diner) => void;
@@ -14,7 +14,7 @@ interface Props {
   subtotal: number;
 }
 
-function DinersList(props: Props) {
+function DinersList(props: DinersListProps) {
   const {
     diners,
     selectedDiner,
@@ -44,7 +44,10 @@ function DinersList(props: Props) {
     setDinerToUpdate(null);
   }
 
-  function handleSaveUpdatedDiner(e: any, dinerName: string) {
+  function handleSaveUpdatedDiner(
+    e: ChangeEvent<HTMLFormElement>,
+    dinerName: string
+  ) {
     e.preventDefault();
 
     if (dinerToUpdate && dinerName.length > 0) {
@@ -64,7 +67,10 @@ function DinersList(props: Props) {
     setIsAddingNewDiner(false);
   }
 
-  function handleAddNewDiner(e: any, dinerName: string) {
+  function handleAddNewDiner(
+    e: ChangeEvent<HTMLFormElement>,
+    dinerName: string
+  ) {
     e.preventDefault();
 
     if (dinerName.length > 0) {

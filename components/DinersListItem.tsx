@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Diner from '../toolkit/Diner';
 import MoreButton from './MoreButton';
 import DinerForm from './DinerForm';
 
-interface Props {
+interface DinersListItemProps {
   diner: Diner;
   selectedDiner: Diner | null;
   dinerToUpdate: Diner | null;
   setSelectedDiner: (diner: Diner) => void;
-  handleSaveUpdatedDiner: (e: any, dinerName: string) => void;
+  handleSaveUpdatedDiner: (
+    e: ChangeEvent<HTMLFormElement>,
+    dinerName: string
+  ) => void;
   resetDinerToUpdate: () => void;
   handleUpdateDiner: (diner: Diner) => void;
   handleRemoveDiner: (diner: Diner) => void;
@@ -16,7 +19,7 @@ interface Props {
   tipTaxTotal: number;
 }
 
-function DinersListItem(props: Props) {
+function DinersListItem(props: DinersListItemProps) {
   const {
     diner,
     selectedDiner,

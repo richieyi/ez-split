@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import MoreButton from './MoreButton';
 import ExpenseForm from './ExpenseForm';
 import Diner from '../toolkit/Diner';
 import Expense from '../toolkit/Expense';
 
-interface Props {
+interface ExpensesListItemProps {
   expense: Expense;
   expenseToUpdate: Expense | null;
   handleUpdateExpense: (expense: Expense) => void;
   handleSaveUpdatedExpense: (
-    e: any,
+    e: ChangeEvent<HTMLFormElement>,
     expenseName: string,
     expenseCost: string
   ) => void;
@@ -19,7 +19,7 @@ interface Props {
   selectedDiner: Diner | null;
 }
 
-function ExpensesListItem(props: Props) {
+function ExpensesListItem(props: ExpensesListItemProps) {
   const {
     expense,
     expenseToUpdate,

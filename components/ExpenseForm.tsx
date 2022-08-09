@@ -1,39 +1,39 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Input from './Input';
 import SaveCancelButtons from './SaveCancelButtons';
 import { isValidAmount } from '../utils';
 
-interface Props {
+interface ExpenseFormProps {
   name?: string;
   cost?: string;
   handleSaveExpense: (
-    e: any,
+    e: ChangeEvent<HTMLFormElement>,
     expenseName: string,
     expenseCost: string
   ) => void;
   handleCancelExpense: () => void;
 }
 
-function ExpenseForm(props: Props) {
+function ExpenseForm(props: ExpenseFormProps) {
   const { name, cost, handleSaveExpense, handleCancelExpense } =
     props;
 
   const [expenseName, setExpense] = useState<string>(name || '');
   const [expenseCost, setCost] = useState<string>(cost || '');
 
-  function onSaveExpense(e: any) {
+  function onSaveExpense(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     handleSaveExpense(e, expenseName, expenseCost);
   }
 
-  function handleNameChange(e: any) {
+  function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     if (val.length <= 10) {
       setExpense(val);
     }
   }
 
-  function handleCostChange(e: any) {
+  function handleCostChange(e: ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     if (val === '' || (isValidAmount(val) && val.length <= 7)) {
       setCost(val);
