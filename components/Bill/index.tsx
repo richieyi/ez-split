@@ -6,6 +6,7 @@ import ExpensesList from '@/components/ExpensesList';
 import TipAndTax from '@/components/TipAndTax';
 import useBillLists from '@/hooks/useBillLists';
 import { calculateSubtotal } from '@/utils/index';
+import Modal from '../Modal';
 
 export interface TipTax {
   tip: number;
@@ -22,7 +23,7 @@ function Bill() {
     handleRemoveDiner,
   } = useBillLists();
 
-  // Selected diner
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedDiner, setSelectedDiner] = useState<Diner | null>(
     null
   );
@@ -80,11 +81,22 @@ function Bill() {
   };
 
   return (
-    <div className="flex-col lg:flex lg:flex-row w-full gap-8">
-      <ExpensesList {...expensesListProps} />
-      <DinersList {...dinersListProps} />
-      <TipAndTax {...tipAndTaxProps} />
-    </div>
+    <>
+      <div className="flex-col lg:flex lg:flex-row w-full gap-8">
+        <ExpensesList {...expensesListProps} />
+        <DinersList {...dinersListProps} />
+        <TipAndTax {...tipAndTaxProps} />
+        <button onClick={() => setShowModal(true)}>Show</button>
+      </div>
+      {showModal ? (
+        <Modal
+          title="Test title"
+          bodyText="Test body"
+          handleCancel={() => setShowModal(false)}
+          handleSave={() => {}}
+        />
+      ) : null}
+    </>
   );
 }
 
