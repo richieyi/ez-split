@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from 'react';
-import Diner from '../toolkit/Diner';
-import DinerForm from './DinerForm';
-import DinersListItem from './DinersListItem';
-import NewItemButton from './NewItemButton';
+import Diner from '@/toolkit/Diner';
+import DinerForm from '@/components/DinerForm';
+import DinersListItem from '@/components/DinersListItem';
+import NewItemButton from '@/components/NewItemButton';
 
 interface DinersListProps {
   diners: Diner[];

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Diner from '../toolkit/Diner';
-import Expense from '../toolkit/Expense';
-import DinersList from './DinersList';
-import ExpensesList from './ExpensesList';
-import TipAndTax from './TipAndTax';
-import useBillLists from '../hooks/useBillLists';
-import { calculateSubtotal } from '../utils';
+import Diner from '@/toolkit/Diner';
+import Expense from '@/toolkit/Expense';
+import DinersList from '@/components/DinersList';
+import ExpensesList from '@/components/ExpensesList';
+import TipAndTax from '@/components/TipAndTax';
+import useBillLists from '@/hooks/useBillLists';
+import { calculateSubtotal } from '@/utils/index';
 
 export interface TipTax {
   tip: number;

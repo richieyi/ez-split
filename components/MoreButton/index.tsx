@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Diner from '../toolkit/Diner';
-import Expense from '../toolkit/Expense';
-import IconButton from './IconButton';
+import Diner from '@/toolkit/Diner';
+import Expense from '@/toolkit/Expense';
+import IconButton from '@/components/IconButton';
 
 interface MoreButtonProps {
   handleUpdate: (item: Diner | Expense) => void;

@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
-import Expense from '../toolkit/Expense';
-import ExpenseForm from './ExpenseForm';
-import NewItemButton from './NewItemButton';
-import Diner from '../toolkit/Diner';
-import ExpensesListItem from './ExpensesListItem';
+import Expense from '@/toolkit/Expense';
+import ExpenseForm from '@/components/ExpenseForm';
+import NewItemButton from '@/components/NewItemButton';
+import ExpensesListItem from '@/components/ExpensesListItem';
+import Diner from '@/toolkit/Diner';
 
 interface ExpensesListProps {
   expenses: Expense[];

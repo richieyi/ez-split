@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
-import { isValidAmount } from '../utils';
-import SaveCancelButtons from './SaveCancelButtons';
+import { isValidAmount } from '@/utils/index';
+import SaveCancelButtons from '@/components/SaveCancelButtons';
 
 interface TipAndTaxProps {
   tipTax: any;

@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import IconButton from './IconButton';
+import IconButton from '@/components/IconButton';
 
 interface SaveCancelButtonsProps {
   handleSave: (e: ChangeEvent<HTMLFormElement>) => void;

@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import Input from './Input';
-import SaveCancelButtons from './SaveCancelButtons';
-import { isValidAmount } from '../utils';
+import Input from '@/components/Input';
+import SaveCancelButtons from '@/components/SaveCancelButtons';
+import { isValidAmount } from '@/utils/index';
 
 interface ExpenseFormProps {
   name?: string;

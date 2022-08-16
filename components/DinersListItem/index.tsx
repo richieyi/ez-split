@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
-import Diner from '../toolkit/Diner';
-import MoreButton from './MoreButton';
-import DinerForm from './DinerForm';
+import Diner from '@/toolkit/Diner';
+import MoreButton from '@/components/MoreButton';
+import DinerForm from '@/components/DinerForm';
 
 interface DinersListItemProps {
   diner: Diner;

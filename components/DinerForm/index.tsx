@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
-import Input from './Input';
-import SaveCancelButtons from './SaveCancelButtons';
+import Input from '@/components/Input';
+import SaveCancelButtons from '@/components/SaveCancelButtons';
 
 interface DinerFormProps {
   name?: string;

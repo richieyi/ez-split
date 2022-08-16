@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react';
-import MoreButton from './MoreButton';
-import ExpenseForm from './ExpenseForm';
-import Diner from '../toolkit/Diner';
-import Expense from '../toolkit/Expense';
+import MoreButton from '@/components/MoreButton';
+import ExpenseForm from '@/components/ExpenseForm';
+import Diner from '@/toolkit/Diner';
+import Expense from '@/toolkit/Expense';
 
 interface ExpensesListItemProps {
   expense: Expense;
