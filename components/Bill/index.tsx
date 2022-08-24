@@ -86,16 +86,16 @@ function Bill() {
         <ExpensesList {...expensesListProps} />
         <DinersList {...dinersListProps} />
         <TipAndTax {...tipAndTaxProps} />
-        <button onClick={() => setShowModal(true)}>Show</button>
+        {/* <button onClick={() => setShowModal(true)}>Show</button> */}
       </div>
-      {showModal ? (
+      {/* {showModal ? (
         <Modal
           title="Test title"
           bodyText="Test body"
           handleCancel={() => setShowModal(false)}
           handleSave={() => {}}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 }
