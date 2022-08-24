@@ -2,7 +2,7 @@
 
 ✨ Split your bills with friends easily ✨
 
-<img src="./screenshot.png">
+<img src="./screenshot-updated.png">
 
 ## Tools used
 
