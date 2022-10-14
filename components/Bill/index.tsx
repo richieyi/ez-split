@@ -6,7 +6,6 @@ import ExpensesList from '@/components/ExpensesList';
 import TipAndTax from '@/components/TipAndTax';
 import useBillLists from '@/hooks/useBillLists';
 import { calculateSubtotal } from '@/utils/index';
-import Modal from '../Modal';
 
 export interface TipTax {
   tip: number;
@@ -81,22 +80,17 @@ function Bill() {
   };
 
   return (
-    <>
+    <div className="text-center">
+      <p className="my-6 text-sm lg:text-base">
+        Add your expenses and diners. Assign expenses to diners or
+        vice versa. Easy.
+      </p>
       <div className="flex-col lg:flex lg:flex-row w-full gap-8">
         <ExpensesList {...expensesListProps} />
         <DinersList {...dinersListProps} />
         <TipAndTax {...tipAndTaxProps} />
-        {/* <button onClick={() => setShowModal(true)}>Show</button> */}
       </div>
-      {/* {showModal ? (
-        <Modal
-          title="Test title"
-          bodyText="Test body"
-          handleCancel={() => setShowModal(false)}
-          handleSave={() => {}}
-        />
-      ) : null} */}
-    </>
+    </div>
   );
 }
 

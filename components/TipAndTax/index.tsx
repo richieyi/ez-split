@@ -85,7 +85,7 @@ function TipAndTax(props: TipAndTaxProps) {
       <h1 className="text-2xl font-bold my-4 lg:text-center text-left">
         Tip + Tax 💰
       </h1>
-      <div className="border rounded my-2 p-2 bg-white flex justify-between">
+      <div className="border rounded my-2 p-2 bg-white flex justify-between shadow-md">
         <span className="font-bold">Subtotal</span>
         <span>{`$${subtotal.toFixed(2)}`}</span>
       </div>
@@ -93,7 +93,7 @@ function TipAndTax(props: TipAndTaxProps) {
         renderForm()
       ) : (
         <>
-          <div className="border rounded my-2 p-2 bg-white flex-col">
+          <div className="border rounded my-2 p-2 bg-white flex-col shadow-md">
             <div className="flex justify-between">
               <span className="font-bold">Tip</span>
               <span>{`$${tip.toFixed(2)}`}</span>
@@ -103,13 +103,13 @@ function TipAndTax(props: TipAndTaxProps) {
               <span>{`$${tax.toFixed(2)}`}</span>
             </div>
           </div>
-          <div className="border rounded my-2 p-2 bg-white flex justify-between">
+          <div className="border rounded my-2 p-2 bg-white flex justify-between shadow-md">
             <span className="font-bold">Total</span>
             <span>{`$${finalTotal.toFixed(2)}`}</span>
           </div>
           <div className="flex justify-center">
             <button
-              className="border rounded p-2 bg-white"
+              className="border rounded p-2 bg-white hover:bg-slate-200 shadow-md"
               onClick={() => setIsEditing(true)}
               autoFocus={true}
             >

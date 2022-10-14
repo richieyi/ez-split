@@ -52,8 +52,8 @@ function DinersListItem(props: DinersListItemProps) {
     <div
       key={diner.getID()}
       className={`flex justify-between items-center border rounded p-2 my-2 ${
-        isUpdating ? '' : 'hover:cursor-pointer hover:bg-slate-300'
-      } bg-white`}
+        isUpdating ? '' : 'hover:cursor-pointer hover:bg-slate-200'
+      } bg-white shadow-md`}
       onClick={isUpdating ? () => {} : () => setSelectedDiner(diner)}
     >
       {!isUpdating ? (
