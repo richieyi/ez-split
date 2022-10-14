@@ -42,7 +42,9 @@ function TipAndTax(props: TipAndTaxProps) {
     }
   }
 
-  function handleSave() {
+  function handleSave(e: ChangeEvent<HTMLFormElement>) {
+    e.preventDefault();
+
     if (newTip !== '' && newTax !== '') {
       setTipTax({ tip: Number(newTip), tax: Number(newTax) });
       setIsEditing(false);
@@ -52,7 +54,7 @@ function TipAndTax(props: TipAndTaxProps) {
   function renderForm() {
     return (
       <div className="border rounded p-2 bg-white">
-        <form>
+        <form onSubmit={handleSave}>
           <Input
             name="tip"
             placeholder="Tip"
@@ -68,6 +70,7 @@ function TipAndTax(props: TipAndTaxProps) {
             onChange={handleTaxChange}
             className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border-2 border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
           />
+          <button type="submit" className="hidden" />
         </form>
         <SaveCancelButtons
           handleSave={handleSave}
@@ -108,6 +111,7 @@ function TipAndTax(props: TipAndTaxProps) {
             <button
               className="border rounded p-2 bg-white"
               onClick={() => setIsEditing(true)}
+              autoFocus={true}
             >
               Edit Tip + Tax
             </button>

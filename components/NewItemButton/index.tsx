@@ -11,6 +11,7 @@ function NewItemButton(props: NewItemButtonProps) {
       <button
         onClick={setIsAddingNewItem}
         className="border rounded p-2 hover:bg-slate-300 bg-white"
+        autoFocus={true}
       >
         Add New {itemType}
       </button>
