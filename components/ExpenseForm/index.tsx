@@ -48,6 +48,7 @@ function ExpenseForm(props: ExpenseFormProps) {
           name="expenseName"
           value={expenseName}
           onChange={handleNameChange}
+          autoFocus
         />
         <Input
           placeholder="Cost"

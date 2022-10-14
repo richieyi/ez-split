@@ -36,6 +36,7 @@ function DinerForm(props: DinerFormProps) {
           placeholder="Diner's nickname"
           value={dinerName}
           onChange={handleNameChange}
+          autoFocus
         />
         <button type="submit" className="hidden" />
       </form>

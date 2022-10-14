@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { isValidAmount } from '@/utils/index';
 import SaveCancelButtons from '@/components/SaveCancelButtons';
+import Input from '../Input';
 
 interface TipAndTaxProps {
   tipTax: any;
@@ -52,13 +53,16 @@ function TipAndTax(props: TipAndTaxProps) {
     return (
       <div className="border rounded p-2 bg-white">
         <form>
-          <input
+          <Input
+            name="tip"
             placeholder="Tip"
             value={newTip}
             onChange={handleTipChange}
             className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border-2 border-slate-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
+            autoFocus
           />
-          <input
+          <Input
+            name="tax"
             placeholder="Tax"
             value={newTax}
             onChange={handleTaxChange}
