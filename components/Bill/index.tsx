@@ -27,8 +27,8 @@ function Bill() {
     null
   );
   const [tipTax, setTipTax] = useState<TipTax>({
-    tip: 8.5,
-    tax: 12.75,
+    tip: 0,
+    tax: 0,
   });
 
   // When diner is selected and expense is clicked
@@ -82,8 +82,8 @@ function Bill() {
   return (
     <div className="text-center">
       <p className="my-6 text-sm lg:text-base">
-        Add your expenses and diners. Assign expenses to diners or
-        vice versa. Easy.
+        Add your expenses and diners. Click on a diner then an expense
+        to assign. Easy.
       </p>
       <div className="flex-col lg:flex lg:flex-row w-full gap-8">
         <ExpensesList {...expensesListProps} />

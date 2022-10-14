@@ -7,7 +7,7 @@ interface DinersListItemProps {
   diner: Diner;
   selectedDiner: Diner | null;
   dinerToUpdate: Diner | null;
-  setSelectedDiner: (diner: Diner) => void;
+  setSelectedDiner: (diner: Diner | null) => void;
   handleSaveUpdatedDiner: (
     e: ChangeEvent<HTMLFormElement>,
     dinerName: string
@@ -48,13 +48,23 @@ function DinersListItem(props: DinersListItemProps) {
     return percentage * tipTaxTotal;
   }
 
+  function getClickHandler() {
+    if (isUpdating) {
+      return () => {};
+    } else if (isSelected) {
+      return () => setSelectedDiner(null);
+    } else if (!isSelected) {
+      return () => setSelectedDiner(diner);
+    }
+  }
+
   return (
     <div
       key={diner.getID()}
       className={`flex justify-between items-center border rounded p-2 my-2 ${
         isUpdating ? '' : 'hover:cursor-pointer hover:bg-slate-200'
       } bg-white shadow-md`}
-      onClick={isUpdating ? () => {} : () => setSelectedDiner(diner)}
+      onClick={getClickHandler()}
     >
       {!isUpdating ? (
         <>
